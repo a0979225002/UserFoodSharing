@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="@drawable/backgroud_gradient">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="70dp"
+        android:paddingBottom="15dp"
+        android:src="@drawable/ic_store_black_24dp"/>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Foodsharing"
+        android:textColor="@color/textColor"
+        android:textSize="45dp"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15dp">
+
+        <EditText
+            android:id="@+id/account"
+            android:layout_marginBottom="10dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:inputType="textPersonName"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:backgroundTint="#fff"
+            android:textColorHint="@color/editTextHint"
+            android:drawableLeft="@drawable/ic_person_black_24dp"
+            android:hint="UserName"
+            android:layout_gravity="center"
+            />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_marginBottom="15dp"
+            android:paddingTop="10dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:backgroundTint="#fff"
+            android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+            android:hint="Password"
+            android:textColorHint="@color/editTextHint"
+            android:layout_gravity="center"
+            />
+
+        <Button
+            android:id="@+id/loginbtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/button_shape"
+            android:textColor="@color/textColor"
+            android:text="Login"
+            android:textSize="20dp"
+            android:onClick="Login" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/signup_link"
+            android:layout_marginLeft="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textColor="@color/link"
+            android:text="註冊"
+            android:textSize="20dp"
+            />
+        <TextView
+            android:id="@+id/forget_password_link"
+            android:layout_marginRight="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@color/link"
+            android:text="忘記密碼"
+            android:textSize="20dp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
