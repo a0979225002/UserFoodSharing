@@ -2,7 +2,6 @@ package tw.org.iii.yichun.foodsharing;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,8 +25,8 @@ public class LoginActivty extends AppCompatActivity {
     @BindView(R.id.forget_password_link)TextView forget_password_link;//忘記密碼
     @BindView(R.id.loginbtn) Button loginbtn;
     private boolean validate;//判斷帳密是否輸入正確
-    private Patterns patterns;//判斷
     private int Enabled = 0;
+    private Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,8 +35,6 @@ public class LoginActivty extends AppCompatActivity {
         ButterKnife.bind(this);
 
     }
-
-
     /**
      * 登入時判斷
      */
@@ -47,10 +44,35 @@ public class LoginActivty extends AppCompatActivity {
             return;
         }
     }
-    //跳到其他畫面取值判斷
+
+    /**
+     * 註冊
+     * @param view
+     */
+    public void Signuplink(View view) {
+        intent = new Intent(this, SignupActivity.class);
+        startActivityForResult(intent,0);
+        finish();
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+    }
+    /**
+     * 忘記密碼
+     * @param view
+     */
+    public void Forgetpasswordlink(View view) {
+
+
+    }
+ //   跳到其他畫面取值判斷
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0){
+            if (resultCode == RESULT_OK){
+                this.finish();
+            }
+        }
+
     }
 
     //輸入退回鍵,會有home鍵效果,回到後台
@@ -74,13 +96,18 @@ public class LoginActivty extends AppCompatActivity {
      */
     public void onLogin_Failed(){
         Enabled++;
-        Toast.makeText(getBaseContext(),"登入失敗:剩餘"+(5-Enabled>=0?5-Enabled:0)
-                ,Toast.LENGTH_LONG).show();
+        if (Enabled<5){
+            Toast.makeText(getBaseContext(),"登入失敗:剩餘"+(5-Enabled>=0?5-Enabled:0)
+                    ,Toast.LENGTH_LONG).show();
+        }
 
         if (Enabled>=5){
+            Toast.makeText(getBaseContext(),"失敗次數過多,請稍後在試",Toast.LENGTH_LONG).show();
             loginbtn.setEnabled(false);
-        }
+        }else {
             loginbtn.setEnabled(true);
+        }
+
     }
 
     /**
@@ -102,5 +129,7 @@ public class LoginActivty extends AppCompatActivity {
         }
         return validate;
     }
+
+
 }
 
