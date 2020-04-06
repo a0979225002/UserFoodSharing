@@ -1,4 +1,4 @@
-package tw.org.iii.yichun.foodsharing;
+package tw.org.iii.yichun.foodsharing.Loading;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tw.org.iii.yichun.foodsharing.R;
 
 /**
  * 登入頁面
@@ -31,7 +32,7 @@ public class LoginActivty extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
     }
