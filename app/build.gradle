@@ -36,4 +36,5 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     compile 'cc.cloudist.acplibrary:library:1.2.1'
+    implementation 'com.android.volley:volley:1.1.1'
 }

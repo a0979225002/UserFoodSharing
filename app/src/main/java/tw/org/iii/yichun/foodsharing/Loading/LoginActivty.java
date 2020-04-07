@@ -87,7 +87,7 @@ public class LoginActivty extends AppCompatActivity {
      * 登入成功
      */
     public void onlogin_successfully(){
-        Enabled = 0;
+        Enabled = 0;//將登入失敗次數歸零
         loginbtn.setEnabled(true);
         finish();
     }
@@ -98,12 +98,12 @@ public class LoginActivty extends AppCompatActivity {
     public void onLogin_Failed(){
         Enabled++;
         if (Enabled<5){
-            Toast.makeText(getBaseContext(),"登入失敗:剩餘"+(5-Enabled>=0?5-Enabled:0)
-                    ,Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"登入失敗:剩餘"+(5-Enabled>=0?5-Enabled:0)
+                    ,Toast.LENGTH_SHORT).show();
         }
 
         if (Enabled>=5){
-            Toast.makeText(getBaseContext(),"失敗次數過多,請稍後在試",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"失敗次數過多,請稍後在試",Toast.LENGTH_LONG).show();
             loginbtn.setEnabled(false);
         }else {
             loginbtn.setEnabled(true);

@@ -74,7 +74,7 @@
             android:gravity="center"
             android:background="@drawable/button_shape"
             android:textColor="@color/textColor"
-            android:text="Login"
+            android:text="登入"
             android:textSize="20dp"
             android:onClick="Login" />
     </LinearLayout>
