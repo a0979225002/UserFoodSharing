@@ -18,10 +18,5 @@ public class SignupActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    //返回鍵判斷
-    @Override
-    public void onBackPressed() {
 
-        super.onBackPressed();
-    }
 }
