@@ -53,7 +53,6 @@ public class LoginActivty extends AppCompatActivity {
     public void Signuplink(View view) {
         intent = new Intent(this, SignupActivity.class);
         startActivityForResult(intent,0);
-        finish();
         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
     /**
@@ -76,13 +75,15 @@ public class LoginActivty extends AppCompatActivity {
 
     }
 
-    //輸入退回鍵,會有home鍵效果,回到後台
+    // 輸入退回鍵,會有home鍵效果,回到後台
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        moveTaskToBack(false);
+        intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
-    //
+
     /**
      * 登入成功
      */

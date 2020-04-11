@@ -60,6 +60,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
 
+
     /**
      *要求客戶需要有權限
      * @param requestCode
@@ -80,6 +81,12 @@ public class LoadingActivity extends AppCompatActivity {
                     toast.show();
         }
         init();
+    }
+//    退後台home鍵效果
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+        super.onBackPressed();
     }
 
     /**
