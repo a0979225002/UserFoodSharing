@@ -15,10 +15,10 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="actionMenuTextColor">@android:color/white</item>
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textSize">20sp</item>
+<!--        <item name="android:background">@color/colorPrimary</item>-->
+<!--        <item name="android:textSize">20sp</item>-->
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="Theme.MaterialComponents.Light.NoActionBar" />
 
 </resources>

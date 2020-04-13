@@ -49,9 +49,30 @@ public class MainActivity extends AppCompatActivity {
 
         // ToolBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.nav_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int i = item.getItemId();
+                if (i == R.id.nav_add){
+
+                }else if (i == R.id.nav_about){
+
+                }else if (i == R.id.nav_feedback){
+
+                }else if (i == R.id.nav_logout){
+
+                }
+
+                return false;
+            }
+        });
+
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false); //隱藏 toolbar default title
+        getSupportActionBar().setDisplayShowTitleEnabled(true); //隱藏 toolbar default title
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false); //是否顯示返回鍵
+        getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
 
     }
 
