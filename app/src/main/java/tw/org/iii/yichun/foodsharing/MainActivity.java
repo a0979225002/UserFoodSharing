@@ -1,16 +1,22 @@
 package tw.org.iii.yichun.foodsharing;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
 
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new HomeFragment());
         fragments.add(new NotificationFragment());
         fragments.add(new MessageFragment());
+        fragments.add(new HomeFragment());
         fragments.add(new ProfileFragment());
         fragments.add(new ShopFragment());
 
@@ -39,14 +45,27 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         // 點擊 Bottom Nav 事件
+        changeBottomNav();
+
+        // ToolBar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false); //隱藏 toolbar default title
+
+    }
+
+
+    // 點擊 Bottom Nav 事件
+    private void changeBottomNav(){
         bmView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int menuId = menuItem.getItemId();
                 switch (menuId){
-                    case R.id.tabHome:viewPager.setCurrentItem(0);break;
-                    case R.id.tabNotification:viewPager.setCurrentItem(1);break;
-                    case R.id.tabMessage:viewPager.setCurrentItem(2);break;
+                    case R.id.tabNotification:viewPager.setCurrentItem(0);break;
+                    case R.id.tabMessage:viewPager.setCurrentItem(1);break;
+                    case R.id.tabHome:viewPager.setCurrentItem(2);break;
                     case R.id.tabProfile:viewPager.setCurrentItem(3);break;
                     case R.id.tabShop:viewPager.setCurrentItem(4);break;
                 }
@@ -58,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-
             }
 
             @Override
@@ -72,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
 
 
