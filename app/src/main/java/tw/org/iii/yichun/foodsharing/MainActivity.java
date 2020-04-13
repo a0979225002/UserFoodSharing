@@ -68,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayShowTitleEnabled(true); //隱藏 toolbar default title
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false); //是否顯示返回鍵
-        getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
+//        setSupportActionBar(toolbar);
+//
+//        getSupportActionBar().setDisplayShowTitleEnabled(true); //隱藏 toolbar default title
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(false); //是否顯示返回鍵
+//        getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
 
     }
 

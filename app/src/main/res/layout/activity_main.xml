@@ -19,7 +19,6 @@
         android:theme="@style/AppTheme.ToolBarStyle"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:title="@string/app_name"
-        app:menu="@menu/nav_menu"
         >
 <!--        <TextView-->
 <!--            android:id="@+id/toolbar_title"-->
