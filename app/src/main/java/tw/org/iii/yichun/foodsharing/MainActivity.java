@@ -1,22 +1,18 @@
 package tw.org.iii.yichun.foodsharing;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +20,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bmView;
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new HomeFragment());
         fragments.add(new ProfileFragment());
         fragments.add(new ShopFragment());
+        fragments.add(new AddFoodFragment());
 
         FragmentAdapter adapter = new FragmentAdapter(fragments,getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        // 點擊 Bottom Nav 事件
         changeBottomNav();
 
         // ToolBar
@@ -55,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int i = item.getItemId();
                 if (i == R.id.nav_add){
+                    Log.v("yichun","456");
+                    viewPager.setCurrentItem(5);
 
                 }else if (i == R.id.nav_about){
 
@@ -102,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
-                bmView.getMenu().getItem(i).setChecked(true);
+                if (i<5){
+                    bmView.getMenu().getItem(i).setChecked(true);
+                }
             }
 
             @Override
