@@ -10,16 +10,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingVertical="100dp">
+        android:layout_height="0dp"
+        android:layout_weight="3.5"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/loading_logo"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="100dp"
             />
 
         <TextView
@@ -36,8 +36,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
         android:orientation="vertical">
 
         <EditText
@@ -83,14 +83,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/signup_link"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="70dp"
             android:layout_weight="1"
             android:gravity="left"
             android:onClick="Signuplink"
@@ -102,7 +104,7 @@
             android:id="@+id/forget_password_link"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="80dp"
+            android:layout_marginRight="70dp"
             android:layout_weight="1"
             android:gravity="right"
             android:onClick="Forgetpasswordlink"
