@@ -18,7 +18,7 @@ import tw.org.iii.yichun.foodsharing.R;
 /**
  * 登入頁面
  */
-public class LoginActivty extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.account) EditText account;//帳號
     @BindView(R.id.password) EditText password;//密碼

@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         changeBottomNav();
 
+//        int photoId = getIntent().getIntExtra("id", 0);
+//        if (photoId == 1){
+//            viewPager.setCurrentItem(5);
+//        }
+
         // ToolBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.nav_menu);
@@ -51,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int i = item.getItemId();
                 if (i == R.id.nav_add){
-                    Log.v("yichun","456");
-                    viewPager.setCurrentItem(5);
+//                    viewPager.setCurrentItem(5);
+                    toAddFood();
 
                 }else if (i == R.id.nav_about){
 
@@ -65,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // 將首頁設為 default fragment
+        if (savedInstanceState == null) {
+            bmView.setSelectedItemId(R.id.tabHome);
+        }
 
 //        setSupportActionBar(toolbar);
 //
@@ -112,6 +124,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // 跳至拍照畫面
+    private void toAddFood() {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+    }
 
 }
 
