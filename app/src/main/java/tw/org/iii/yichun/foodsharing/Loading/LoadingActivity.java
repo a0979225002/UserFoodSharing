@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import tw.org.iii.yichun.foodsharing.Global.VolleyApp;
-import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 
 
@@ -123,7 +122,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         }else {
             dialog.dismiss();
-            intent = new Intent(this,LoginActivty.class);
+            intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent,0);
             finish();
             overridePendingTransition(R.anim.fade_in,R.anim.fade_out);

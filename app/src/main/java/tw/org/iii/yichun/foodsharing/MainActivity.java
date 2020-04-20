@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int i = item.getItemId();
                 if (i == R.id.nav_add){
-                    Log.v("yichun","456");
                     viewPager.setCurrentItem(5);
 
                 }else if (i == R.id.nav_about){
@@ -65,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // 將首頁設為 default fragment
+        if (savedInstanceState == null) {
+            bmView.setSelectedItemId(R.id.tabHome);
+        }
 
 //        setSupportActionBar(toolbar);
 //

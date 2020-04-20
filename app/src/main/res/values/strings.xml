@@ -9,4 +9,15 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <string name="input_foodName">"食物名稱"</string>
+    <string name="input_foodCategory">"食物分類"</string>
+    <string-array name="foodCategory">
+        <item>熟食</item>
+        <item>生鮮</item>
+        <item>蔬菜</item>
+        <item>水果</item>
+        <item>乾貨</item>
+        <item>飲品</item>
+    </string-array>
 </resources>
