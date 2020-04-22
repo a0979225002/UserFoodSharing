@@ -75,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
     private boolean verify_account_OK;
     private boolean verify_phone_OK;
     private Intent intent;
-
+    private Drawable drawableOK;
 
 
 //    //驗證碼
@@ -88,6 +88,8 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
+
+        drawableOK = getResources().getDrawable(R.drawable.ic_check_circle_black_24dp);
 
 //        mAuth = FirebaseAuth.getInstance();
 
@@ -126,6 +128,8 @@ public class SignupActivity extends AppCompatActivity {
                         if (getpassword.length() >= 6 && getpassword.length() <= 8) {
 
                         } else {
+                            passwd.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,null,null,null);
                             passwd.setError("您輸入的密碼需要6～8之間");
                         }
                     }
@@ -137,16 +141,21 @@ public class SignupActivity extends AppCompatActivity {
                 public void onFocusChange(View v, boolean hasFocus) {
                     getpasswdVerify = passwdVerify.getText().toString();
                     getpassword = passwd.getText().toString();
+                    Log.v("lipin",getpassword+"::"+getpasswdVerify);
                     if (!hasFocus){
-                        if (getpasswdVerify.equals(passwd)){
-                            Drawable drawable =
-                                    getResources().getDrawable(R.drawable.ic_check_circle_black_24dp);
+                        if (getpasswdVerify.equals(getpassword)){
+
                             passwd.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,null,drawable,null);
+                                    null,null,drawableOK,null);
                             passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,null,drawable,null);
+                                    null,null,drawableOK,null);
                         }else {
+                            passwd.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,null,null,null);
+                            passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,null,null,null);
                             passwdVerify.setError("兩組輸入的密碼需一樣");
+                            passwd.setError("兩組輸入的密碼需一樣");
                         }
                     }
                 }
@@ -245,9 +254,6 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         phone_check(response);
-                        Drawable drawable = getResources().getDrawable(
-                                R.drawable.ic_check_circle_black_24dp);
-                        phone.setCompoundDrawablesWithIntrinsicBounds(null,null,drawable,null);
                     }
                 },
                 new Response.ErrorListener() {
@@ -278,11 +284,10 @@ public class SignupActivity extends AppCompatActivity {
         int newCount = Integer.parseInt(count2);
         if (newCount < 1) {
             verify_account_OK = true;
-            Drawable drawable = getResources().getDrawable(R.drawable.ic_check_circle_black_24dp);
-            account.setCompoundDrawablesWithIntrinsicBounds(null,null,drawable,null);
+            account.setCompoundDrawablesWithIntrinsicBounds(null,null,drawableOK,null);
         } else {
             verify_account_OK = false;
-            dialog.dismiss();
+            account.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
             snackbar = Snackbar.make(allview,
                     "此帳號已註冊過",
                     Snackbar.LENGTH_LONG);
@@ -302,9 +307,10 @@ public class SignupActivity extends AppCompatActivity {
         int newCount = Integer.parseInt(count2);
         if (newCount < 1) {
             verify_phone_OK = true;
+            phone.setCompoundDrawablesWithIntrinsicBounds(null,null,drawableOK,null);
         } else {
             verify_phone_OK = false;
-            dialog.dismiss();
+            phone.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
             snackbar = Snackbar.make(allview,
                     "此電話已註冊過",
                     Snackbar.LENGTH_LONG);
@@ -328,13 +334,14 @@ public class SignupActivity extends AppCompatActivity {
         getcaptcha = captcha.getText().toString();//拿取客戶輸入的驗證碼
         getphone = phone.getText().toString();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        createTime = simpleDateFormat.format(new Date());
+        Date date = new Date();
+        createTime = simpleDateFormat.format(date);
         Save_Signup();
 
 
         Log.v("lipin",verify_phone_OK+":"+verify_account_OK);
 
-
+        Log.v("lipin",createTime);
     }
 
     private void Save_Signup(){
@@ -350,7 +357,7 @@ public class SignupActivity extends AppCompatActivity {
                             snackbar = Snackbar.make(allview,"註冊成功",Snackbar.LENGTH_INDEFINITE);
                             snackbar.show();
                             intent = new Intent(SignupActivity.this,LoginActivity.class);
-
+                            startActivity(intent);
                         }
                     },
                     new Response.ErrorListener() {
