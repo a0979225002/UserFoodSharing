@@ -27,8 +27,8 @@ import tw.org.iii.yichun.foodsharing.R;
  * 讀取頁面
  */
 public class LoadingActivity extends AppCompatActivity {
-    SharedPreferences setting;
-    ACProgressFlower dialog;
+    SharedPreferences setting;//將帳密保存手機內
+    private ACProgressFlower dialog;//進度框
     Intent intent;
     boolean ispermission;
     @Override

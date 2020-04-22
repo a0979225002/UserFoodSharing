@@ -1,35 +1,45 @@
 package tw.org.iii.yichun.foodsharing.Loading;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Global.VolleyApp;
 import tw.org.iii.yichun.foodsharing.R;
@@ -49,15 +59,29 @@ public class SignupActivity extends AppCompatActivity {
     EditText phone;
     @BindView(R.id.captcha)
     EditText captcha;
+    @BindView(R.id.allview)
+    LinearLayout allview;
 
+    Snackbar snackbar;
+    ACProgressFlower dialog;
 
     private String getaccount;
     private String getphone;
     private String getpassword;
-    private Date createTime;
+    private String getpasswdVerify;
+    private String getcaptcha;
+    private String createTime;
 
-    private boolean verifyOK;
+    private boolean verify_account_OK;
+    private boolean verify_phone_OK;
+    private Intent intent;
 
+
+
+    //驗證碼
+    private FirebaseAuth mAuth;
+    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    String mVerificationId;//獲得驗證碼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,20 +89,136 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        initFireBaseCallbacks();//驗證碼
+
+        EditText_verify();
+
 
     }
+
+    /**
+     * 判斷註冊EditText是否有輸入正確格式
+     */
+        private void EditText_verify(){
+            //帳號欄位
+            account.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    getaccount = account.getText().toString();
+                    if (!hasFocus) {
+                        if (getaccount.length()>=6&&getaccount.length()<=8) {
+                            verify_account();
+                        }else {
+                            account.setError("您輸入的帳號需要6～8之間");
+                        }
+                    }
+                }
+            });
+            //密碼欄位
+            passwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    getpassword = passwd.getText().toString();
+                    if (!hasFocus) {
+                        if (getpassword.length() >= 6 && getpassword.length() <= 8) {
+
+                        } else {
+                            passwd.setError("您輸入的密碼需要6～8之間");
+                        }
+                    }
+                }
+            });
+            //第二次輸入密碼欄位
+            passwdVerify.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    getpasswdVerify = passwdVerify.getText().toString();
+                    if (!hasFocus){
+                        if (getpasswdVerify.equals(passwd)){
+                            Drawable drawable =
+                                    getResources().getDrawable(R.drawable.ic_check_circle_black_24dp);
+                            passwd.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,null,drawable,null);
+                            passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,null,drawable,null);
+                        }else {
+                            passwdVerify.setError("兩組輸入的密碼需一樣");
+                        }
+                    }
+                }
+            });
+            //電話號碼欄位
+            phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                   getphone = phone.getText().toString();
+                    if (!hasFocus){
+                        if (getphone.length()==10){
+                            verify_phone();
+                        }else {
+                            phone.setError("您輸入的電話格式錯誤");
+                        }
+                    }
+                }
+            });
+
+
+        }
+    //進度框
+    private void loadingview(){
+        dialog = new ACProgressFlower.Builder(this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .text("Loading....")
+                .textSize(80)
+                .sizeRatio(0.4f)//背景大小
+                .bgAlpha(0.8f)//透明度
+                .borderPadding(0.4f)//花瓣長度
+                .fadeColor(Color.DKGRAY).build();
+        dialog.show();
+    }
+
+    /**
+     * 發送驗證碼
+     */
+    private void initFireBaseCallbacks() {
+        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential credential) {
+                Toast.makeText(SignupActivity.this, "Verification Complete", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                Toast.makeText(SignupActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(String verificationId,
+                                   PhoneAuthProvider.ForceResendingToken token) {
+                Toast.makeText(SignupActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
+                mVerificationId = verificationId;
+            }
+        };
+    }
+
+
     /**
      * 查詢帳號是否重複
      */
-    private void verify(){
-        String url = "http://"+ Utils.ip +"/FoodSharing_war/Sql_Signp_Verify_Servlet";
+    private void verify_account() {
+        String url = String.format("http://%s/FoodSharing_war/Sql_Signp_Verify_Account_Servlet?account=%s",
+                Utils.ip,getaccount);
         StringRequest request = new StringRequest(
-                Request.Method.POST,
+                Request.Method.GET,
                 url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        verify_check(response);
+                        account_check(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -87,12 +227,40 @@ public class SignupActivity extends AppCompatActivity {
 
                     }
                 }
-        ){
+        );
+        VolleyApp.queue.add(request);
+    }
+    /**
+     * 查詢電話是否重複
+     */
+    private void verify_phone() {
+        Log.v("lipin","到此一遊");
+        String url = String.format("http://%s/FoodSharing_war/Sql_Signp_Verify_phone_Servlet?phone=%s",
+                Utils.ip,getphone);
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        phone_check(response);
+                        Drawable drawable = getResources().getDrawable(
+                                R.drawable.ic_check_circle_black_24dp);
+                        phone.setCompoundDrawablesWithIntrinsicBounds(null,null,drawable,null);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String > params = new HashMap<>();
-                params.put("account",getaccount);
-                params.put("phone",getphone);
+                HashMap<String, String> params = new HashMap<>();
+                params.put("phone", getphone);
+
                 return params;
             }
         };
@@ -100,131 +268,135 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     /**
-     * 讀出後台網頁是否有值
+     * 讀出後台網頁帳號是否有值
      * @param count
      * @return
      */
-    private Boolean verify_check(String count){
-        if (count!=null){
-            verifyOK = true;
-        }else {
-            verifyOK = false;
+    private Boolean account_check(String count) {
+        String count2 = count.substring(0,1);
+        int newCount = Integer.parseInt(count2);
+        if (newCount < 1) {
+            verify_account_OK = true;
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_check_circle_black_24dp);
+            account.setCompoundDrawablesWithIntrinsicBounds(null,null,drawable,null);
+        } else {
+            verify_account_OK = false;
         }
-        return  verifyOK;
+        Log.v("lipin",verify_account_OK+"帳號確認");
+        return verify_account_OK;
+    }
+
+    /**
+     * 讀出後台網頁電話是否有值
+     * @param count
+     * @return
+     */
+    private Boolean phone_check(String count) {
+        String count2 = count.substring(0,1);
+        int newCount = Integer.parseInt(count2);
+        if (newCount < 1) {
+            verify_phone_OK = true;
+        } else {
+            verify_phone_OK = false;
+        }
+        Log.v("lipin",verify_phone_OK+"電話確認");
+        return verify_phone_OK;
     }
 
 
     /**
      * 將帳密加入到sql中保存
+     * 註冊按鈕
      * @param view
      */
     public void Signup_Btn(View view) {
-
-        verify();
-
-        String url = "";
-        StringRequest request = new StringRequest(
-                Request.Method.POST,
-                url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }
-        ){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> params = new HashMap<>();
+        loadingview();
+        getaccount = account.getText().toString();
+        getpassword = passwd.getText().toString();
+        getpasswdVerify = passwdVerify.getText().toString();
+        getcaptcha = captcha.getText().toString();//拿取客戶輸入的驗證碼
+        getphone = phone.getText().toString();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        createTime = simpleDateFormat.format(new Date());
+        Save_Signup();
 
 
+        Log.v("lipin",verify_phone_OK+":"+verify_account_OK);
 
 
-                return super.getParams();
-            }
-        };
-
-
-        VolleyApp.queue.add(request);
     }
 
+    private void Save_Signup(){
+        if (verify_phone_OK && verify_account_OK) {
+            String url = "http://" + Utils.ip + "/FoodSharing_war/Sql_Signup_Servlet";
+            StringRequest request = new StringRequest(
+                    Request.Method.POST,
+                    url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            dialog.dismiss();
+                            snackbar = Snackbar.make(allview,"註冊成功",Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+                            intent = new Intent(SignupActivity.this,LoginActivity.class);
+
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }
+            ) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("account",getaccount);
+                    params.put("password",getpassword);
+                    params.put("phone",getphone);
+                    params.put("createTime",createTime);
+
+
+
+                    return params;
+                }
+            };
+
+
+            VolleyApp.queue.add(request);
+        } else if (!verify_account_OK){
+            dialog.dismiss();
+            snackbar = Snackbar.make(allview,
+                    "此帳號已註冊過",
+                    Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+            account.setError("請更換帳號");
+        }else if (!verify_phone_OK){
+            dialog.dismiss();
+            snackbar = Snackbar.make(allview,
+                    "此電話已註冊過",
+                    Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+            account.setError("請更換電話");
+        }else {
+            dialog.dismiss();
+        }
+    }
 
     /**
      * 手機驗證碼
+     *獲得手機驗證碼按鈕
      * @param view
      */
     public void Verify_Btn(View view) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+1 123456",        // Phone number to verify
-                60,                 // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
+                "+886123456789",        // Phone number to verify
+                1,                 // Timeout duration
+                TimeUnit.MINUTES,   // Unit of timeout
                 this,               // Activity (for callback binding)
-                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                    @Override
-                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-
-                    }
-
-                    @Override
-                    public void onVerificationFailed(FirebaseException e) {
-
-                    }
-                });
-
-//        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//
-//            @Override
-//            public void onVerificationCompleted(PhoneAuthCredential credential) {
-//                // This callback will be invoked in two situations:
-//                // 1 - Instant verification. In some cases the phone number can be instantly
-//                //     verified without needing to send or enter a verification code.
-//                // 2 - Auto-retrieval. On some devices Google Play services can automatically
-//                //     detect the incoming verification SMS and perform verification without
-//                //     user action.
-//                Log.d(TAG, "onVerificationCompleted:" + credential);
-//
-//                signInWithPhoneAuthCredential(credential);
-//            }
-//
-//            @Override
-//            public void onVerificationFailed(FirebaseException e) {
-//                // This callback is invoked in an invalid request for verification is made,
-//                // for instance if the the phone number format is not valid.
-//                Log.w(TAG, "onVerificationFailed", e);
-//
-//                if (e instanceof FirebaseAuthInvalidCredentialsException) {
-//                    // Invalid request
-//                    // ...
-//                } else if (e instanceof FirebaseTooManyRequestsException) {
-//                    // The SMS quota for the project has been exceeded
-//                    // ...
-//                }
-//
-//                // Show a message and update the UI
-//                // ...
-//            }
-//
-//            @Override
-//            public void onCodeSent(@NonNull String verificationId,
-//                                   @NonNull PhoneAuthProvider.ForceResendingToken token) {
-//                // The SMS verification code has been sent to the provided phone number, we
-//                // now need to ask the user to enter the code and then construct a credential
-//                // by combining the code with a verification ID.
-//                Log.d(TAG, "onCodeSent:" + verificationId);
-//
-//                // Save verification ID and resending token so we can use them later
-//                mVerificationId = verificationId;
-//                mResendToken = token;
-//
-//                // ...
-//            }
-//        };
+                mCallbacks);        // OnVerificationStateChangedCallbacks
 
     }
 }
