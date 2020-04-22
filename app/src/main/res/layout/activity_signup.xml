@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/textWhite"
             android:drawableLeft="@drawable/ic_person_black_24dp"
+            android:inputType="text"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -100,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/textWhite"
                 android:drawableLeft="@drawable/ic_local_phone_black_24dp"
+                android:inputType="phone"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -121,17 +123,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/textWhite"
+                    android:inputType="text"
                     />
             </com.google.android.material.textfield.TextInputLayout>
             <Button
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_width="0dp"
                 android:layout_weight="4.5"
                 android:layout_height="60dp"
-                android:layout_alignParentRight="true"
                 android:text="獲取驗證碼"
+                android:onClick="Verify_Btn"
                 />
         </LinearLayout>
     </LinearLayout>
