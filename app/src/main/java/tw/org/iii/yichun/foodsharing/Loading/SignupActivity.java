@@ -69,7 +69,7 @@ public class SignupActivity extends AppCompatActivity {
     private String getphone;
     private String getpassword;
     private String getpasswdVerify;
-    private String getcaptcha;
+    private String getcaptcha;//驗證碼
     private String createTime;
 
     private boolean verify_account_OK;
@@ -78,10 +78,10 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-    //驗證碼
-    private FirebaseAuth mAuth;
-    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    String mVerificationId;//獲得驗證碼
+//    //驗證碼
+//    private FirebaseAuth mAuth;
+//    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+//    String mVerificationId;//獲得驗證碼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +89,9 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
 
-        mAuth = FirebaseAuth.getInstance();
+//        mAuth = FirebaseAuth.getInstance();
 
-        initFireBaseCallbacks();//驗證碼
+//        initFireBaseCallbacks();//驗證碼
 
         EditText_verify();
 
@@ -136,6 +136,7 @@ public class SignupActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     getpasswdVerify = passwdVerify.getText().toString();
+                    getpassword = passwd.getText().toString();
                     if (!hasFocus){
                         if (getpasswdVerify.equals(passwd)){
                             Drawable drawable =
@@ -181,29 +182,29 @@ public class SignupActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    /**
-     * 發送驗證碼
-     */
-    private void initFireBaseCallbacks() {
-        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(PhoneAuthCredential credential) {
-                Toast.makeText(SignupActivity.this, "Verification Complete", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText(SignupActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCodeSent(String verificationId,
-                                   PhoneAuthProvider.ForceResendingToken token) {
-                Toast.makeText(SignupActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
-                mVerificationId = verificationId;
-            }
-        };
-    }
+//    /**
+//     * 發送驗證碼
+//     */
+//    private void initFireBaseCallbacks() {
+//        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//            @Override
+//            public void onVerificationCompleted(PhoneAuthCredential credential) {
+//                Toast.makeText(SignupActivity.this, "Verification Complete", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onVerificationFailed(FirebaseException e) {
+//                Toast.makeText(SignupActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onCodeSent(String verificationId,
+//                                   PhoneAuthProvider.ForceResendingToken token) {
+//                Toast.makeText(SignupActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
+//                mVerificationId = verificationId;
+//            }
+//        };
+//    }
 
 
     /**
@@ -281,6 +282,11 @@ public class SignupActivity extends AppCompatActivity {
             account.setCompoundDrawablesWithIntrinsicBounds(null,null,drawable,null);
         } else {
             verify_account_OK = false;
+            dialog.dismiss();
+            snackbar = Snackbar.make(allview,
+                    "此帳號已註冊過",
+                    Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
         Log.v("lipin",verify_account_OK+"帳號確認");
         return verify_account_OK;
@@ -298,6 +304,11 @@ public class SignupActivity extends AppCompatActivity {
             verify_phone_OK = true;
         } else {
             verify_phone_OK = false;
+            dialog.dismiss();
+            snackbar = Snackbar.make(allview,
+                    "此電話已註冊過",
+                    Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
         Log.v("lipin",verify_phone_OK+"電話確認");
         return verify_phone_OK;
@@ -340,7 +351,6 @@ public class SignupActivity extends AppCompatActivity {
                             snackbar.show();
                             intent = new Intent(SignupActivity.this,LoginActivity.class);
 
-
                         }
                     },
                     new Response.ErrorListener() {
@@ -358,45 +368,27 @@ public class SignupActivity extends AppCompatActivity {
                     params.put("phone",getphone);
                     params.put("createTime",createTime);
 
-
-
                     return params;
                 }
             };
-
-
             VolleyApp.queue.add(request);
-        } else if (!verify_account_OK){
-            dialog.dismiss();
-            snackbar = Snackbar.make(allview,
-                    "此帳號已註冊過",
-                    Snackbar.LENGTH_INDEFINITE);
-            snackbar.show();
-            account.setError("請更換帳號");
-        }else if (!verify_phone_OK){
-            dialog.dismiss();
-            snackbar = Snackbar.make(allview,
-                    "此電話已註冊過",
-                    Snackbar.LENGTH_INDEFINITE);
-            snackbar.show();
-            account.setError("請更換電話");
         }else {
             dialog.dismiss();
         }
     }
 
-    /**
-     * 手機驗證碼
-     *獲得手機驗證碼按鈕
-     * @param view
-     */
-    public void Verify_Btn(View view) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+886123456789",        // Phone number to verify
-                1,                 // Timeout duration
-                TimeUnit.MINUTES,   // Unit of timeout
-                this,               // Activity (for callback binding)
-                mCallbacks);        // OnVerificationStateChangedCallbacks
-
-    }
+//    /**
+//     * 手機驗證碼
+//     *獲得手機驗證碼按鈕
+//     * @param view
+//     */
+//    public void Verify_Btn(View view) {
+//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+//                "+886123456789",        // Phone number to verify
+//                1,                 // Timeout duration
+//                TimeUnit.MINUTES,   // Unit of timeout
+//                this,               // Activity (for callback binding)
+//                mCallbacks);        // OnVerificationStateChangedCallbacks
+//
+//    }
 }
