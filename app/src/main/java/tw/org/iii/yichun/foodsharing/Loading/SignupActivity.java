@@ -113,7 +113,7 @@ public class SignupActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (getaccount.length()>=6&&getaccount.length()<=8) {
                             verify_account();
-                        }else {
+                        }else if(getaccount.length()<6 || getaccount.length()>8){
                             account.setError("您輸入的帳號需要6～8之間");
                         }
                     }
@@ -126,8 +126,17 @@ public class SignupActivity extends AppCompatActivity {
                     getpassword = passwd.getText().toString();
                     if (!hasFocus) {
                         if (getpassword.length() >= 6 && getpassword.length() <= 8) {
-
-                        } else {
+                            if (getpassword.equals(getpasswdVerify)) {
+                                passwd.setError(null);
+                                passwdVerify.setError(null);
+                                passwd.setCompoundDrawables(null, null, null, null);
+                                passwdVerify.setCompoundDrawables(null, null, null, null);
+                                passwd.setCompoundDrawablesWithIntrinsicBounds(
+                                        null, null, drawableOK, null);
+                                passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
+                                        null, null, drawableOK, null);
+                            }
+                        } else if (getpassword.length() < 6 && getpassword.length() > 8){
                             passwd.setCompoundDrawablesWithIntrinsicBounds(
                                     null,null,null,null);
                             passwd.setError("您輸入的密碼需要6～8之間");
@@ -140,16 +149,19 @@ public class SignupActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     getpasswdVerify = passwdVerify.getText().toString();
-                    getpassword = passwd.getText().toString();
-                    Log.v("lipin",getpassword+"::"+getpasswdVerify);
+
                     if (!hasFocus){
                         if (getpasswdVerify.equals(getpassword)){
-
+                            passwd.setError(null);
+                            passwdVerify.setError(null);
+                            passwd.setCompoundDrawables(null, null, null, null);
+                            passwdVerify.setCompoundDrawables(null, null, null, null);
+                            Log.v("lipin",getpassword+"::"+getpasswdVerify);
                             passwd.setCompoundDrawablesWithIntrinsicBounds(
                                     null,null,drawableOK,null);
                             passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
                                     null,null,drawableOK,null);
-                        }else {
+                        }else if(!getpasswdVerify.equals(getpassword)) {
                             passwd.setCompoundDrawablesWithIntrinsicBounds(
                                     null,null,null,null);
                             passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
@@ -167,6 +179,7 @@ public class SignupActivity extends AppCompatActivity {
                    getphone = phone.getText().toString();
                     if (!hasFocus){
                         if (getphone.length()==10){
+                            phone.setError(null);
                             verify_phone();
                         }else {
                             phone.setError("您輸入的電話格式錯誤");

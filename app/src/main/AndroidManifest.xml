@@ -18,7 +18,8 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         <activity android:name=".CameraActivity"></activity>
         <activity android:name=".Loading.LoginActivity" />
-        <activity android:name=".Loading.SignupActivity" />
+        <activity android:name=".Loading.SignupActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".MainActivity"/>
 
              <activity android:name=".Loading.LoadingActivity">
