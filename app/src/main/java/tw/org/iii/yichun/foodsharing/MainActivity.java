@@ -3,12 +3,16 @@ package tw.org.iii.yichun.foodsharing;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -29,6 +33,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE},
+                    123);
+
+        } else {
+            init();
+        }
+
+
+        // 將首頁設為 default fragment
+        if (savedInstanceState == null) {
+            bmView.setSelectedItemId(R.id.tabHome);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        init();
+    }
+
+    private void init(){
         bmView = findViewById(R.id.bottom_nav_view);
         viewPager = findViewById(R.id.view_pager);
 
@@ -38,17 +76,11 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new HomeFragment());
         fragments.add(new ProfileFragment());
         fragments.add(new ShopFragment());
-        fragments.add(new AddFoodFragment());
 
         FragmentAdapter adapter = new FragmentAdapter(fragments,getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         changeBottomNav();
-
-//        int photoId = getIntent().getIntExtra("id", 0);
-//        if (photoId == 1){
-//            viewPager.setCurrentItem(5);
-//        }
 
         // ToolBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int i = item.getItemId();
                 if (i == R.id.nav_add){
-//                    viewPager.setCurrentItem(5);
-                    toAddFood();
+                    toCamera();
 
                 }else if (i == R.id.nav_about){
 
@@ -73,17 +104,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 將首頁設為 default fragment
-        if (savedInstanceState == null) {
-            bmView.setSelectedItemId(R.id.tabHome);
-        }
-
-//        setSupportActionBar(toolbar);
+        //        setSupportActionBar(toolbar);
 //
 //        getSupportActionBar().setDisplayShowTitleEnabled(true); //隱藏 toolbar default title
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(false); //是否顯示返回鍵
 //        getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
-
     }
 
 
@@ -125,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 跳至拍照畫面
-    private void toAddFood() {
-        Intent intent = new Intent(this, CameraActivity.class);
+    private void toCamera() {
+        Intent intent = new Intent(this, MyCameraActivity.class);
         startActivity(intent);
     }
 
