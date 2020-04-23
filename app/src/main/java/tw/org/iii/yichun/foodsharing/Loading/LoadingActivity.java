@@ -13,13 +13,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONArray;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
+import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Global.VolleyApp;
+import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 
 
@@ -27,7 +38,11 @@ import tw.org.iii.yichun.foodsharing.R;
  * 讀取頁面
  */
 public class LoadingActivity extends AppCompatActivity {
-    SharedPreferences setting;//將帳密保存手機內
+
+    private String account;
+    private String password;
+    private int intcount;
+
     private ACProgressFlower dialog;//進度框
     Intent intent;
     boolean ispermission;
@@ -97,75 +112,93 @@ public class LoadingActivity extends AppCompatActivity {
                 .themeColor(Color.WHITE)
                 .text("Loading....")
                 .textSize(80)
-                .sizeRatio(0.4f)//背景大小
+                .sizeRatio(0.3f)//背景大小
                 .bgAlpha(0.8f)//透明度
-                .borderPadding(0.4f)//花瓣長度
+                .borderPadding(0.3f)//花瓣長度
                 .fadeColor(Color.DKGRAY).build();
         dialog.show();
     }
 
     /**
      * 自動拿取登入帳密
-     * 表單key:data
-     * 儲存帳密key:Auto_USERID
+     * 表單key:FoodSharing_User
      */
     private void Auto_login(){
-        setting = getSharedPreferences("data",MODE_PRIVATE);
-        //有拿到以存取的帳密媽？
-        if ((setting.getString("Auto_USERID",null))!=null){
-            UserID();
-//            if (){     //SQl判斷帳密是否正確
-//                intent = new Intent(this, MainActivity.class);
-//            }else {
-//
-//            }
+         account = getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
+                 .getString("account",null);
+         password = getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
+                 .getString("password",null);
 
-        }else {
-            dialog.dismiss();
+         if (account!=null&&password!=null) {
+             VerifyID();
+         }else {
             intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent,0);
             finish();
             overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            dialog.dismiss();
         }
         }
 
     /**
      * 拿取以存取帳密到web端判斷
      */
-    private void UserID(){
-        String url = "";
-
-        JsonArrayRequest request = new JsonArrayRequest(
+    private void VerifyID(){
+        String url = "http://"+ Utils.ip +"/FoodSharing_war/Sql_Login_Verify";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
                 url,
-                new Response.Listener<JSONArray>() {
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-//                        parseJSON(response);
+                    public void onResponse(String response) {
+                        getVerify(response);
+                        Verify();
+                        Log.v("lipin",account+"::"+password+"::"+response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.v("lipin",error.toString());
+
                     }
                 }
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("account",account);
+                params.put("passwd",password);
+                return params;
+            }
+        };
         VolleyApp.queue.add(request);
-}
+    }
 
     /**
-     *抓取web端查詢出來的sql帳密
-     * @param jsonArray
+     * 拿取驗證結果 正確為1 不正確為0
+     * @param respons
      */
-//    private void parseJSON(JSONArray jsonArray){
-//            jsonArray = new JSONArray();
-//            String account = jsonArray.getString();
-//            String password = jsonArray.getString();
-//
-//
-//    }
+    private void getVerify(String respons){
+        String count = respons.substring(0,1);
+        intcount = Integer.valueOf(count);
+    }
 
+    /**
+     * 確認是否為正確的帳密
+     */
+    private void Verify(){
+        if (intcount ==1){
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            dialog.dismiss();
 
-
-
+        }else {
+            intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent,0);
+            finish();
+            overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            dialog.dismiss();
+        }
+    }
 }

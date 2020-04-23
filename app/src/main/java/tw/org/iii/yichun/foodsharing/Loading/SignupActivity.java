@@ -72,10 +72,11 @@ public class SignupActivity extends AppCompatActivity {
     private String getcaptcha;//驗證碼
     private String createTime;
 
-    private boolean verify_account_OK;
-    private boolean verify_phone_OK;
+    private boolean verify_account_OK;//判斷後台是否有重複帳號
+    private boolean verify_phone_OK;//判斷後台是否有重複電話
     private Intent intent;
-    private Drawable drawableOK;
+    private Drawable drawableOK;//打勾圖案
+    int intcount;//確認用戶是否有加入成功 1 = 有加入,0 ＝沒加入
 
 
 //    //驗證碼
@@ -111,10 +112,12 @@ public class SignupActivity extends AppCompatActivity {
 
                     getaccount = account.getText().toString();
                     if (!hasFocus) {
-                        if (getaccount.length()>=6&&getaccount.length()<=8) {
+                        if (getaccount.length()>=6&&getaccount.length()<=10) {
+                            account.setError(null);
+                            account.setCompoundDrawables(null, null, null, null);
                             verify_account();
-                        }else if(getaccount.length()<6 || getaccount.length()>8){
-                            account.setError("您輸入的帳號需要6～8之間");
+                        }else if(getaccount.length()<6 || getaccount.length()>10){
+                            account.setError("您輸入的帳號需要6～10之間");
                         }
                     }
                 }
@@ -125,7 +128,7 @@ public class SignupActivity extends AppCompatActivity {
                 public void onFocusChange(View v, boolean hasFocus) {
                     getpassword = passwd.getText().toString();
                     if (!hasFocus) {
-                        if (getpassword.length() >= 6 && getpassword.length() <= 8) {
+                        if (getpassword.length() >= 6 && getpassword.length() <= 10) {
                             if (getpassword.equals(getpasswdVerify)) {
                                 passwd.setError(null);
                                 passwdVerify.setError(null);
@@ -136,10 +139,10 @@ public class SignupActivity extends AppCompatActivity {
                                 passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
                                         null, null, drawableOK, null);
                             }
-                        } else if (getpassword.length() < 6 && getpassword.length() > 8){
+                        } else if (getpassword.length() < 6 || getpassword.length() > 10){
                             passwd.setCompoundDrawablesWithIntrinsicBounds(
                                     null,null,null,null);
-                            passwd.setError("您輸入的密碼需要6～8之間");
+                            passwd.setError("您輸入的密碼需要6～10之間");
                         }
                     }
                 }
@@ -156,7 +159,7 @@ public class SignupActivity extends AppCompatActivity {
                             passwdVerify.setError(null);
                             passwd.setCompoundDrawables(null, null, null, null);
                             passwdVerify.setCompoundDrawables(null, null, null, null);
-                            Log.v("lipin",getpassword+"::"+getpasswdVerify);
+
                             passwd.setCompoundDrawablesWithIntrinsicBounds(
                                     null,null,drawableOK,null);
                             passwdVerify.setCompoundDrawablesWithIntrinsicBounds(
@@ -180,6 +183,7 @@ public class SignupActivity extends AppCompatActivity {
                     if (!hasFocus){
                         if (getphone.length()==10){
                             phone.setError(null);
+                            account.setCompoundDrawables(null, null, null, null);
                             verify_phone();
                         }else {
                             phone.setError("您輸入的電話格式錯誤");
@@ -233,10 +237,9 @@ public class SignupActivity extends AppCompatActivity {
      * 查詢帳號是否重複
      */
     private void verify_account() {
-        String url = String.format("http://%s/FoodSharing_war/Sql_Signp_Verify_Account_Servlet?account=%s",
-                Utils.ip,getaccount);
+        String url = "http://"+Utils.ip+"/FoodSharing_war/Sql_Signp_Verify_Account_Servlet";
         StringRequest request = new StringRequest(
-                Request.Method.GET,
+                Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
                     @Override
@@ -247,10 +250,17 @@ public class SignupActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.v("lipin",error.toString());
                     }
                 }
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("account",getaccount);
+                return params;
+            }
+        };
         VolleyApp.queue.add(request);
     }
     /**
@@ -258,10 +268,9 @@ public class SignupActivity extends AppCompatActivity {
      */
     private void verify_phone() {
         Log.v("lipin","到此一遊");
-        String url = String.format("http://%s/FoodSharing_war/Sql_Signp_Verify_phone_Servlet?phone=%s",
-                Utils.ip,getphone);
+        String url = "http://"+Utils.ip+"/FoodSharing_war/Sql_Signp_Verify_phone_Servlet";
         StringRequest request = new StringRequest(
-                Request.Method.GET,
+                Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
                     @Override
@@ -272,7 +281,7 @@ public class SignupActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.v("lipin",error.toString());
                     }
                 }
         ) {
@@ -366,17 +375,27 @@ public class SignupActivity extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            dialog.dismiss();
-                            snackbar = Snackbar.make(allview,"註冊成功",Snackbar.LENGTH_INDEFINITE);
+                            Check_Signup(response);
+                         if (intcount == 1) {
+                             snackbar = Snackbar.make(allview, "註冊成功", Snackbar.LENGTH_INDEFINITE);
+                             snackbar.show();
+                             intent = new Intent(SignupActivity.this, LoginActivity.class);
+                             intent.putExtra("account", getaccount);
+                             intent.putExtra("passwd", getpassword);
+                             startActivity(intent);
+                             finish();
+                             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                             dialog.dismiss();
+                         }else {
+                            snackbar = Snackbar.make(allview,"目前伺服器過載中,請稍後再註冊",Snackbar.LENGTH_LONG);
                             snackbar.show();
-                            intent = new Intent(SignupActivity.this,LoginActivity.class);
-                            startActivity(intent);
+                         }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            Log.v("lipin",error.toString());
                         }
                     }
             ) {
@@ -395,6 +414,12 @@ public class SignupActivity extends AppCompatActivity {
         }else {
             dialog.dismiss();
         }
+    }
+    private int Check_Signup(String response){
+        String count = response.substring(0,1);
+        intcount = Integer.valueOf(count);
+
+        return  intcount;
     }
 
 //    /**
