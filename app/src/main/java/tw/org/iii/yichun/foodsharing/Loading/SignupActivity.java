@@ -183,7 +183,7 @@ public class SignupActivity extends AppCompatActivity {
                     if (!hasFocus){
                         if (getphone.length()==10){
                             phone.setError(null);
-                            account.setCompoundDrawables(null, null, null, null);
+                            phone.setCompoundDrawables(null, null, null, null);
                             verify_phone();
                         }else {
                             phone.setError("您輸入的電話格式錯誤");
@@ -329,6 +329,7 @@ public class SignupActivity extends AppCompatActivity {
         int newCount = Integer.parseInt(count2);
         if (newCount < 1) {
             verify_phone_OK = true;
+            Log.v("lipin",newCount+"::::");
             phone.setCompoundDrawablesWithIntrinsicBounds(null,null,drawableOK,null);
         } else {
             verify_phone_OK = false;

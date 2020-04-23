@@ -20,9 +20,9 @@
         <activity android:name=".MyCameraActivity" />
         <activity android:name=".Loading.LoginActivity" />
         <activity android:name=".Loading.SignupActivity" />
-        <activity android:name=".Loading.LoadingActivity"/>
+        <activity android:name=".MainActivity"/>
 
-             <activity android:name=".MainActivity">
+             <activity android:name=".Loading.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
