@@ -414,6 +414,8 @@ public class SignupActivity extends AppCompatActivity {
             VolleyApp.queue.add(request);
         }else {
             dialog.dismiss();
+            snackbar = Snackbar.make(allview,"目前伺服器過載中,請稍後再註冊",Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
     }
     private int Check_Signup(String response){
