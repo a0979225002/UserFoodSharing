@@ -18,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -31,7 +32,8 @@ public class AddFoodActivity extends AppCompatActivity {
     private ImageView foodimg;
     private File sdroot;
     private AutoCompleteTextView addFoodCity, addFoodDist;
-    private String selectedCity;
+    private String selectedCity;//下拉選單監聽,城市名
+    private String selectedDist;//下拉選單監聽,區域名
 
 
     @Override
@@ -39,15 +41,40 @@ public class AddFoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food);
 
-        datetime = findViewById(R.id.addFood_datetime);
-        datePickerBtn = findViewById(R.id.datePickerBtn);
-        addFoodCity = findViewById(R.id.addFood_city);
-        addFoodDist = findViewById(R.id.addFood_dist);
 
-        foodimg = findViewById(R.id.addFood_img);
-        sdroot = Environment.getExternalStorageDirectory();
-        Bitmap bmp = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/iii02.jpg");
-        foodimg.setImageBitmap(bmp);
+        FindID();//findbyid 拉出去寫
+
+        camera();//點擊相片給予重新拍照,將會面引導去拍照頁面
+
+        FoodCategoryList();//將value的值給予給予食物分類的下拉選單
+
+        FoodCityList();//監聽客戶端選擇的縣市
+
+        FoodDistList();//監聽客戶端選擇的區域
+
+
+    }
+
+    private void FindID(){
+        datetime = findViewById(R.id.addFood_datetime);//截止時間
+        datePickerBtn = findViewById(R.id.datePickerBtn);//截止時間按鈕
+        addFoodCity = findViewById(R.id.addFood_city);//縣市輸入
+        addFoodDist = findViewById(R.id.addFood_dist);//區域輸入
+        foodimg = findViewById(R.id.addFood_img);//照片位置
+
+        addFoodCity.setDropDownHeight(400);//給予下拉選單寬度
+        addFoodDist.setDropDownHeight(400);
+    }
+
+
+    /**
+     *點擊相片給予重新拍照,將會面引導去拍照頁面
+     */
+    private void camera(){
+        sdroot = Environment.getExternalStorageDirectory();//拿取sd卡路徑
+        Bitmap bmp = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/iii02.jpg");//將照片存放sd卡中,並加入照片名
+        foodimg.setImageBitmap(bmp);//拿取存放的照片
+
 
         foodimg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,23 +83,13 @@ public class AddFoodActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-        datePickerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatetimePicker();
-            }
-        });
-
-
-        FoodCategoryList();
-        FoodCityList();
-
     }
 
-    public void FoodCategoryList(){
+
+    /**
+     * 將 values 內 string的文字加入食物分類的欄位中
+     */
+    public void FoodCategoryList() {
         Resources resources = getResources();
         String[] list = resources.getStringArray(R.array.foodCategory);
 
@@ -82,14 +99,20 @@ public class AddFoodActivity extends AppCompatActivity {
                         R.layout.dropdown_menu_popup_item,
                         list);
 
+        //將資源欓內的文字加入食物分類中
         AutoCompleteTextView editTextFilledExposedDropdown = findViewById(R.id.addFood_category);
         editTextFilledExposedDropdown.setAdapter(adapter);
     }
 
-    public void FoodCityList(){
+    /**
+     *將values 內 string的文字加入縣市的欄位中
+     */
+    public void FoodCityList() {
         Resources resources = getResources();
+        //將values 內 string的文字加入陣列
         String[] list = resources.getStringArray(R.array.foodCity);
 
+        //將陣列的文字加入layout中
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
                         this,
@@ -98,16 +121,17 @@ public class AddFoodActivity extends AppCompatActivity {
 
         addFoodCity.setAdapter(adapter);
 
-        addFoodCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /**
+         * 下拉選單監聽，selectedCity ＝ 字串（城市名）
+         */
+        addFoodCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedCity = parent.getItemAtPosition(position).toString();
-                Log.v("yichun","123");
+                Log.v("lipin", selectedCity);
 
-                switch (selectedCity)
-                {
+                switch (selectedCity) {
                     case "台北":
-                        Log.v("yichun","test");
                         addFoodDist.setAdapter(new ArrayAdapter<String>(AddFoodActivity.this,
                                 R.layout.dropdown_menu_popup_item,
                                 getResources().getStringArray(R.array.foodCity_Taipei)));
@@ -120,37 +144,55 @@ public class AddFoodActivity extends AppCompatActivity {
                 }
 
                 addFoodDist.setVisibility(View.VISIBLE);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
     }
 
-    public void showDatetimePicker(){
-        DatePickerDialog dialog = new DatePickerDialog(this,
-                DatePickerDialog.THEME_DEVICE_DEFAULT_DARK, new DatePickerDialog.OnDateSetListener() {
+
+    /**
+     * 監聽區域的選擇,拿取客戶端選擇的區域
+     */
+    public void FoodDistList(){
+        addFoodDist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                datetime.setText(year + "/" + (month+1) + "/" + dayOfMonth);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedDist = parent.getItemAtPosition(position).toString();
+                Log.v("lipin",selectedDist);
             }
-        },
-                2020, 4 - 1, 12);
+        });
+    }
 
-        DatePicker picker = dialog.getDatePicker();
-        Calendar limit = Calendar.getInstance();
-        limit.set(2020,3,12);
 
-        picker.setMinDate(limit.getTimeInMillis());
 
-        dialog.show();
+
+    public void showDatetimePicker(){
+            DatePickerDialog dialog = new DatePickerDialog(this,
+                    DatePickerDialog.THEME_DEVICE_DEFAULT_DARK, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    datetime.setText(year + "/" + (month+1) + "/" + dayOfMonth);
+                }
+            },
+                    2020, 4 - 1, 12);
+
+            DatePicker picker = dialog.getDatePicker();
+            Calendar limit = Calendar.getInstance();
+            limit.set(2020,3,12);
+
+            picker.setMinDate(limit.getTimeInMillis());
+
+            dialog.show();
     }
 
     public void toAddFoodPreview(View view) {
 
     }
+
+    /**
+     * 截止時間按鈕
+     */
+    public void datePickerBtn(View view) {
+        showDatetimePicker();
+    }
 }
+
