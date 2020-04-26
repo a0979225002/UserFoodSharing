@@ -209,58 +209,58 @@ public class SignupActivity extends AppCompatActivity {
         dialog.show();
     }
 
-//    /**
-//     * 發送驗證碼
-//     */
-//
-//    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//        @Override
-//        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-//            //Getting the code sent by SMS
-//            String code = phoneAuthCredential.getSmsCode();
-//
-//            Log.v("lipin",code);
-//
-//            //sometime the code is not detected automatically
-//            //in this case the code will be null
-//            //so user has to manually enter the code
-//
-//
-//        }
-//
-//        @Override
-//        public void onVerificationFailed(FirebaseException e) {
-//            Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-//        }
-//
-//        @Override
-//        public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-//            super.onCodeSent(s, forceResendingToken);
-//            mVerificationId = s;
-//            PhoneAuthProvider.ForceResendingToken mResendToken = forceResendingToken;
-//            Log.v("lipin",mResendToken.toString()+"::::::");
-//        }
-//    };
-//    private void initFireBaseCallbacks() {
-//        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//            @Override
-//            public void onVerificationCompleted(PhoneAuthCredential credential) {
-//                Toast.makeText(SignupActivity.this, "Verification Complete", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onVerificationFailed(FirebaseException e) {
-//                Toast.makeText(SignupActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCodeSent(String verificationId,
-//                                   PhoneAuthProvider.ForceResendingToken token) {
-//                Toast.makeText(SignupActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
-//                mVerificationId = verificationId;
-//            }
-//        };
-//    }
+    /**
+     * 發送驗證碼
+     */
+
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        @Override
+        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+            //Getting the code sent by SMS
+            String code = phoneAuthCredential.getSmsCode();
+
+            Log.v("lipin",code);
+
+            //sometime the code is not detected automatically
+            //in this case the code will be null
+            //so user has to manually enter the code
+
+
+        }
+
+        @Override
+        public void onVerificationFailed(FirebaseException e) {
+            Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+            super.onCodeSent(s, forceResendingToken);
+            mVerificationId = s;
+            PhoneAuthProvider.ForceResendingToken mResendToken = forceResendingToken;
+            Log.v("lipin",mResendToken.toString()+"::::::");
+        }
+    };
+    private void initFireBaseCallbacks() {
+        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential credential) {
+                Toast.makeText(SignupActivity.this, "Verification Complete", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                Toast.makeText(SignupActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(String verificationId,
+                                   PhoneAuthProvider.ForceResendingToken token) {
+                Toast.makeText(SignupActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
+                mVerificationId = verificationId;
+            }
+        };
+    }
 
 
     /**
@@ -408,6 +408,7 @@ public class SignupActivity extends AppCompatActivity {
                         public void onResponse(String response) {
                             Check_Signup(response);
                          if (intcount == 1) {
+                             Log.v("lipin","12323123");
                              snackbar = Snackbar.make(allview, "註冊成功", Snackbar.LENGTH_INDEFINITE);
                              snackbar.show();
                              intent = new Intent(SignupActivity.this, LoginActivity.class);
@@ -418,6 +419,7 @@ public class SignupActivity extends AppCompatActivity {
                              overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                              dialog.dismiss();
                          }else {
+                             dialog.dismiss();
                             snackbar = Snackbar.make(allview,"目前伺服器過載中,請稍後再註冊",Snackbar.LENGTH_LONG);
                             snackbar.show();
                          }
@@ -455,18 +457,18 @@ public class SignupActivity extends AppCompatActivity {
         return  intcount;
     }
 
-//    /**
-//     * 手機驗證碼
-//     *獲得手機驗證碼按鈕
-//     * @param view
-//     */
-//    public void Verify_Btn(View view) {
-//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-//                "+886" +"979225002" ,
-//                60,
-//                TimeUnit.SECONDS,
-//                TaskExecutors.MAIN_THREAD,
-//                mCallbacks);
-//
-//    }
+    /**
+     * 手機驗證碼
+     *獲得手機驗證碼按鈕
+     * @param view
+     */
+    public void Verify_Btn(View view) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                "+886" +"979225002" ,
+                60,
+                TimeUnit.SECONDS,
+                TaskExecutors.MAIN_THREAD,
+                mCallbacks);
+
+    }
 }
