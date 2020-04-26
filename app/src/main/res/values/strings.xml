@@ -20,8 +20,18 @@
         <item>乾貨</item>
         <item>飲品</item>
     </string-array>
+
+<!--  縣市選單  -->
     <string-array name="foodCity">
         <item>台中</item>
         <item>台北</item>
+    </string-array>
+    <string-array name="foodCity_Taipei">
+        <item>大安區</item>
+        <item>信義區</item>
+    </string-array>
+    <string-array name="foodCity_Taichung">
+        <item>中區</item>
+        <item>西屯區</item>
     </string-array>
 </resources>
