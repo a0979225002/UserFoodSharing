@@ -31,9 +31,10 @@ public class AddFoodActivity extends AppCompatActivity {
     private Button datePickerBtn;
     private ImageView foodimg;
     private File sdroot;
-    private AutoCompleteTextView addFoodCity, addFoodDist;
+    private AutoCompleteTextView addFoodCity, addFoodDist,addFoodCategory;
     private String selectedCity;//下拉選單監聽,城市名
     private String selectedDist;//下拉選單監聽,區域名
+    private String selectedCategory;
 
 
     @Override
@@ -60,6 +61,7 @@ public class AddFoodActivity extends AppCompatActivity {
         datePickerBtn = findViewById(R.id.datePickerBtn);//截止時間按鈕
         addFoodCity = findViewById(R.id.addFood_city);//縣市輸入
         addFoodDist = findViewById(R.id.addFood_dist);//區域輸入
+        addFoodCategory = findViewById(R.id.addFood_category);//食物分類選擇
         foodimg = findViewById(R.id.addFood_img);//照片位置
 
         addFoodCity.setDropDownHeight(400);//給予下拉選單寬度
@@ -100,12 +102,22 @@ public class AddFoodActivity extends AppCompatActivity {
                         list);
 
         //將資源欓內的文字加入食物分類中
-        AutoCompleteTextView editTextFilledExposedDropdown = findViewById(R.id.addFood_category);
-        editTextFilledExposedDropdown.setAdapter(adapter);
+        addFoodCategory.setAdapter(adapter);
+
+        addFoodCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategory = parent.getItemAtPosition(position).toString();
+                Log.v("lipin",selectedCategory);
+            }
+        });
+
+
+
     }
 
     /**
-     *將values 內 string的文字加入縣市的欄位中
+     *將values 內 string的文字加入縣市的欄位中,並監聽客戶端點選的縣市
      */
     public void FoodCityList() {
         Resources resources = getResources();

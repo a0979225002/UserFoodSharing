@@ -58,6 +58,11 @@ public class NotificationFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+    }
+
     private void initlv() {
         adapter = new SimpleAdapter(this.getActivity(), data, R.layout.listview_notification,from, to);
         lv.setAdapter(adapter);
