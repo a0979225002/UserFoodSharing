@@ -190,6 +190,7 @@ public class LoadingActivity extends AppCompatActivity {
         if (intcount ==1){
             intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             dialog.dismiss();
 

@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.TaskExecutors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,10 +80,10 @@ public class SignupActivity extends AppCompatActivity {
     int intcount;//確認用戶是否有加入成功 1 = 有加入,0 ＝沒加入
 
 
-//    //驗證碼
-//    private FirebaseAuth mAuth;
+    //驗證碼
+    private FirebaseAuth mAuth;
 //    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-//    String mVerificationId;//獲得驗證碼
+    String mVerificationId;//獲得驗證碼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class SignupActivity extends AppCompatActivity {
 
         drawableOK = getResources().getDrawable(R.drawable.ic_check_circle_black_24dp);
 
-//        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
 //        initFireBaseCallbacks();//驗證碼
 
@@ -154,7 +155,7 @@ public class SignupActivity extends AppCompatActivity {
                     getpasswdVerify = passwdVerify.getText().toString();
 
                     if (!hasFocus){
-                        if (getpasswdVerify.equals(getpassword)){
+                        if (getpasswdVerify.equals(getpassword)&& getpasswdVerify.length()>=6 ){
                             passwd.setError(null);
                             passwdVerify.setError(null);
                             passwd.setCompoundDrawables(null, null, null, null);
@@ -211,6 +212,35 @@ public class SignupActivity extends AppCompatActivity {
 //    /**
 //     * 發送驗證碼
 //     */
+//
+//    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//        @Override
+//        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+//            //Getting the code sent by SMS
+//            String code = phoneAuthCredential.getSmsCode();
+//
+//            Log.v("lipin",code);
+//
+//            //sometime the code is not detected automatically
+//            //in this case the code will be null
+//            //so user has to manually enter the code
+//
+//
+//        }
+//
+//        @Override
+//        public void onVerificationFailed(FirebaseException e) {
+//            Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+//
+//        @Override
+//        public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+//            super.onCodeSent(s, forceResendingToken);
+//            mVerificationId = s;
+//            PhoneAuthProvider.ForceResendingToken mResendToken = forceResendingToken;
+//            Log.v("lipin",mResendToken.toString()+"::::::");
+//        }
+//    };
 //    private void initFireBaseCallbacks() {
 //        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 //            @Override
@@ -432,11 +462,11 @@ public class SignupActivity extends AppCompatActivity {
 //     */
 //    public void Verify_Btn(View view) {
 //        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-//                "+886123456789",        // Phone number to verify
-//                1,                 // Timeout duration
-//                TimeUnit.MINUTES,   // Unit of timeout
-//                this,               // Activity (for callback binding)
-//                mCallbacks);        // OnVerificationStateChangedCallbacks
+//                "+886" +"979225002" ,
+//                60,
+//                TimeUnit.SECONDS,
+//                TaskExecutors.MAIN_THREAD,
+//                mCallbacks);
 //
 //    }
 }
