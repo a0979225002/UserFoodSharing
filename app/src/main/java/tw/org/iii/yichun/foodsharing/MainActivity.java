@@ -10,18 +10,22 @@ import androidx.viewpager.widget.ViewPager;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import tw.org.iii.yichun.foodsharing.profile.ProfileFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -111,19 +115,24 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
     }
 
-
     // 點擊 Bottom Nav 事件
     private void changeBottomNav(){
         bmView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int currentIndex = viewPager.getCurrentItem();
                 int menuId = menuItem.getItemId();
+
                 switch (menuId){
                     case R.id.tabNotification:viewPager.setCurrentItem(0);break;
                     case R.id.tabMessage:viewPager.setCurrentItem(1);break;
                     case R.id.tabHome:viewPager.setCurrentItem(2);break;
                     case R.id.tabProfile:viewPager.setCurrentItem(3);break;
                     case R.id.tabShop:viewPager.setCurrentItem(4);break;
+                }
+
+                switch (menuId){
+                    case 0:
                 }
                 return false;
             }
@@ -145,6 +154,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int i) {
 
+            }
+        });
+
+        // 禁止 viewPager 左右滑動
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
             }
         });
     }
