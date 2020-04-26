@@ -37,6 +37,8 @@ public class ProfileFragment extends Fragment {
     private Fragment fragment1, fragment2, fragment3;
     private TabLayout tabLayout;
     private View view;
+    private ArrayList views;
+
 
     @Override
     public void onStart() {
@@ -54,89 +56,62 @@ public class ProfileFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-//        removefragment();
-        setFragment();
-
-       String ss=   viewPager.getAdapter().toString();
-        Log.v("lipin",ss);
-        return view;
-    }
-
-    private void removefragment() {
-        //先保证ViewPager之前已设置过Adapter,这样才有可能存在缓存
-        if (viewPager.getAdapter() != null) {
-            //获取FragmentManager实现类的class对象,这里指的就是FragmentManagerImpl
-            Class<? extends FragmentManager> aClass = getChildFragmentManager().getClass();
-            try {
-                //1.获取其mAdded字段
-                Field f = aClass.getDeclaredField("mAdded");
-                f.setAccessible(true);
-                //强转成ArrayList
-                ArrayList<Fragment> list = (ArrayList) f.get(getChildFragmentManager());
-                //清空缓存
-                list.clear();
-
-                //2.获取mActive字段
-                f = aClass.getDeclaredField("mActive");
-                f.setAccessible(true);
-                //强转成SparseArray
-                SparseArray<Fragment> array = (SparseArray) f.get(getChildFragmentManager());
-                //清空缓存
-                array.clear();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-//再次设置ViewPager的Adapter
-
-
-
-
-
-    }
-    private void setFragment() {
         profileImg = view.findViewById(R.id.profile_img);
-
         tabLayout = view.findViewById(R.id.profile_tabLayout);
         viewPager = view.findViewById(R.id.profile_viewPager);
-        tabLayout.setupWithViewPager(viewPager);
+
+
+        views = new ArrayList();
+
+
 
         fragment1 = new ShareHistoryFragment();
         fragment2 = new TakeHistoryFragment();
         fragment3 = new CommentFragment();
 
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager(),tabLayout.getTabCount()) {
+        views.add(0,fragment1);
+        views.add(1,fragment2);
+        views.add(2,fragment3);
+
+        setFragment();
+
+        return view;
+    }
+
+
+    private void setFragment() {
+
+//        tabLayout.setupWithViewPager(viewPager);
+
+
+        viewPager.setAdapter(new FragmentPagerAdapter(getFragmentManager(),tabLayout.getTabCount()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
+                Log.v("lipin", 123456+"::::"+position+"");
 
-                return null;
+                return (Fragment) views.get(position);
             }
+
 
             @Override
             public int getCount() {
-                return 3;
+                return views.size();
             }
 
             @NonNull
             @Override
             public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                Log.v("lipin", 123 + "");
                 tabLayout.getTabAt(0).setText("分享紀錄");
                 tabLayout.getTabAt(1).setText("索取紀錄");
                 tabLayout.getTabAt(2).setText("評論");
-                switch (position) {
-                    case 0:
-                        return fragment1;
-                    case 1:
-                        return fragment2;
-                    case 2:
-                        return fragment3;
-                }
 
+                Log.v("lipin",position+"::::0000");
                 return super.instantiateItem(container, position);
             }
         });
+
+
 
 
 
