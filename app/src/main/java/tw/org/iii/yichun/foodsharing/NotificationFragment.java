@@ -23,6 +23,7 @@ import tw.org.iii.yichun.foodsharing.R;
  * A simple {@link Fragment} subclass.
  */
 public class NotificationFragment extends Fragment {
+    private View view;
     private Button btn;
     private ListView lv;
 
@@ -36,8 +37,27 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        btn = (Button) view.findViewById(R.id.notify);
+        view = inflater.inflate(R.layout.fragment_notification, container, false);
+
+        findID(); //findview
+        addNotification(); //按下按鈕模擬訊息進來
+        initlv(); //初始listview
+        return view;
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+    }
+
+    private void findID(){
+        btn = (Button) view.findViewById(R.id.notify); //模擬通知進來
+        lv = (ListView) view.findViewById(R.id.lv);//fragment_notification中的listivew 訊息進來呈現的地方
+    }
+
+    /**模擬通知資料進來呈現在listview 一個蘿蔔一個坑**/
+    private void addNotification(){
         btn.setOnClickListener(new View.OnClickListener() {
             int count = 0;
             @Override
@@ -51,18 +71,9 @@ public class NotificationFragment extends Fragment {
 
             }
         });
-
-        lv = (ListView) view.findViewById(R.id.lv);
-        initlv();
-        return view;
-
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-    }
-
+    /**初始化listview套用layout--listview_notification**/
     private void initlv() {
         adapter = new SimpleAdapter(this.getActivity(), data, R.layout.listview_notification,from, to);
         lv.setAdapter(adapter);
@@ -71,7 +82,8 @@ public class NotificationFragment extends Fragment {
     //todo: 別人做了什麼事 就丟到這來? 情境: 1. 索取者按下排隊->通知分享者 ;
     // 2. 分享者卡片到期->通知分享者 3. 索取者卡片排隊結束-> 通知索取者
     // 4. 評分...
-    // 待辦功能: 對應的通知點選要能夠到對應的頁面  推論: 所以通知送進來時，還要帶page資訊以供intent過去?
+    // 待辦功能: 對應的通知點選要能夠到對應的頁面  推論: 所以通知送進來時，要帶page資訊以供intent過去
+    // notification資料庫? 因為每次進來都要能看到歷史通知
 
 
 }
