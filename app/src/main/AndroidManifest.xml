@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".AddFoodActivity"></activity>
+        <activity android:name=".AddFoodActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".MyCameraActivity" />
         <activity android:name=".Loading.LoginActivity"
             android:windowSoftInputMode="stateHidden"/>

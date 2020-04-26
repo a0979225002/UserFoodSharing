@@ -83,7 +83,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="20dp">
-
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
@@ -98,6 +97,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         />
+
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -147,6 +148,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginRight="10dp"
                     android:backgroundTint="@color/colorPrimary"
+                    android:onClick="datePickerBtn"
                     />
 
                 <com.google.android.material.textfield.TextInputLayout

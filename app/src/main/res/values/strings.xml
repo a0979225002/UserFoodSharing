@@ -25,6 +25,13 @@
     <string-array name="foodCity">
         <item>台中</item>
         <item>台北</item>
+        <item>高雄</item>
+        <item>彰化</item>
+        <item>雲林</item>
+        <item>台南</item>
+        <item>花蓮</item>
+
+
     </string-array>
     <string-array name="foodCity_Taipei">
         <item>大安區</item>
