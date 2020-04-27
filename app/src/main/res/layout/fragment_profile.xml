@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="20dp"
+        android:paddingHorizontal="20dp"
         >
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_img"
@@ -17,7 +17,8 @@
             android:layout_weight="1"
             android:layout_height="96dp"
             android:src="@drawable/profile_img"
-            app:civ_border_width="2dp"
+            app:civ_border_width="1dp"
+            android:layout_marginRight="20dp"
             />
         <LinearLayout
             android:layout_width="0dp"
@@ -31,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="user name"
+                android:textColor="@color/colorSecondary"
                 android:textSize="24sp"
             />
             <TextView
@@ -38,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4.3"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:textColor="@color/colorPrimary"
                 />
         </LinearLayout>
@@ -51,18 +53,20 @@
             android:layout_gravity="center_vertical"
             >
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="粉絲"
-                android:textSize="18sp"
-                android:layout_gravity="center_horizontal"
-                />
-            <TextView
                 android:id="@+id/profile_follower"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="123"
+                android:textColor="@color/colorSecondary"
                 android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="粉絲"
+                android:textSize="12sp"
+                android:textColor="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
                 />
         </LinearLayout>
@@ -75,18 +79,20 @@
             android:layout_gravity="center_vertical"
             >
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="追蹤中"
-                android:textSize="18sp"
-                android:layout_gravity="center_horizontal"
-                />
-            <TextView
                 android:id="@+id/profile_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="456"
+                android:textColor="@color/colorSecondary"
                 android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="追蹤中"
+                android:textSize="12sp"
+                android:textColor="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
                 />
         </LinearLayout>

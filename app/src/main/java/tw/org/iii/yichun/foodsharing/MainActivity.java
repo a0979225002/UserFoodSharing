@@ -85,8 +85,12 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         changeBottomNav();
+        setToolBar();
+    }
 
-        // ToolBar
+
+    // 自訂 ToolBar
+    private void setToolBar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.nav_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -108,12 +112,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //        setSupportActionBar(toolbar);
+//      setSupportActionBar(toolbar);
 //
-//        getSupportActionBar().setDisplayShowTitleEnabled(true); //隱藏 toolbar default title
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(false); //是否顯示返回鍵
-//        getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
+//      getSupportActionBar().setDisplayShowTitleEnabled(true); //隱藏 toolbar default title
+//      getSupportActionBar().setDisplayHomeAsUpEnabled(false); //是否顯示返回鍵
+//      getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
     }
+
 
     // 點擊 Bottom Nav 事件
     private void changeBottomNav(){

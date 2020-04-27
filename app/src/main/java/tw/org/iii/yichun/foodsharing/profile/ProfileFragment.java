@@ -60,10 +60,7 @@ public class ProfileFragment extends Fragment {
         tabLayout = view.findViewById(R.id.profile_tabLayout);
         viewPager = view.findViewById(R.id.profile_viewPager);
 
-
         views = new ArrayList();
-
-
 
         fragment1 = new ShareHistoryFragment();
         fragment2 = new TakeHistoryFragment();
