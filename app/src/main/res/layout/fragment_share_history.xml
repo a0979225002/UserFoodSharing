@@ -5,17 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".profile.ShareHistoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <GridView
         android:id="@+id/shareHistory_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="120dp"
         android:gravity="center"
-        android:numColumns="auto_fit"
+        android:numColumns="3"
         android:stretchMode="columnWidth"
         tools:listitem="@layout/listview_profile_history"
-        android:padding="20dp"
+        android:padding="10dp"
         />
 
 </FrameLayout>

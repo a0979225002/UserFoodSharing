@@ -56,7 +56,7 @@ public class ShareHistoryFragment extends Fragment {
         /**
          * HomeList Item 集合，對應 listView_home.xml
          */
-        public final class HomeListItem{
+        public final class ListItem{
             public ImageView image; // 食物照片
             public TextView title; // 食物名稱
         }
@@ -79,16 +79,16 @@ public class ShareHistoryFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            // 取得 listView_home.xml
-            HomeListItem homeListItem = new HomeListItem();
+            // 取得 listView_profile_history.xml
+            ListItem ListItem = new ListItem();
             convertView = layoutInflater.inflate(R.layout.listview_profile_history, null);
-            homeListItem.image = (ImageView) convertView.findViewById(R.id.profile_foodList_img);
-            homeListItem.title = (TextView) convertView.findViewById(R.id.profile_foodList_title);
-            convertView.setTag(homeListItem);
+            ListItem.image = (ImageView) convertView.findViewById(R.id.profile_foodList_img);
+            ListItem.title = (TextView) convertView.findViewById(R.id.profile_foodList_title);
+            convertView.setTag(ListItem);
 
             // 綁定資料
-            homeListItem.image.setImageResource((Integer)data.get(position).get("image"));
-            homeListItem.title.setText((String)data.get(position).get("title"));
+            ListItem.image.setImageResource((Integer)data.get(position).get("image"));
+            ListItem.title.setText((String)data.get(position).get("title"));
 
             return convertView;
         }

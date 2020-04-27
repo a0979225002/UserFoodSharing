@@ -8,4 +8,5 @@
     <color name="textWhite">#FFF</color>
     <color name="editTextHint">#D1D4EA</color>
     <color name="link">#352252</color>
+    <color name="gray">#A7A7A7</color>
 </resources>
