@@ -10,12 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
+import java.sql.Struct;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import tw.org.iii.yichun.foodsharing.R;
 
@@ -29,8 +35,8 @@ public class NotificationFragment extends Fragment {
 
     private SimpleAdapter adapter;
     private LinkedList<HashMap<String,String>> data = new LinkedList<>();
-    private String [] from = {"iv","tv"};
-    private int [] to = {R.id.notification_msg, R.id.notification_time};
+    private String [] from = {"notification","time"};
+    private int [] to = {R.id.notification_notification, R.id.notification_time};
 
     @Nullable
     @Override
@@ -42,21 +48,46 @@ public class NotificationFragment extends Fragment {
         findID(); //findview
         addNotification(); //按下按鈕模擬訊息進來
         initlv(); //初始listview
+        getData();
         return view;
 
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-    }
 
     private void findID(){
         btn = (Button) view.findViewById(R.id.notify); //模擬通知進來
         lv = (ListView) view.findViewById(R.id.lv);//fragment_notification中的listivew 訊息進來呈現的地方
+
     }
 
-    /**模擬通知資料進來呈現在listview 一個蘿蔔一個坑**/
+    /**初始化listview套用layout--listview_notification**/
+    private void initlv() {
+        adapter = new SimpleAdapter(this.getActivity(), data, R.layout.listview_notification,from, to);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: how?
+            }
+        });
+    }
+
+    /**導入listview原本資料**/
+    public LinkedList<HashMap<String,String>> getData(){
+        LinkedList<HashMap<String,String>> list = new LinkedList<>();
+        for (int i = 0; i < 10; i++){
+            HashMap<String, String> row =new HashMap<>();
+            row.put(from[0], "王小明已於愛心便當排隊");
+            row.put(from[1], "2020.04.30 08:0"+i);
+            data.add(0,row); //新通知放在最上面
+            adapter.notifyDataSetChanged();
+
+        }
+        return list;
+    }
+
+
+    /**模擬通知資料進來呈現在listview **/
     private void addNotification(){
         btn.setOnClickListener(new View.OnClickListener() {
             int count = 0;
@@ -73,17 +104,18 @@ public class NotificationFragment extends Fragment {
         });
     }
 
-    /**初始化listview套用layout--listview_notification**/
-    private void initlv() {
-        adapter = new SimpleAdapter(this.getActivity(), data, R.layout.listview_notification,from, to);
-        lv.setAdapter(adapter);
-    }
+
+    /**可點擊的listview**/
+
+
+
 
     //todo: 別人做了什麼事 就丟到這來? 情境: 1. 索取者按下排隊->通知分享者 ;
     // 2. 分享者卡片到期->通知分享者 3. 索取者卡片排隊結束-> 通知索取者
     // 4. 評分...
     // 待辦功能: 對應的通知點選要能夠到對應的頁面  推論: 所以通知送進來時，要帶page資訊以供intent過去
     // notification資料庫? 因為每次進來都要能看到歷史通知
+
 
 
 }
