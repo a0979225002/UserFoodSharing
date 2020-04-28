@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:paddingVertical="15dp"
+    >
+    <ImageView
+        android:id="@+id/storeLv_storeImg"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_shop_24dp"
+        android:padding="10dp"
+        />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/storeLv_storeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Store Name"
+            android:textSize="18sp"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginBottom="5dp"
+            />
+
+        <TextView
+            android:id="@+id/storeLv_discountInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="可於線上消費折抵"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/storeLv_discount"
+        android:layout_width="0dp"
+        android:layout_weight="1.5"
+        android:layout_height="wrap_content"
+        android:text="10-100點"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center_vertical"
+        />
+
+
+</LinearLayout>

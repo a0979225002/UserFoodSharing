@@ -53,7 +53,7 @@ public class TakeHistoryFragment extends Fragment {
 
 
         /**
-         * HomeList Item 集合，對應 listView_home.xml
+         * List Item 集合，對應 listView_profile_history.xml
          */
         public final class ListItem{
             public ImageView image; // 食物照片
