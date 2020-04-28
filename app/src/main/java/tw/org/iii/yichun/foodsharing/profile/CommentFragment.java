@@ -41,7 +41,7 @@ public class CommentFragment extends Fragment {
     }
 
     /**
-     * 食物 ListView Adapter
+     * 評論 ListView Adapter
      */
     public class ListViewAdapter extends BaseAdapter {
 
@@ -56,7 +56,7 @@ public class CommentFragment extends Fragment {
 
 
         /**
-         * HomeList Item 集合，對應 listView_home.xml
+         * List Item 集合，對應 listView_comment.xml
          */
         public final class ListItem{
             public CircleImageView userPhoto;
@@ -103,7 +103,7 @@ public class CommentFragment extends Fragment {
 
 
     /**
-     * 食物 ListView getData
+     * 評論 ListView getData
      */
     // TODO: 2020/4/27 撈資料庫資料
     public List<HashMap<String, Object>> getData(){
