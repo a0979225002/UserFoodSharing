@@ -52,7 +52,7 @@ public class NotificationFragment extends Fragment {
             }
         });
 
-        lv = (ListView) view.findViewById(R.id.lv);
+        lv = (ListView) view.findViewById(R.id.notification_lv);
         initlv();
         return view;
 

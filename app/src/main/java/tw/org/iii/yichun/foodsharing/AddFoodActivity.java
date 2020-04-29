@@ -98,6 +98,9 @@ public class AddFoodActivity extends AppCompatActivity {
         camera();//點擊相片給予重新拍照,將會面引導去拍照頁面
 
         dismissBar();//讓整頁擁有關掉snackbar的功能
+
+        addFoodImg.setImageResource(R.drawable.ic_add_a_photo_grey_24dp);//預設相機圖示
+
     }
 
 
@@ -293,6 +296,11 @@ public class AddFoodActivity extends AppCompatActivity {
                         addFoodDist.setAdapter(new ArrayAdapter<String>(AddFoodActivity.this,
                                 R.layout.dropdown_menu_popup_item,
                                 getResources().getStringArray(R.array.foodCity_Taichung)));
+                        break;
+                    case "高雄":
+                        addFoodDist.setAdapter(new ArrayAdapter<String>(AddFoodActivity.this,
+                                R.layout.dropdown_menu_popup_item,
+                                getResources().getStringArray(R.array.foodCity_Kouhsiung)));
                         break;
                 }
 
