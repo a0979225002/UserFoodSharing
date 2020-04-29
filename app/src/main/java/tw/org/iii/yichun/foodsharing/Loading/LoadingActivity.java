@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,10 +17,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +25,7 @@ import java.util.Map;
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
-import tw.org.iii.yichun.foodsharing.Global.VolleyApp;
+import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 
@@ -171,7 +167,7 @@ public class LoadingActivity extends AppCompatActivity {
                 return params;
             }
         };
-        VolleyApp.queue.add(request);
+        MainUtils.queue.add(request);
     }
 
     /**

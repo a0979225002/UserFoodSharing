@@ -27,6 +27,10 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import tw.org.iii.yichun.foodsharing.Item.AddFood;
 
 public class MyCameraActivity extends AppCompatActivity {
     private Camera camera;
@@ -38,12 +42,22 @@ public class MyCameraActivity extends AppCompatActivity {
     private MySensorListener mySensorListener;
     private Bitmap bmp;
     private ImageView imageView;
-
+    private String Imgname;
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_camera);
 
+        findID();
+
+        Intent intent = getIntent();
+
+    }
+
+
+
+    private void findID(){
         camera = getCameraInstance();
 //        camera.getParameters().setFocusMode();
 
@@ -67,8 +81,9 @@ public class MyCameraActivity extends AppCompatActivity {
         }else {
             camera.setDisplayOrientation(180);
         }
-
     }
+
+
 
     private class MySensorListener implements SensorEventListener {
         @Override
@@ -132,7 +147,10 @@ public class MyCameraActivity extends AppCompatActivity {
     private void savePic(byte[] data){
         Log.v("yichun","file: " + data.length);
         try {
-            FileOutputStream fout = new FileOutputStream(new File(sdroot, "iii02.jpg"));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("_yyyyMMddHHmmss");
+            Date date = new Date();
+            Imgname = "FoodSharing"+simpleDateFormat.format(date)+".jpg";
+            FileOutputStream fout = new FileOutputStream(new File(sdroot, Imgname));
             fout.write(data);
             fout.flush();
             fout.close();
@@ -150,9 +168,28 @@ public class MyCameraActivity extends AppCompatActivity {
         builder.setPositiveButton("使用", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                Log.v("lipin",Imgname+"照片地址");
+
+                intent = getIntent();
+
+                AddFood addFood = (AddFood) getIntent().getSerializableExtra("savefood");
+
+                Log.v("lipin",addFood.getAddFoodName());
+
+
+
+                intent = new Intent(MyCameraActivity.this, AddFoodActivity.class);
+
+
+
+                if (Imgname != null) addFood.setAddFoodImg(Imgname);
+
+                intent.putExtra("savefood",addFood);
+
+                startActivityForResult(intent,321);
+
                 finish();
-                Intent intent = new Intent(MyCameraActivity.this, AddFoodActivity.class);
-                startActivity(intent);
             }
         });
         builder.setNegativeButton("返回", new DialogInterface.OnClickListener() {
@@ -170,7 +207,7 @@ public class MyCameraActivity extends AppCompatActivity {
         dialog.show();
 
         ImageView img = dialog.findViewById(R.id.camera_dialog_img);
-        Bitmap bmp = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/iii02.jpg");
+        Bitmap bmp = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/"+Imgname+".jpg");
         img.setImageBitmap(bmp);
 
     }
