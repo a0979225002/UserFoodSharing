@@ -367,13 +367,12 @@ public class AddFoodActivity extends AppCompatActivity {
 
             merge_arrdress = selectedCity+" "+ selectedDist+" "+ address.getText().toString();//將縣市區域地址整合成一條字串
 
-            Intent intent = new Intent(this, newPreview.class);
+            intent = new Intent(this, newPreview.class);
             SaveAddFood();
             intent.putExtra("savefood",addFood);
             startActivityForResult(intent,321);
-            finish();
-
             startActivity(intent);
+            finish();
 
         } else if (bitmap == null
                 || addFoodAmount.getText().toString().trim().isEmpty()

@@ -66,7 +66,8 @@
                     <AutoCompleteTextView
                         android:id="@+id/addFood_category"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -98,6 +99,7 @@
                         android:id="@+id/addFood_city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text"
                         />
 
 
@@ -114,7 +116,8 @@
                     <AutoCompleteTextView
                         android:id="@+id/addFood_dist"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
