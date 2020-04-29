@@ -1,14 +1,22 @@
 package tw.org.iii.yichun.foodsharing;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +57,9 @@ public class newPreview extends AppCompatActivity {
 
     private Intent intent;
     private AddFood addFood;
+    private File sdroot;
+    private Bitmap bitmap;
+    private int foodAmount_Number;//食物數量,將字串與數字分開,這裡只有數字
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +67,71 @@ public class newPreview extends AppCompatActivity {
         setContentView(R.layout.activity_new_preview);
         ButterKnife.bind(this);
 
-        queueBtn.setEnabled(false);//將排隊按鈕關閉
+        queueBtn.setEnabled(false);//將排隊按鈕關閉,不給點擊
         queueBtn.setBackgroundColor(Color.GRAY);//更改排隊按鈕顏色
 
         intent = getIntent();
         addFood = (AddFood) getIntent().getSerializableExtra("savefood");
 
+        FoodAmount();//取出數量的值,用正則把數字與字串分開
+        getFoodCard();//拿取addfoodactivity寫入的值
+        getuser();//取得客戶的客戶名稱,與照片
+
+    }
+    /**
+     * 取出數量的值,用正則把數字與字串分開
+     */
+    private void FoodAmount(){
+        String foodAmount = addFood.getAddFoodAmount();
+        String foodAmount2 = "[^0-9]";
+        Pattern pattern = Pattern.compile(foodAmount2);
+        Matcher matcher = pattern.matcher(foodAmount);
+        foodAmount_Number = Integer.valueOf(matcher.replaceAll("").trim());
+
+        Log.v("lipin",foodAmount_Number+"食物數量");
     }
 
+    /**
+     * 取得客戶的客戶名稱,與照片
+     */
+    private void getuser(){
+
+        //如果客戶沒有輸入詳細資料,取得不到客戶名稱,將給予帳號名稱來代替
+        username.setText(getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
+                             .getString("name",null));
+        if (username.getText().toString().trim().isEmpty())
+        username.setText(getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
+                            .getString("account",null));
+
+    }
+
+    /**
+     * 拿取addfoodactivity寫入的值
+     */
+    private  void getFoodCard(){
+
+        String Imgname = addFood.getAddFoodImg();
+        queue.setText(foodAmount_Number+"人排隊");
+        address.setText(addFood.getMerge_arrdress());
+        category.setText(addFood.getAddFoodCategory());
+        foodTag.setText(addFood.getAddFoodTag());
+        datetime.setText(addFood.getAddFoodDatetime());
+        amount.setText(addFood.getAddFoodAmount());
+
+        if (addFood.isShareIt()){
+            shareIt.setText("可以");
+        }else {
+            shareIt.setText("不可以");
+        }
+
+        Memo.setText(addFood.getAddFoodMemo());
+        foodname.setText(addFood.getAddFoodName());
+
+        //拿取addfoodactivity儲存的照片名,搜尋該照片後放在此頁面
+        sdroot = Environment.getExternalStorageDirectory();
+        bitmap = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/" +Imgname);//拿出sd卡位置的圖片
+        foodImage.setImageBitmap(bitmap);
+    }
 
     /**
      * 分享按鈕
@@ -80,9 +148,17 @@ public class newPreview extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+
        intent = new Intent(newPreview.this, AddFoodActivity.class);
        intent.putExtra("savefood",addFood);
        startActivityForResult(intent,321);
        finish();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v("lipin","預覽onStop");
     }
 }

@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
     private void toCamera() {
         Intent intent = new Intent(this, AddFoodActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }

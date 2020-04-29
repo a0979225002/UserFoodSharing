@@ -62,7 +62,7 @@ public class AddFoodActivity extends AppCompatActivity {
     LinearLayout allview;                //整個頁面
 
 
-    private File sdroot;//將照片加入的位置
+    private File sdroot;//獲得加入照片的位置
 
     private String selectedCity;//下拉選單監聽,獲得客戶端選擇的城市名
     private String selectedDist;//下拉選單監聽,獲得客戶端選擇的區域名
@@ -433,7 +433,12 @@ public class AddFoodActivity extends AppCompatActivity {
                 .setConfirmClickListener(new KAlertDialog.KAlertClickListener() {
                     @Override
                     public void onClick(KAlertDialog sDialog) {
+                        intent = new Intent(AddFoodActivity.this,MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        sDialog.dismiss();
                         AddFoodActivity.this.finish();
+
                     }
 
                 });
