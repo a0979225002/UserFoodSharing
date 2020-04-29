@@ -29,7 +29,6 @@
                     android:id="@+id/addFood_img"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:src="@drawable/ic_add_a_photo_24dp"
                     />
             </LinearLayout>
 
