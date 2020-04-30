@@ -75,11 +75,16 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
                     />
-                <ImageView
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/useDiscount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_shop_24dp"
+                    app:icon="@drawable/ic_shop_24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="10dp"
                     android:layout_gravity="center_vertical"
+                    style="@style/IconOnlyButton"
                     />
             </LinearLayout>
         </LinearLayout>
