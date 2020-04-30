@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,7 +18,14 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +34,7 @@ import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Global.MainUtils;
+import tw.org.iii.yichun.foodsharing.Item.User;
 import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 
@@ -38,6 +47,8 @@ public class LoadingActivity extends AppCompatActivity {
     private String account;
     private String password;
     private int intcount;
+    private Location mLastLocation;//取得現在位置(經緯度)
+    private GoogleApiClient mGoogleApiClient;
 
     private ACProgressFlower dialog;//進度框
     Intent intent;
@@ -196,6 +207,81 @@ public class LoadingActivity extends AppCompatActivity {
             finish();
             overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
             dialog.dismiss();
+        }
+    }
+
+    /**
+     * 拿取user全部資料
+     */
+    private void User(){
+        String url = "";
+
+        JsonArrayRequest request  = new JsonArrayRequest(
+                Request.Method.POST,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        setjosnUser(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("account",account);
+                params.put("passwd",password);
+
+                return params;
+            }
+        };
+    }
+    /**
+     * 拿取現在位置
+     */
+//    private String position(){
+//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//        if (mLastLocation != null) {
+//            textLastLocation.setText(
+//                    String.valueOf(mLastLocation.getLatitude()) + "\n"
+//                            + String.valueOf(mLastLocation.getLongitude()));
+//        }else{
+//
+//        }
+//        return
+//    }
+
+
+    /**
+     * 將值傳給static,方便以後在任何地方都能拿取
+     * @param response
+     */
+    private void setjosnUser(JSONArray response) {
+        Log.v("lipin",response.toString());
+        try {
+            for (int i = 0 ;i<=response.length();i++){
+                JSONObject row = response.getJSONObject(i);
+
+                User.setId(row.getString("id"));
+                User.setAccount(row.getString("account"));
+                User.setName(row.getString("name"));
+                User.setPhone(row.getString("phone"));
+                User.setEmail(null);
+                User.setUserimg(null);
+                User.setAddress(null);
+
+            }
+
+
+        }catch (Exception e){
+            Log.v("lipin",e.toString());
         }
     }
 }

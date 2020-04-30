@@ -97,8 +97,12 @@ public class AddFoodActivity extends AppCompatActivity {
 
         camera();//點擊相片給予重新拍照,將會面引導去拍照頁面
 
-        dismissBar();//讓整頁擁有關掉snackbar的功能
+        dismissBar();
     }
+
+    /**
+     * 讓整頁擁有關掉snackbar的功能
+     */
 
 
     /**
@@ -211,6 +215,7 @@ public class AddFoodActivity extends AppCompatActivity {
         bitmap = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/" +Imgname);//拿出sd卡位置的圖片
         addFoodImg.setImageBitmap(bitmap);//拿取存放的照片
 
+        Log.v("lipin","bitmap"+bitmap);
 
         //點擊照片回到照相頁面
         addFoodImg.setOnClickListener(new View.OnClickListener() {
@@ -389,6 +394,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 snackbar = Snackbar.make(allview, "發布時須給予照片", Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
             }
+
             if (addFoodAmount.getText().toString().trim().isEmpty())
                 addFoodAmount.setError("數量欄位不能為空");
             if (addFoodCity.getText().toString().isEmpty())
@@ -399,11 +405,14 @@ public class AddFoodActivity extends AppCompatActivity {
                 address.setError("地址欄位不能為空");
             if (addFoodCategory.getText().toString().isEmpty())
                 addFoodCategory.setError("請選擇食物類型");
-            if (addFoodDatetime.getText().toString().isEmpty())
+            if (addFoodDatetime.getText().toString().isEmpty()) {
                 snackbar = Snackbar.make(allview, "請選擇截止日期", Snackbar.LENGTH_LONG);
                 snackbar.show();
+            }
             if (addFoodName.getText().toString().trim().isEmpty())
                 addFoodName.setError("食物名稱不能為空");
+
+            Log.v("lipin","截止日期" +addFoodDatetime.getText().toString());
         }
     }
 
@@ -437,7 +446,9 @@ public class AddFoodActivity extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         sDialog.dismiss();
+                        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                         AddFoodActivity.this.finish();
+
 
                     }
 

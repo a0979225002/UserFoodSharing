@@ -253,8 +253,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         };
     }
-
-
     /**
      * 查詢帳號是否重複
      */

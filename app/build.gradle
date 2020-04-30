@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.shreyaspatil:MaterialNavigationView:1.2'
     implementation 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
     implementation 'com.github.TutorialsAndroid:KAlertDialog:v9.0.19'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
 
     implementation 'com.camerakit:camerakit:1.0.0-beta3.11'
