@@ -1,5 +1,6 @@
 package tw.org.iii.yichun.foodsharing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ import java.util.LinkedList;
  */
 public class NotificationFragment extends Fragment {
     private View view;
-    private Button btn;
+    //private Button btn;
     private ListView lv;
 
     private SimpleAdapter adapter;
@@ -38,7 +39,7 @@ public class NotificationFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_notification, container, false);
 
         findID(); //findview
-        addNotification(); //按下按鈕模擬訊息進來
+        //addNotification(); //按下按鈕模擬訊息進來
         initlv(); //初始listview
         getData();
         return view;
@@ -47,7 +48,7 @@ public class NotificationFragment extends Fragment {
 
 
     private void findID(){
-        btn = (Button) view.findViewById(R.id.notify); //模擬通知進來
+        //btn = (Button) view.findViewById(R.id.notify); //模擬通知進來
         lv = (ListView) view.findViewById(R.id.notification_lv);//fragment_notification中的listivew 訊息進來呈現的地方
 
     }
@@ -56,10 +57,18 @@ public class NotificationFragment extends Fragment {
     private void initlv() {
         adapter = new SimpleAdapter(this.getActivity(), data, R.layout.listview_notification,from, to);
         lv.setAdapter(adapter);
+
+        /**可點擊的listview**/
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO: how?
+                //todo: how?
+                if (position == 0){
+                    Log.v("flora","onclick");
+                }
+
+
+
             }
         });
     }
@@ -80,24 +89,25 @@ public class NotificationFragment extends Fragment {
 
 
     /**模擬通知資料進來呈現在listview **/
-    private void addNotification(){
-        btn.setOnClickListener(new View.OnClickListener() {
-            int count = 0;
-            @Override
-            public void onClick(View v) {
-                Log.v("flora","onclick");
-                HashMap<String, String> row =new HashMap<>();
-                row.put(from[0], "王小明已於愛心便當排隊");
-                row.put(from[1], "2020.04.30 08:0"+count++);
-                data.add(0,row); //新通知放在最上面
-                adapter.notifyDataSetChanged();
+//    private void addNotification(){
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            int count = 0;
+//            @Override
+//            public void onClick(View v) {
+//                Log.v("flora","onclick");
+//                HashMap<String, String> row =new HashMap<>();
+//                row.put(from[0], "王小明已於愛心便當排隊");
+//                row.put(from[1], "2020.04.30 08:0"+count++);
+//                data.add(0,row); //新通知放在最上面
+//                adapter.notifyDataSetChanged();
+//
+//            }
+//        });
+//    }
 
-            }
-        });
-    }
 
 
-    /**可點擊的listview**/
+
 
 
 

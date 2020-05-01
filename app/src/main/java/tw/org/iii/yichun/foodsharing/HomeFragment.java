@@ -1,6 +1,7 @@
 package tw.org.iii.yichun.foodsharing;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,6 +35,16 @@ public class HomeFragment extends Fragment {
         listView = view.findViewById(R.id.home_lv);
         List<HashMap<String,Object>> list = getData();
         listView.setAdapter(new ListViewAdapter(getActivity(), list));
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0){
+                    Intent intent = new Intent(view.getContext(), FoodinfoGiver.class);
+                    startActivityForResult(intent, 0);
+                }
+            }
+        });
 
         return view;
     }

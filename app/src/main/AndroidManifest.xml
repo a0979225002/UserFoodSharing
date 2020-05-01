@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".newPreview"></activity>
+        <activity android:name=".FoodinfoGiver"></activity>
+        <activity android:name=".newPreview" />
+        <activity android:name=".ChatRoomActivity" />
         <activity
             android:name=".AddFoodActivity"
             android:windowSoftInputMode="stateHidden" />
@@ -27,8 +29,9 @@
         <activity
             android:name=".Loading.SignupActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".Loading.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

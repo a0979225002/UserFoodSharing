@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context=".newPreview">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/foodinfoGiver_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.ToolBarStyle"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:id="@+id/allview"
         android:layout_width="match_parent"
@@ -49,35 +62,48 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     android:textSize="20sp"
-
+                    android:text="李大華"
                     />
                 <Button
                     android:id="@+id/queueBtn"
                     android:layout_width="8dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:text="排隊"
+                    android:layout_weight="4"
+                    android:text="結束分享"
                     />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:orientation="horizontal"
                 >
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="8.5"
+                    android:layout_weight="7"
                     />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
                 <TextView
                     android:id="@+id/queue"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
                     android:text="？人排隊"
                     android:textStyle="bold"
                     android:gravity="center"
                     />
+                    <TextView
+                        android:id="@+id/remaining"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="預約/總份數: 4/10"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        />
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,6 +125,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="愛心便當"
                     />
             </LinearLayout>
             <LinearLayout
@@ -121,6 +148,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="台中市南屯區"
                     />
             </LinearLayout>
             <LinearLayout
@@ -143,6 +171,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="熟食"
                     />
             </LinearLayout>
             <LinearLayout
@@ -165,6 +194,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="便當"
                     />
             </LinearLayout>
             <LinearLayout
@@ -187,6 +217,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="2020/05/27 20:00"
                     />
             </LinearLayout>
             <LinearLayout
@@ -209,6 +240,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="3份"
                     />
             </LinearLayout>
             <LinearLayout
@@ -231,6 +263,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="可拆領"
                     />
             </LinearLayout>
             <LinearLayout
@@ -253,6 +286,7 @@
                     android:layout_weight="8"
                     android:layout_height="wrap_content"
                     android:textSize="15dp"
+                    android:text="便當分享"
                     />
             </LinearLayout>
 
@@ -263,6 +297,7 @@
                 android:layout_marginBottom="10dp"/>
 
             <ListView
+                android:id="@+id/takerlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
