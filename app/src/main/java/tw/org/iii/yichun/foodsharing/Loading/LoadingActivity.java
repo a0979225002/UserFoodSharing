@@ -49,8 +49,6 @@ public class LoadingActivity extends AppCompatActivity {
     private int intcount;
     private Location mLastLocation;//取得現在位置(經緯度)
     private GoogleApiClient mGoogleApiClient;
-
-    private ACProgressFlower dialog;//進度框
     Intent intent;
     boolean ispermission;
     @Override
@@ -76,8 +74,11 @@ public class LoadingActivity extends AppCompatActivity {
     }
     //執行完權限才做的事
     private void init(){
-        loadingview();
-        Auto_login();
+        MainUtils.showloading(this);
+        getaccount();//拿取存在手機內的帳號密碼
+        Log.v("lipin",account+password);
+        User();//將user資訓存到靜態類
+//        if (getUser) Auto_login();//有成功存入,就讓他判斷要跳轉哪個頁面
     }
 
 
@@ -100,8 +101,9 @@ public class LoadingActivity extends AppCompatActivity {
                     "若不開啟GPS我們將無法幫您判斷您附近有多少剩食提供者", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER,0,0);
                     toast.show();
+            init();
         }
-        init();
+
     }
 //    退後台home鍵效果
     @Override
@@ -110,32 +112,18 @@ public class LoadingActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    /**
-     * 讀取框執行中
-     */
-    private void loadingview(){
-        dialog = new ACProgressFlower.Builder(this)
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .text("Loading....")
-                .textSize(80)
-                .sizeRatio(0.3f)//背景大小
-                .bgAlpha(0.8f)//透明度
-                .borderPadding(0.3f)//花瓣長度
-                .fadeColor(Color.DKGRAY).build();
-        dialog.show();
-    }
 
+    private void getaccount(){
+        account = getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
+                .getString("account",null);
+        password = getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
+                .getString("password",null);
+    }
     /**
-     * 自動拿取登入帳密
+     * 判斷自動哪取出來的帳號密碼
      * 表單key:FoodSharing_User
      */
     private void Auto_login(){
-         account = getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
-                 .getString("account",null);
-         password = getSharedPreferences("FoodSharing_User",MODE_PRIVATE)
-                 .getString("password",null);
-
          if (account!=null&&password!=null) {
              VerifyID();
          }else {
@@ -143,7 +131,7 @@ public class LoadingActivity extends AppCompatActivity {
             startActivityForResult(intent,0);
             finish();
             overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-            dialog.dismiss();
+            MainUtils.dimissloading();
         }
         }
 
@@ -158,9 +146,10 @@ public class LoadingActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        getVerify(response);
-                        Verify();
-                        Log.v("lipin",account+"::"+password+"::"+response);
+                            getVerify(response);
+                            Verify();
+                            Log.v("lipin", account + "::" + password + "::" + response);
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -199,14 +188,14 @@ public class LoadingActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            dialog.dismiss();
+            MainUtils.dimissloading();
 
         }else {
             intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent,0);
             finish();
             overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-            dialog.dismiss();
+            MainUtils.dimissloading();
         }
     }
 
@@ -214,22 +203,23 @@ public class LoadingActivity extends AppCompatActivity {
      * 拿取user全部資料
      */
     private void User(){
-        String url = "";
+        String url = "http://"+Utils.ip+"/FoodSharing_war/Sql_getUser";
 
-        JsonArrayRequest request  = new JsonArrayRequest(
+        StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
-                null,
-                new Response.Listener<JSONArray>() {
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        setjosnUser(response);
+                    public void onResponse(String response) {
+                        MainUtils.setUser(response);
+                        Log.v("lipin","執行完了");
+                        Auto_login();//有成功存入,就讓他判斷要跳轉哪個頁面
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.v("lipin",error.toString());
                     }
                 }
         ){
@@ -239,9 +229,12 @@ public class LoadingActivity extends AppCompatActivity {
                 params.put("account",account);
                 params.put("passwd",password);
 
+                Log.v("lipin",account+"::::::::"+password);
+
                 return params;
             }
         };
+        MainUtils.queue.add(request);
     }
     /**
      * 拿取現在位置
@@ -258,30 +251,4 @@ public class LoadingActivity extends AppCompatActivity {
 //        return
 //    }
 
-
-    /**
-     * 將值傳給static,方便以後在任何地方都能拿取
-     * @param response
-     */
-    private void setjosnUser(JSONArray response) {
-        Log.v("lipin",response.toString());
-        try {
-            for (int i = 0 ;i<=response.length();i++){
-                JSONObject row = response.getJSONObject(i);
-
-                User.setId(row.getString("id"));
-                User.setAccount(row.getString("account"));
-                User.setName(row.getString("name"));
-                User.setPhone(row.getString("phone"));
-                User.setEmail(null);
-                User.setUserimg(null);
-                User.setAddress(null);
-
-            }
-
-
-        }catch (Exception e){
-            Log.v("lipin",e.toString());
-        }
-    }
 }

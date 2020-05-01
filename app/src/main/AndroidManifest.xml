@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         <activity android:name=".newPreview"></activity>
+        <activity android:name=".ChatRoomActivity"/>
         <activity
             android:name=".AddFoodActivity"
             android:windowSoftInputMode="stateHidden" />

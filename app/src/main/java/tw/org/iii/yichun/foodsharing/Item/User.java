@@ -13,6 +13,33 @@ public class User {
     private static String email;
     private static String userimg;
     private static String address;
+    private static String city;
+    private static String dist;
+    private static String position_notsql;//user現在位置,該參數並不是sql拿取的
+
+    public static String getPosition_notsql() {
+        return position_notsql;
+    }
+
+    public static void setPosition_notsql(String position_notsql) {
+        User.position_notsql = position_notsql;
+    }
+
+    public static String getCity() {
+        return city;
+    }
+
+    public static void setCity(String city) {
+        User.city = city;
+    }
+
+    public static String getDist() {
+        return dist;
+    }
+
+    public static void setDist(String dist) {
+        User.dist = dist;
+    }
 
     public static String getAddress() {
         return address;
