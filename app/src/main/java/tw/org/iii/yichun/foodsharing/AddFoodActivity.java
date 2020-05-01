@@ -249,7 +249,7 @@ public class AddFoodActivity extends AppCompatActivity {
                         R.layout.dropdown_menu_popup_item,
                         list);
 
-        //將資源欓內的文字加入食物分類中
+        //將資源檔內的文字加入食物分類中
         addFoodCategory.setAdapter(adapter);
 
         addFoodCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {

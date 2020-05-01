@@ -17,12 +17,13 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="20dp"
             android:orientation="vertical">
-        <ImageView
-            android:id="@+id/foodImage"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="20dp"
-            />
+            <ImageView
+                android:id="@+id/foodImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="20dp"
+                android:src="@drawable/foodimg"
+                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
@@ -82,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 >
                 <TextView
                     android:layout_width="0dp"
@@ -104,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 >
                 <TextView
                     android:layout_width="0dp"
@@ -126,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 >
                 <TextView
                     android:layout_width="0dp"
@@ -148,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 >
                 <TextView
                     android:layout_width="0dp"
@@ -255,13 +256,17 @@
                     />
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="分享"
-                android:onClick="shareIt"
-                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#000"
+                android:layout_marginBottom="10dp"/>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
         </LinearLayout>
 
     </ScrollView>
