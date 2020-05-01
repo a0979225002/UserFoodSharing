@@ -97,7 +97,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
         camera();//點擊相片給予重新拍照,將會面引導去拍照頁面
 
-        addFoodImg.setImageResource(R.drawable.ic_add_a_photo_grey_24dp); //預設相機圖示
+//        addFoodImg.setImageResource(R.drawable.ic_add_a_photo_grey_24dp); //預設相機圖示
 
         dismissBar();
     }
@@ -214,10 +214,13 @@ public class AddFoodActivity extends AppCompatActivity {
 
         Log.v("lipin",Imgname+"地址");
 
-        bitmap = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/" +Imgname);//拿出sd卡位置的圖片
-        addFoodImg.setImageBitmap(bitmap);//拿取存放的照片
+        if (Imgname != null) {
 
-        Log.v("lipin","bitmap"+bitmap);
+            bitmap = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/" + Imgname);//拿出sd卡位置的圖片
+            addFoodImg.setImageBitmap(bitmap);//拿取存放的照片
+
+            Log.v("lipin", "bitmap" + bitmap);
+        }
 
         //點擊照片回到照相頁面
         addFoodImg.setOnClickListener(new View.OnClickListener() {
