@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,7 @@ import tw.org.iii.yichun.foodsharing.profile.CommentFragment;
  */
 public class ShopFragment extends Fragment {
     private ListView listView;
+    private MaterialButton btn;
 
     @Nullable
     @Override
@@ -39,7 +42,18 @@ public class ShopFragment extends Fragment {
         List<HashMap<String,Object>> list = getData();
         listView.setAdapter(new ListViewAdapter(getActivity(), list));
 
+        btn = view.findViewById(R.id.useDiscount);
+        //btn.setOnClickListener(new );
+
         return view;
+    }
+
+//    private View.OnClickListener myClickListener(){
+//
+//    }
+
+    public void useDiscount(){
+
     }
 
     /**

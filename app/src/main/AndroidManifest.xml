@@ -9,23 +9,27 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".Global.VolleyApp"
+        android:name=".Global.MainUtils"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".AddFoodActivity"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".newPreview"></activity>
+        <activity
+            android:name=".AddFoodActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".MyCameraActivity" />
-        <activity android:name=".Loading.LoginActivity"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Loading.SignupActivity"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".MainActivity"/>
-
-             <activity android:name=".Loading.LoadingActivity">
+        <activity
+            android:name=".Loading.LoginActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Loading.SignupActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Loading.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

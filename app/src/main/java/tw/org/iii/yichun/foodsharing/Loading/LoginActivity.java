@@ -1,17 +1,14 @@
 package tw.org.iii.yichun.foodsharing.Loading;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,9 +17,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
@@ -33,7 +28,7 @@ import butterknife.ButterKnife;
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
-import tw.org.iii.yichun.foodsharing.Global.VolleyApp;
+import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 
@@ -191,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        VolleyApp.queue.add(request);
+        MainUtils.queue.add(request);
     }
     /**
      * 帳密驗證是否正確

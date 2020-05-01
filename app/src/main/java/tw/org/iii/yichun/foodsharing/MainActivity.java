@@ -171,10 +171,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // 跳至拍照畫面
+    /**
+     *
+     *
+     * 暫時更改為先到加入食物卡片的頁面,這裡還要回來判斷
+     *
+     *
+     */
     private void toCamera() {
-        Intent intent = new Intent(this, MyCameraActivity.class);
+        Intent intent = new Intent(this, AddFoodActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }

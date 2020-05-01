@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,11 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
@@ -33,8 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -42,7 +35,7 @@ import butterknife.ButterKnife;
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
-import tw.org.iii.yichun.foodsharing.Global.VolleyApp;
+import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.R;
 
 /**
@@ -212,7 +205,6 @@ public class SignupActivity extends AppCompatActivity {
     /**
      * 發送驗證碼
      */
-
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -261,8 +253,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         };
     }
-
-
     /**
      * 查詢帳號是否重複
      */
@@ -291,7 +281,7 @@ public class SignupActivity extends AppCompatActivity {
                 return params;
             }
         };
-        VolleyApp.queue.add(request);
+        MainUtils.queue.add(request);
     }
     /**
      * 查詢電話是否重複
@@ -323,7 +313,7 @@ public class SignupActivity extends AppCompatActivity {
                 return params;
             }
         };
-        VolleyApp.queue.add(request);
+        MainUtils.queue.add(request);
     }
 
     /**
@@ -443,7 +433,7 @@ public class SignupActivity extends AppCompatActivity {
                     return params;
                 }
             };
-            VolleyApp.queue.add(request);
+            MainUtils.queue.add(request);
         }else {
             dialog.dismiss();
             snackbar = Snackbar.make(allview,"目前伺服器過載中,請稍後再註冊",Snackbar.LENGTH_LONG);

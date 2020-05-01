@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     >
     <LinearLayout
+        android:id="@id/allview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".AddFoodFragment"
@@ -41,7 +42,6 @@
                 android:paddingRight="20dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/addFood_name"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -50,8 +50,10 @@
                     android:theme="@style/AppInput">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/addFood_name"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -64,7 +66,8 @@
                     <AutoCompleteTextView
                         android:id="@+id/addFood_category"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -96,6 +99,7 @@
                         android:id="@+id/addFood_city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text"
                         />
 
 
@@ -112,14 +116,14 @@
                     <AutoCompleteTextView
                         android:id="@+id/addFood_dist"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addFood_address"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,8 +133,10 @@
                 android:layout_marginBottom="20dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/address"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
@@ -139,7 +145,6 @@
                 android:layout_marginBottom="20dp">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/datePickerBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_date_range_24dp"
@@ -162,7 +167,7 @@
                         android:id="@+id/addFood_datetime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="datetime"
+                        android:focusable="false"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,7 +185,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addFood_tag"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -207,6 +213,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/share_it"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
@@ -226,7 +233,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addFood_memo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
