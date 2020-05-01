@@ -30,7 +30,8 @@
 
     <!--  Button  -->
     <style name="Button" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundColor">@color/colorPrimary</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/textWhite</item>
     </style>
 
     <style name="IconOnlyButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -38,6 +39,14 @@
         <item name="iconGravity">textStart</item>
         <item name="backgroundTint">@color/colorPrimary</item>
         <item name="iconTint">@color/textWhite</item>
+    </style>
+
+    <style name="IconOnlyButtonNoBG" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="backgroundTint">@color/float_transparent</item>
+        <item name="iconTint">@color/colorPrimary</item>
+        <item name="android:shadowColor">@color/float_transparent</item>
     </style>
 
     <!--  Rating Bar  -->
