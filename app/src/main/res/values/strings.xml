@@ -21,6 +21,15 @@
         <item>飲品</item>
     </string-array>
 
+    <string name="input_period">"分享時間"</string>
+    <string name="input_periodCategory">"分享時間"</string>
+    <string-array name="periodCategory">
+        <item>一天內</item>
+        <item>三天內</item>
+        <item>一週內</item>
+        <item>一個月內</item>
+    </string-array>
+
     <!--  縣市選單  -->
     <string-array name="foodCity">
         <item>台中</item>

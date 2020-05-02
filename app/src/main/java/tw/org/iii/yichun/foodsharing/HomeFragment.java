@@ -33,6 +33,11 @@ public class HomeFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        selectmap = view.findViewById(R.id.selectmap);
+        gotomap();
+        filter = view.findViewById(R.id.filter);
+        gotoFilter();
+
         listView = view.findViewById(R.id.home_lv);
         List<HashMap<String,Object>> list = getData();
         listView.setAdapter(new ListViewAdapter(getActivity(), list));
@@ -55,6 +60,30 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
+    //去地圖頁面  todo: 有錯誤，要判斷homemapfragment活在哪裡
+    private void gotomap(){
+        selectmap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), HomeMapFragment.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
+
+    //去進階搜尋
+    private void gotoFilter(){
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),SearchFilterActivity.class);
+                startActivityForResult(intent,0);
+            }
+        });
+    }
+
+
 
     /**
      * 食物 ListView Adapter
