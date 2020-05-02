@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment {
         List<HashMap<String,Object>> list = getData();
         listView.setAdapter(new ListViewAdapter(getActivity(), list));
 
+        //點擊第0個，跳到該卡片詳細資料頁面 (Giver視角)
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
