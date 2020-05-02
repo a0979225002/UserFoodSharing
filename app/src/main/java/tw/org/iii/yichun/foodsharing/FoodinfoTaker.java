@@ -24,7 +24,7 @@ public class FoodinfoTaker extends AppCompatActivity {
      * 設定 Toolbar
      */
     private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.foodinfoGiver_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.foodinfoTaker_toolbar);
         String title = "愛心便當"; // 食物名稱
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
@@ -33,7 +33,6 @@ public class FoodinfoTaker extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
     //toolbar切換設定
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
