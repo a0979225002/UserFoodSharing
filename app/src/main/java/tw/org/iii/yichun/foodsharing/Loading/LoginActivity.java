@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,14 +53,13 @@ public class LoginActivity extends AppCompatActivity {
 
     Snackbar snackbar;
     private boolean validate;//判斷帳密是否輸入正確
-    private int Enabled = 0;
+    private int Enabled = 0;//輸入錯誤時的數字一開始是0,最多輸入5次錯誤
     private Intent intent;
 
     private String getaccount;
     private String getpasswd;
     private int intcount;//1：是後端判斷帳密正確,0：是後端帳密判斷錯誤
     private SharedPreferences addUser;//保存帳密
-    private ACProgressFlower dialog;//進度框
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,24 +69,6 @@ public class LoginActivity extends AppCompatActivity {
 
         getSignup();//拿取註冊時的帳號密碼
     }
-
-    /**
-     * 讀取框執行中
-     */
-    private void loadingview(){
-        dialog = new ACProgressFlower.Builder(this)
-                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
-                .themeColor(Color.WHITE)
-                .text("Loading....")
-                .textSize(80)
-                .sizeRatio(0.4f)//背景大小
-                .bgAlpha(0.8f)//透明度
-                .borderPadding(0.4f)//花瓣長度
-                .fadeColor(Color.DKGRAY).build();
-        dialog.show();
-    }
-
-
     /**
      * 如果是從註冊頁面回來的客戶,擁有直接拿取當初註冊時填寫的帳號密碼
      */
@@ -102,14 +84,11 @@ public class LoginActivity extends AppCompatActivity {
      * 登入按鈕
      */
     public void Login(View view) {
-        loadingview();
-        if (isValidate()) {
-
+        if (isValidate()) {//如果帳密格式輸入正確
+            MainUtils.showloading(LoginActivity.this);
             Verify_account_passwd();
 
-
         } else if (!isValidate()) {//只要輸入格式錯誤就不給傳入後端判斷
-            dialog.dismiss();
             onLogin_Failed();
         }
     }
@@ -165,8 +144,8 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Verify(response);
-                        onlogin_successfully();
+                        Verify(response);//拿取驗證資訊,1是成功,0是失敗
+                        onlogin_successfully();//是1的話就倒去首頁,如果不是1就增加失敗次數
                     }
                 },
                 new Response.ErrorListener() {
@@ -195,7 +174,6 @@ public class LoginActivity extends AppCompatActivity {
     private void Verify(String respons){
         String count = respons.substring(0,1);
         intcount = Integer.valueOf(count);
-
     }
 
     /**
@@ -209,13 +187,16 @@ public class LoginActivity extends AppCompatActivity {
                     .putString("account",getaccount)
                     .putString("password",getpasswd)
                     .commit();
+            User();//將登入成功的user資料都存起來,方便之後在任何地方拿取
             intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
             overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-            dialog.dismiss();
+
+            MainUtils.dimissloading();
         }else {
             onLogin_Failed();//增加次數限制 超過五次以上將會無法登入
+            MainUtils.dimissloading();
         }
     }
     /**
@@ -280,6 +261,40 @@ public class LoginActivity extends AppCompatActivity {
             return validate;
         }
         return validate;
+    }
+    /**
+     * 拿取user全部資料,將登入成功的user資料都存起來,方便之後在任何地方拿取
+     */
+    private void User(){
+        String url = "http://"+Utils.ip+"/FoodSharing_war/Sql_getUser";
+
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        MainUtils.setUser(response);
+                        Log.v("lipin","執行完了");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("account",getaccount);
+                params.put("passwd",getpasswd);
+
+                return params;
+            }
+        };
+        MainUtils.queue.add(request);
     }
 }
 

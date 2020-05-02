@@ -35,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.Item.AddFood;
+import tw.org.iii.yichun.foodsharing.Item.User;
 
 
 /**
@@ -100,7 +101,9 @@ public class newPreview extends AppCompatActivity {
         dismissSnckbar();//關掉snackbar
 
 
-
+        Log.v("lipin","拿取id:"+ User.getId());
+        Log.v("lipin","拿取帳號"+User.getAddress());
+        Log.v("lipin","拿取電話"+User.getPhone());
     }
 
 

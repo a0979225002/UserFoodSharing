@@ -373,10 +373,10 @@ public class AddFoodActivity extends AppCompatActivity {
         Log.v("lipin",bitmap+":圖片");
         if (bitmap != null
                 && !addFoodAmount.getText().toString().trim().isEmpty()
-                && !selectedCity.isEmpty()
-                && !selectedDist.isEmpty()
+                && !addFoodCity.getText().toString().isEmpty()
+                && !addFoodDist.getText().toString().isEmpty()
                 && !address.getText().toString().trim().isEmpty()
-                && !selectedCategory.isEmpty()
+                && !addFoodCategory.getText().toString().isEmpty()
                 && !addFoodDatetime.getText().toString().isEmpty()
                 && !addFoodName.getText().toString().trim().isEmpty()) {
 
@@ -392,10 +392,10 @@ public class AddFoodActivity extends AppCompatActivity {
 
         } else if (bitmap == null
                 || addFoodAmount.getText().toString().trim().isEmpty()
-                || selectedCity.isEmpty()
-                || selectedDist.isEmpty()
+                || addFoodCity.getText().toString().isEmpty()
+                || addFoodDist.getText().toString().isEmpty()
                 || address.getText().toString().trim().isEmpty()
-                || selectedCategory.isEmpty()
+                || addFoodCategory.getText().toString().isEmpty()
                 || addFoodDatetime.getText().toString().isEmpty()
                 || addFoodName.getText().toString().trim().isEmpty()) {
 

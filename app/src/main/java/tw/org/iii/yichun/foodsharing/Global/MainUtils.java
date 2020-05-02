@@ -14,11 +14,15 @@ import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
+import tw.org.iii.yichun.foodsharing.Item.User;
 import tw.org.iii.yichun.foodsharing.R;
 
 /**
@@ -99,6 +103,37 @@ public class MainUtils extends Application {
         byte[] bytes = Base64.decode(base64,Base64.DEFAULT);
 
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+    }
+
+
+    /**
+     *
+     * 網址： String url = "http://"+Utils.ip+"/FoodSharing_war/Sql_getUser";
+     * 需要使用後端網路volley,使這個方法可以拿取值
+     * 將值傳給static,方便以後在任何地方都能拿取
+     * @param response
+     */
+    public static void setUser(String response) {
+
+        try {
+            JSONArray root = new JSONArray(response);
+            for (int i = 0 ;i<root.length();i++){
+                JSONObject row = root.getJSONObject(i);
+
+                User.setId(row.optString("id",null));
+                User.setAccount(row.optString("account",null));
+                User.setName( row.optString("name",null));
+                User.setPhone(row.optString("phone",null));
+                User.setEmail(row.optString("email",null));
+                User.setUserimg(row.optString("img",null));
+                User.setAddress(row.optString("address",null));
+                User.setCity(row.optString("city",null));
+                User.setDist(row.optString("dist",null));
+
+            }
+        }catch (Exception e){
+            Log.v("lipin",e.toString());
+        }
     }
 
 }
