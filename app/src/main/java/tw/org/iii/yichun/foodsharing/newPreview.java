@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tw.org.iii.yichun.foodsharing.Global.MainUtils;
+import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Item.AddFood;
 import tw.org.iii.yichun.foodsharing.Item.User;
 
@@ -93,12 +94,12 @@ public class newPreview extends AppCompatActivity {
         intent = getIntent();
         addFood = (AddFood) getIntent().getSerializableExtra("savefood");
 
-
+        dismissSnckbar();//關掉snackbar
 
         FoodAmount();//取出數量的值,用正則把數字與字串分開
         getFoodCard();//拿取addfoodactivity寫入的值
         getuser();//取得客戶的客戶名稱,與照片
-        dismissSnckbar();//關掉snackbar
+
 
 
         Log.v("lipin","拿取id:"+ User.getId());
@@ -138,14 +139,10 @@ public class newPreview extends AppCompatActivity {
     private void getuser() {
 
         //如果客戶沒有輸入詳細資料,取得不到客戶名稱,將給予帳號名稱來代替
-        username.setText(getSharedPreferences("FoodSharing_User", MODE_PRIVATE)
-                .getString("name", null));
+            username.setText(User.getName());
 
-
-        if (username.getText().toString().trim().isEmpty()) {
-            username.setText(getSharedPreferences("FoodSharing_User", MODE_PRIVATE)
-                    .getString("account", null));
-
+        if (User.getName() == null) {
+            username.setText(User.getAccount());
         }
     }
 
@@ -160,7 +157,7 @@ public class newPreview extends AppCompatActivity {
         category.setText(addFood.getAddFoodCategory());
         foodTag.setText(addFood.getAddFoodTag());
         datetime.setText(addFood.getAddFoodDatetime());
-        amount.setText(addFood.getAddFoodAmount());
+        amount.setText(addFood.getAddFoodAmount()+"份");
 
         if (addFood.isShareIt()) {
             shareIt.setText("可以");
@@ -179,12 +176,12 @@ public class newPreview extends AppCompatActivity {
 
     /**
      * 分享按鈕
-     *
      * @param view
      */
     public void shareIt(View view) {
         MainUtils.showloading(this);//跳出讀取條
 
+        //加入建立時間
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date date = new Date();
         createTime = simpleDateFormat.format(date);
@@ -196,7 +193,7 @@ public class newPreview extends AppCompatActivity {
      * 將要發布的食物資訊加入sql中
      */
     private void SaveFoodcard() {
-        String url = "";
+        String url = "http://"+ Utils.ip +"/FoodSharing_war/Sql_AddFoodCard";
 
         StringRequest request = new StringRequest(
                 Request.Method.POST,
@@ -209,6 +206,7 @@ public class newPreview extends AppCompatActivity {
                         if (intcount == 1) {
                             intent = new Intent(newPreview.this, MainActivity.class);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                             finish();
 
                             MainUtils.dimissloading();//關掉讀取框
@@ -232,24 +230,25 @@ public class newPreview extends AppCompatActivity {
 
                 String base64img = MainUtils.bitmaptoBase64(bitmap);//拿取已經將圖片轉成base64的字串
 
+                Log.v("lipin",base64img+":圖片64");
+                Log.v("lipin",category.getText().toString());
+
                 HashMap<String, String> parmas = new HashMap<>();
 
-                parmas.put("base64img",base64img);
+                parmas.put("foodimg",base64img);
 
-                parmas.put("username", getSharedPreferences("FoodSharing_User", MODE_PRIVATE)
-                        .getString("name", null));
-                parmas.put("account", getSharedPreferences("FoodSharing_User", MODE_PRIVATE)
-                        .getString("account", null));
+                parmas.put("userID",User.getId());
                 parmas.put("foodname", foodname.getText().toString());
-                parmas.put("category", category.toString());
+                parmas.put("category", category.getText().toString().trim());
                 parmas.put("city", addFood.getAddFoodCity());
                 parmas.put("dist", addFood.getAddFoodDist());
                 parmas.put("address", addFood.getAddress());
-                parmas.put("dueDate", datetime.toString());
-                parmas.put("tag", foodTag.toString());
+                parmas.put("dueDate", datetime.getText().toString());
+                parmas.put("tag", foodTag.getText().toString());
                 parmas.put("qty", Integer.toString(foodAmount_Number));
                 parmas.put("split", addFood.isShareIt() == true ? "1" : "0");
                 parmas.put("createtime", createTime);
+                parmas.put("detail",Memo.getText().toString());
 
                 return parmas;
             }
@@ -261,9 +260,9 @@ public class newPreview extends AppCompatActivity {
      * 傳回來驗證是否加入sql,如果有就引導到首頁
      */
     private void CheckAddfood(String response) {
+        Log.v("lipin","測試拿取"+response);
 
         //在這會取得0或1,1是有加入sql,0是沒有加入sql
-
         String count = response.substring(0, 1);
         intcount = Integer.valueOf(count);
     }
@@ -278,7 +277,9 @@ public class newPreview extends AppCompatActivity {
         intent = new Intent(newPreview.this, AddFoodActivity.class);
         intent.putExtra("savefood", addFood);
         startActivityForResult(intent, 321);
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
         finish();
+
 
     }
 

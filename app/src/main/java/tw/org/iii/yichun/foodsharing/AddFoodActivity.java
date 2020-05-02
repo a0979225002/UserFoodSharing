@@ -382,13 +382,11 @@ public class AddFoodActivity extends AppCompatActivity {
 
             merge_arrdress = selectedCity+" "+ selectedDist+" "+ address.getText().toString();//將縣市區域地址整合成一條字串
 
-            Intent intent = new Intent(this, newPreview.class);
+            intent = new Intent(this, newPreview.class);
             SaveAddFood();
             intent.putExtra("savefood",addFood);
             startActivityForResult(intent,321);
             finish();
-
-            startActivity(intent);
 
         } else if (bitmap == null
                 || addFoodAmount.getText().toString().trim().isEmpty()
@@ -453,7 +451,6 @@ public class AddFoodActivity extends AppCompatActivity {
                     @Override
                     public void onClick(KAlertDialog sDialog) {
                         intent = new Intent(AddFoodActivity.this,MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         sDialog.dismiss();
                         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
