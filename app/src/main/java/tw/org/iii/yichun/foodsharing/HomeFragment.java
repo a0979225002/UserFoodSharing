@@ -25,6 +25,7 @@ import tw.org.iii.yichun.foodsharing.profile.ShareHistoryFragment;
 
 public class HomeFragment extends Fragment {
     private ListView listView;
+    private ImageView selectmap,filter;
 
     @Nullable
     @Override
