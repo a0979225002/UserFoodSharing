@@ -77,8 +77,16 @@ public class LoadingActivity extends AppCompatActivity {
         MainUtils.showloading(this);
         getaccount();//拿取存在手機內的帳號密碼
         Log.v("lipin",account+password);
-        User();//將user資訓存到靜態類
-//        if (getUser) Auto_login();//有成功存入,就讓他判斷要跳轉哪個頁面
+        if (account!=null) {
+            Log.v("lipin","有執行媽01");
+            //如果是二次登入者,讓他存取該user的資訊,然後Auto_login()方法比對帳密是否正確要跳轉哪個頁面
+            User();//將user資訓存到靜態類
+        }else {
+            Log.v("lipin","有執行媽02");
+
+            //如果是第一次登入者,無帳號,或有帳號密碼錯誤者
+            Auto_login();//讓他判斷要跳轉哪個頁面
+        }
     }
 
 
@@ -101,9 +109,9 @@ public class LoadingActivity extends AppCompatActivity {
                     "若不開啟GPS我們將無法幫您判斷您附近有多少剩食提供者", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER,0,0);
                     toast.show();
-            init();
-        }
 
+        }
+        init();
     }
 //    退後台home鍵效果
     @Override
@@ -212,8 +220,9 @@ public class LoadingActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         MainUtils.setUser(response);
+                        Auto_login();
                         Log.v("lipin","執行完了");
-                        Auto_login();//有成功存入,就讓他判斷要跳轉哪個頁面
+
                     }
                 },
                 new Response.ErrorListener() {
