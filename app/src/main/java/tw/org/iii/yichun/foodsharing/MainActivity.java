@@ -31,6 +31,7 @@ import tw.org.iii.yichun.foodsharing.profile.ProfileFragment;
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bmView;
     private ViewPager viewPager;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int i = item.getItemId();
                 if (i == R.id.nav_add){
-                    toCamera();
+                    toaddfood();
 
                 }else if (i == R.id.nav_about){
 
@@ -119,6 +120,14 @@ public class MainActivity extends AppCompatActivity {
 //      getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
     }
 
+    /**
+     *點擊toolbar上的＋,會進入新增卡片的頁面
+     */
+    private void toaddfood() {
+        Intent intent = new Intent(this, AddFoodActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     // 點擊 Bottom Nav 事件
     private void changeBottomNav(){
@@ -172,16 +181,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     *
-     * 暫時更改為先到加入食物卡片的頁面,這裡還要回來判斷
-     *
-     *
+     * 改寫返回鍵,如果在首頁點擊返回鍵,此程式並不會死掉
      */
-    private void toCamera() {
-        Intent intent = new Intent(this, AddFoodActivity.class);
+    @Override
+    public void onBackPressed() {
+        intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
-        finish();
     }
 
 }
