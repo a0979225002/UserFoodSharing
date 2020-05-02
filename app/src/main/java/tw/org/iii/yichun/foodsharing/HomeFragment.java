@@ -36,12 +36,17 @@ public class HomeFragment extends Fragment {
         List<HashMap<String,Object>> list = getData();
         listView.setAdapter(new ListViewAdapter(getActivity(), list));
 
-        //點擊第0個，跳到該卡片詳細資料頁面 (Giver視角)
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //做出畫面-點擊第0個，跳到該卡片詳細資料頁面 (Giver視角)
                 if (position == 0){
                     Intent intent = new Intent(view.getContext(), FoodinfoGiver.class);
+                    startActivityForResult(intent, 0);
+                }//做出畫面-點擊第1個，跳到該卡片詳細資料頁面 (Taker視角)
+                if (position == 1){
+                    Intent intent = new Intent(view.getContext(), FoodinfoTaker.class);
                     startActivityForResult(intent, 0);
                 }
             }

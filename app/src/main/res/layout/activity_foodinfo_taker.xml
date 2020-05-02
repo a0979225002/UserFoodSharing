@@ -65,11 +65,11 @@
                     android:text="李大華"
                     />
                 <Button
-                    android:id="@+id/shareBtn"
+                    android:id="@+id/queueBtn"
                     android:layout_width="8dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="結束分享"
+                    android:text="排隊"
                     />
             </LinearLayout>
             <LinearLayout
@@ -82,28 +82,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
                     />
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                <TextView
-                    android:id="@+id/queue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="？人排隊"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    />
+
                     <TextView
-                        android:id="@+id/remaining"
+                        android:id="@+id/queue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="預約/總份數: 4/10"
+                        android:text="預估剩餘份數:4"
                         android:textStyle="bold"
                         android:gravity="center"
                         />
-                </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -290,16 +278,6 @@
                     />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#000"
-                android:layout_marginBottom="5dp"/>
-
-            <ListView
-                android:id="@+id/takerlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
 
         </LinearLayout>

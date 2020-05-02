@@ -137,10 +137,10 @@ public class FoodinfoGiver extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.foodinfoGiver_toolbar);
 
         String title = "愛心便當"; // 食物名稱
-        //todo: 進入卡片編輯頁面 使用edit icon
 
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
+        //回復前頁的設定
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -149,16 +149,17 @@ public class FoodinfoGiver extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.edit_menu,menu);
+        menuInflater.inflate(R.menu.edit_menu,menu); //設定toolbar編輯按鈕
 
         return true;
     }
 
+    //toolbar切換設定
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case android.R.id.home: finish(); return true;
-            case R.id.menu_edit:
+            case android.R.id.home: finish(); return true; //回復前頁
+            case R.id.menu_edit: //去編輯頁面
                 Intent intent = new Intent(this, AddFoodActivity.class);
                 startActivityForResult(intent,0); return true;
             default:return super.onOptionsItemSelected(item);
