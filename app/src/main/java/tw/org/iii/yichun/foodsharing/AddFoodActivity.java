@@ -85,7 +85,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
         getAddFood();//拿取客戶端寫的欄位資料
 
-        FoodCategoryList();//將value的值給予食物分類的下拉選單,監聽酷戶端選擇的食物分類
+        FoodCategoryList();//將value的值給予食物分類的下拉選單,監聽客戶端選擇的食物分類
 
         CheckBox();//監聽客戶端是否有打勾
 
@@ -464,7 +464,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
 
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage("確定要離開發布頁面媽？ 系統將不會保存您輸入的資料！");
+//        builder.setMessage("確定要離開發布頁面嗎？ 系統將不會保存您輸入的資料！");
 //        builder.setPositiveButton("不要", new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialog, int which) {
