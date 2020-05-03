@@ -16,7 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".toolbarBtn.UserData"></activity>
+        <activity android:name=".SearchFilterActivity"></activity>
+        <activity android:name=".FoodinfoTaker" />
+        <activity android:name=".toolbarBtn.UserData" />
+        <activity android:name=".FoodinfoGiver" />
         <activity android:name=".newPreview" />
         <activity android:name=".ChatRoomActivity" />
         <activity

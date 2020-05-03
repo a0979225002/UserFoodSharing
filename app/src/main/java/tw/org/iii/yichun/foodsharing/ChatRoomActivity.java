@@ -121,7 +121,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
      */
     private void setToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.chatRoom_toolbar);
-        String title = "李大華"; // 聊天對象名字
+        String title = "王小明"; // 聊天對象名字
         String subtitle = "愛心便當" + " - 索取者"; //聊天對象身份
 
         toolbar.setTitle(title);

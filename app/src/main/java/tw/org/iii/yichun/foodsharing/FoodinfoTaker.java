@@ -1,64 +1,44 @@
 package tw.org.iii.yichun.foodsharing;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import androidx.fragment.app.Fragment;
+public class FoodinfoTaker extends AppCompatActivity {
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_foodinfo_taker);
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FoodinfoTaker#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FoodinfoTaker extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FoodinfoTaker() {
-        // Required empty public constructor
+        setToolbar();
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FoodinfoTaker.
+     * 設定 Toolbar
      */
-    // TODO: Rename and change types and number of parameters
-    public static FoodinfoTaker newInstance(String param1, String param2) {
-        FoodinfoTaker fragment = new FoodinfoTaker();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private void setToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.foodinfoTaker_toolbar);
+        String title = "愛心便當"; // 食物名稱
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        //回復前頁的設定
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+    //toolbar切換設定
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            finish();//回復前頁
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_foodinfo_taker, container, false);
+        return super.onOptionsItemSelected(item);
     }
 }

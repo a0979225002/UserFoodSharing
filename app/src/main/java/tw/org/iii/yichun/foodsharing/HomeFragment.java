@@ -1,6 +1,7 @@
 package tw.org.iii.yichun.foodsharing;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,6 +25,7 @@ import tw.org.iii.yichun.foodsharing.profile.ShareHistoryFragment;
 
 public class HomeFragment extends Fragment {
     private ListView listView;
+    private ImageView selectmap,filter;
 
     @Nullable
     @Override
@@ -30,12 +33,57 @@ public class HomeFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        selectmap = view.findViewById(R.id.selectmap);
+        gotomap();
+        filter = view.findViewById(R.id.filter);
+        gotoFilter();
+
         listView = view.findViewById(R.id.home_lv);
         List<HashMap<String,Object>> list = getData();
         listView.setAdapter(new ListViewAdapter(getActivity(), list));
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //做出畫面-點擊第0個，跳到該卡片詳細資料頁面 (Giver視角)
+                if (position == 0){
+                    Intent intent = new Intent(view.getContext(), FoodinfoGiver.class);
+                    startActivityForResult(intent, 0);
+                }//做出畫面-點擊第1個，跳到該卡片詳細資料頁面 (Taker視角)
+                if (position == 1){
+                    Intent intent = new Intent(view.getContext(), FoodinfoTaker.class);
+                    startActivityForResult(intent, 0);
+                }
+            }
+        });
+
         return view;
     }
+
+    //去地圖頁面  todo: 有錯誤，要判斷homemapfragment活在哪裡
+    private void gotomap(){
+        selectmap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), HomeMapFragment.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
+
+    //去進階搜尋
+    private void gotoFilter(){
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),SearchFilterActivity.class);
+                startActivityForResult(intent,0);
+            }
+        });
+    }
+
+
 
     /**
      * 食物 ListView Adapter
