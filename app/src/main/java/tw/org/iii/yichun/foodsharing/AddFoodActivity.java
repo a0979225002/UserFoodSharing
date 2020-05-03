@@ -1,6 +1,7 @@
 package tw.org.iii.yichun.foodsharing;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,8 +17,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import com.developer.kalert.KAlertDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jzxiang.pickerview.TimePickerDialog;
@@ -100,6 +101,7 @@ public class AddFoodActivity extends AppCompatActivity {
 //        addFoodImg.setImageResource(R.drawable.ic_add_a_photo_grey_24dp); //預設相機圖示
 
         dismissBar();
+
     }
 
     /**
@@ -436,29 +438,24 @@ public class AddFoodActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-       KAlertDialog dialog =  new KAlertDialog(this, KAlertDialog.WARNING_TYPE)
-                .setTitleText("確定要離開？")
-                .setContentText("系統將不會保留您輸入的資訊")
-                .setConfirmText("離開")
-                .setCancelText("不離開")
-                .setCancelClickListener(new KAlertDialog.KAlertClickListener() {
+         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+                .setTitle("確定要離開？")
+                .setMessage("系統將不會保留您輸入的資訊")
+                .setNegativeButton("不離開", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(KAlertDialog kAlertDialog) {
-                        kAlertDialog.cancel();
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
                 })
-                .setConfirmClickListener(new KAlertDialog.KAlertClickListener() {
+                .setPositiveButton("離開", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(KAlertDialog sDialog) {
+                    public void onClick(DialogInterface dialog, int which) {
                         intent = new Intent(AddFoodActivity.this,MainActivity.class);
                         startActivity(intent);
-                        sDialog.dismiss();
+                        dialog.cancel();
                         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                         AddFoodActivity.this.finish();
-
-
                     }
-
                 });
                dialog.show();
 

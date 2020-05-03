@@ -8,7 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowDisablePreview">true</item>
         <!--        <item name="android:windowFullscreen">true</item>-->
     </style>
 
@@ -29,7 +28,7 @@
     </style>
 
     <!--  Button  -->
-    <style name="Button" parent="Widget.MaterialComponents.Button">
+    <style name="Button" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="backgroundTint">@color/colorPrimary</item>
         <item name="android:textColor">@color/textWhite</item>
     </style>

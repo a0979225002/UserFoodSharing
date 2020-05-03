@@ -30,8 +30,7 @@
             android:name=".Loading.SignupActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:name=".MainActivity"/>
         <activity android:name=".Loading.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
