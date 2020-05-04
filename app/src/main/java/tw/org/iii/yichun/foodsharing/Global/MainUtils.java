@@ -44,10 +44,10 @@ public class MainUtils extends Application {
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.WHITE)
                 .text("Loading....")
-                .textSize(80)
+                .textSize(50)
                 .sizeRatio(0.3f)//背景大小
                 .bgAlpha(0.8f)//透明度
-                .borderPadding(0.3f)//花瓣長度
+                .borderPadding(0.55f)//花瓣長度
                 .fadeColor(Color.DKGRAY).build();
         dialog.show();
     }

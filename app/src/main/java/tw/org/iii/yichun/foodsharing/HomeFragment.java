@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,19 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import tw.org.iii.yichun.foodsharing.Global.Utils;
+import tw.org.iii.yichun.foodsharing.Item.User;
 import tw.org.iii.yichun.foodsharing.profile.ShareHistoryFragment;
 
 public class HomeFragment extends Fragment {
@@ -66,7 +76,7 @@ public class HomeFragment extends Fragment {
         selectmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), HomeMapFragment.class);
+                Intent intent = new Intent(getContext(), tw.org.iii.yichun.foodsharing.GoogleMap.Map.class);
                 startActivityForResult(intent, 0);
             }
         });
@@ -148,7 +158,40 @@ public class HomeFragment extends Fragment {
             return convertView;
         }
     }
+    /**
+     * 抓取sql內的食物資訊
+     */
+    private void getfoodcard(){
+        String url = "http://"+ Utils.ip +"/FoodSharing_war/Sql_getAddFoodCard";
 
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
+        ){
+            //拿取user當前地址,如果抓不到user當前位置就抓取整個foodcard表單
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                if (User.getDist()!=null){
+                    //傳回地址,
+                }
+                return null;
+            }
+        };
+
+    }
 
     /**
      * 食物 ListView getData

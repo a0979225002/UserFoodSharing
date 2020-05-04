@@ -15,14 +15,23 @@ public class User {
     private static String address;
     private static String city;
     private static String dist;
-    private static String position_notsql;//user現在位置,該參數並不是sql拿取的
+    private static Double Latitude;//user現在位置,經度
+    private static Double Longitude;//user現在位置,緯度
 
-    public static String getPosition_notsql() {
-        return position_notsql;
+    public static Double getLatitude() {
+        return Latitude;
     }
 
-    public static void setPosition_notsql(String position_notsql) {
-        User.position_notsql = position_notsql;
+    public static void setLatitude(Double latitude) {
+        Latitude = latitude;
+    }
+
+    public static Double getLongitude() {
+        return Longitude;
+    }
+
+    public static void setLongitude(Double longitude) {
+        Longitude = longitude;
     }
 
     public static String getCity() {
