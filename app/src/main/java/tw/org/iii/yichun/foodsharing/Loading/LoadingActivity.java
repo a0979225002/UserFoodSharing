@@ -95,7 +95,7 @@ public class LoadingActivity extends AppCompatActivity {
              if (User.getLatitude()!= null){
                  Location = true;
                  cancel();
-                 Log.v("lipin",User.getLatitude().toString()+"::::::::");
+                 Log.v("lipin",User.getLatitude().toString()+"::::::::"+User.getLongitude().toString());
              }else if (count>=5){   //如果超過五次就不再執行
                     Log.v("lipin",count+"次數");
                     cancel();

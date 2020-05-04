@@ -2,6 +2,7 @@ package tw.org.iii.yichun.foodsharing;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,11 +25,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Item.User;
 import tw.org.iii.yichun.foodsharing.profile.ShareHistoryFragment;
@@ -46,13 +52,23 @@ public class HomeFragment extends Fragment {
         selectmap = view.findViewById(R.id.selectmap);
         gotomap();
         filter = view.findViewById(R.id.filter);
-        gotoFilter();
 
         listView = view.findViewById(R.id.home_lv);
-        List<HashMap<String,Object>> list = getData();
-        listView.setAdapter(new ListViewAdapter(getActivity(), list));
+
+        getfoodcard();//資料庫獲得食物資訊,並將食物資訊放在list裡面,把參數給予適配器adpader
 
 
+        listViewClickListener();
+
+
+        gotoFilter();//去進階搜尋頁面
+
+        return view;
+    }
+    /**
+     * 點擊跳轉頁面
+     */
+    private void listViewClickListener(){
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -67,11 +83,11 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-
-        return view;
     }
 
-    //去地圖頁面  todo: 有錯誤，要判斷homemapfragment活在哪裡
+    /**
+     *  去地圖頁面
+     */
     private void gotomap(){
         selectmap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,8 +109,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-
-
     /**
      * 食物 ListView Adapter
      */
@@ -108,8 +122,6 @@ public class HomeFragment extends Fragment {
             this.data = data;
             this.layoutInflater = LayoutInflater.from(context);
         }
-
-
         /**
          * HomeList Item 集合，對應 listView_home.xml
          */
@@ -148,7 +160,8 @@ public class HomeFragment extends Fragment {
             convertView.setTag(ListItem);
 
             // 綁定資料
-            ListItem.image.setImageResource((Integer)data.get(position).get("image"));
+
+            ListItem.image.setImageBitmap((Bitmap) data.get(position).get("image"));
             ListItem.title.setText((String)data.get(position).get("title"));
             ListItem.location.setText((String)data.get(position).get("location"));
             ListItem.deadline.setText((String)data.get(position).get("deadline"));
@@ -159,18 +172,26 @@ public class HomeFragment extends Fragment {
         }
     }
     /**
+     * 抓取現在客戶經緯度轉換為,拿取區域,與縣市
+     */
+
+
+
+
+    /**
      * 抓取sql內的食物資訊
      */
     private void getfoodcard(){
         String url = "http://"+ Utils.ip +"/FoodSharing_war/Sql_getAddFoodCard";
-
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        JsonFoodcard(response);
+                        //將抓下來的參數給予建構式中的ListViewAdapter class
+                        listView.setAdapter(new ListViewAdapter(getActivity(), list));
                     }
                 },
                 new Response.ErrorListener() {
@@ -186,10 +207,37 @@ public class HomeFragment extends Fragment {
                 HashMap<String,String> params = new HashMap<>();
                 if (User.getDist()!=null){
                     //傳回地址,
+
                 }
                 return null;
             }
         };
+        MainUtils.queue.add(request);
+    }
+
+
+    /**
+     * 抓取json的食物資訊
+     * @param response
+     */
+    JSONObject row;
+    HashMap<String, Object> hashMap;
+    List<HashMap<String, Object>> list;
+    private void JsonFoodcard(String response) {
+        list = new ArrayList<HashMap<String, Object>>();
+
+        try {
+            JSONArray array = new JSONArray(response);
+            for (int i = 0; i < array.length();i++){
+                row = array.getJSONObject(i);
+
+                getData();//將抓取的值一個一個放在listview裡面
+
+            }
+
+        }catch (Exception e){
+            Log.v("lipin","JsonFoodcard:"+e.toString());
+        }
 
     }
 
@@ -197,18 +245,34 @@ public class HomeFragment extends Fragment {
      * 食物 ListView getData
      */
     // TODO: 2020/4/27 撈資料庫資料
-    public List<HashMap<String, Object>> getData(){
-        List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-        for (int i = 0; i < 10; i++){
-            HashMap<String, Object> hashMap = new HashMap<String, Object>();
-            hashMap.put("image", R.drawable.foodimg);
-            hashMap.put("title", "食物名稱" + i);
-            hashMap.put("location", "台中市南屯區" + i);
-            hashMap.put("deadline", "期限：" + "2020/05/27 20:00");
-            hashMap.put("quantity", "份數：" + i + " 份，可拆領");
-            hashMap.put("leftQuantity", "預估剩餘：" + i + " 份");
+    public void getData(){
+            //因為list加入的方式的比對方式是地址,重複的地址物件會被蓋過,所以需要每次尋訪時是產生新的hashMap,故在此new出來
+            hashMap = new HashMap<String, Object>();
+
+            //拿取拆領的數字,0 or 1
+            int split = Integer.valueOf(row.optString("split"));
+
+            //將拆領的值更改為字串
+            String stringSplit = null;
+            if (split == 1){
+                stringSplit = "可拆領";
+            }else if (split ==0){
+                stringSplit = "不可拆領";
+            }
+
+            //取出base64的圖片
+            String base64Img = row.optString("foodimg");
+            //轉成bitmap
+            Bitmap bitmap = MainUtils.base64Tobitmap(base64Img);
+
+            hashMap.put("image",bitmap);
+            hashMap.put("title", row.optString("name") );
+            hashMap.put("location", row.optString("city")+row.optString("dist"));
+            hashMap.put("deadline", "期限：" + row.optString("due_date"));
+            hashMap.put("quantity", "可否拆領："+stringSplit);
+            hashMap.put("leftQuantity", "預估剩餘："+ row.optString("qty")+ " 份");
+
+            Log.v("lipin",hashMap.toString());
             list.add(hashMap);
-        }
-        return list;
-    }
+         }
 }

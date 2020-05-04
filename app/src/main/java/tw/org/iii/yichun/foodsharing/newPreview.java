@@ -250,6 +250,7 @@ public class newPreview extends AppCompatActivity {
                 parmas.put("createtime", createTime);
                 parmas.put("detail",Memo.getText().toString());
 
+                Log.v("lipin", "測試::"+datetime.getText().toString());
                 return parmas;
             }
         };
