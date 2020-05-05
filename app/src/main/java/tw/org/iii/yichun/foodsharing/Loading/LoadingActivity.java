@@ -350,10 +350,10 @@ public class LoadingActivity extends AppCompatActivity {
             return;
         }
         Location location = mLastLocation.getLastKnownLocation(LocationManager.GPS_PROVIDER);//取得最後已知的座標
-
-        User.setLatitude(location.getLatitude());//拿取經度,傳給user靜態類保存
-        User.setLongitude(location.getLongitude());//拿取偉度,傳給user靜態類保存
-
+        if (location != null) {
+            User.setLatitude(location.getLatitude());//拿取經度,傳給user靜態類保存
+            User.setLongitude(location.getLongitude());//拿取偉度,傳給user靜態類保存
+        }
         mLastLocation.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, myListener);
     }
 
@@ -366,9 +366,10 @@ public class LoadingActivity extends AppCompatActivity {
          */
         @Override
         public void onLocationChanged(Location location) {
-
-            User.setLatitude(location.getLatitude());
-            User.setLongitude(location.getLongitude());
+            if(location != null){
+                User.setLatitude(location.getLatitude());
+                User.setLongitude(location.getLongitude());
+            }
         }
 
         @Override

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,7 @@ import tw.org.iii.yichun.foodsharing.profile.ShareHistoryFragment;
 public class HomeFragment extends Fragment {
     private ListView listView;
     private ImageView selectmap,filter;
+    private Intent intent;
 
     @Nullable
     @Override
@@ -70,23 +76,33 @@ public class HomeFragment extends Fragment {
         return view;
     }
     /**
-     * 點擊跳轉頁面
+     * 監聽客戶點擊第幾個食物卡片
      */
     private void listViewClickListener(){
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //做出畫面-點擊第0個，跳到該卡片詳細資料頁面 (Giver視角)
-                if (position == 0){
-                    Intent intent = new Intent(view.getContext(), FoodinfoGiver.class);
-                    startActivityForResult(intent, 0);
-                }//做出畫面-點擊第1個，跳到該卡片詳細資料頁面 (Taker視角)
-                if (position == 1){
-                    Intent intent = new Intent(view.getContext(), FoodinfoTaker.class);
-                    startActivityForResult(intent, 0);
-                }
+
+                Log.v("lipin",position+"查看");
+
+                GotoFoodinfoTaker(position,view);
             }
         });
+    }
+
+    /**
+     * 點擊前往跳轉頁面
+     */
+    private void GotoFoodinfoTaker(int position,View view){
+        intent = new Intent(view.getContext(),FoodinfoTaker.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("foodcard", (Serializable) list.get(position));
+
+        intent.putExtras(bundle);
+
+        startActivity(intent);
+
     }
 
     /**
@@ -166,11 +182,12 @@ public class HomeFragment extends Fragment {
             // 綁定資料
 
             ListItem.image.setImageBitmap((Bitmap) data.get(position).get("image"));
-            ListItem.title.setText((String)data.get(position).get("title"));
-            ListItem.location.setText((String)data.get(position).get("location"));
-            ListItem.deadline.setText((String)data.get(position).get("deadline"));
-            ListItem.quantity.setText((String)data.get(position).get("quantity"));
-            ListItem.leftQuantity.setText((String)data.get(position).get("leftQuantity"));
+            ListItem.title.setText("名稱:"+(String)data.get(position).get("title"));
+            ListItem.location.setText("地區:"+(String)data.get(position).get("city")+
+                    (String)data.get(position).get("dist"));
+            ListItem.deadline.setText("期限:"+(String)data.get(position).get("deadline"));
+            ListItem.quantity.setText("可否拆領:"+(String)data.get(position).get("quantity"));
+            ListItem.leftQuantity.setText("預估剩餘份數:"+(String)data.get(position).get("leftQuantity")+"份");
 
             return convertView;
         }
@@ -264,7 +281,7 @@ public class HomeFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> params = new HashMap<>();
-
+                    params.put("userid",User.getId());
                 //檢查有無取得地址,如果有的話,將地址傳給後端,讓顯示在首頁的不再是最新的20個資訊,而是你附近地址的資訊
                 if (User.getDist()!=null&&User.getCity()!=null){
                     params.put("city",User.getCity());
@@ -309,7 +326,7 @@ public class HomeFragment extends Fragment {
      * 食物 ListView getData
      */
     // TODO: 2020/4/27 撈資料庫資料
-    public void getData(){
+    public void getData() throws ParseException {
             //因為list加入的方式的比對方式是地址,重複的地址物件會被蓋過,所以需要每次尋訪時是產生新的hashMap,故在此new出來
             hashMap = new HashMap<String, Object>();
 
@@ -323,20 +340,34 @@ public class HomeFragment extends Fragment {
             }else if (split ==0){
                 stringSplit = "不可拆領";
             }
+            //將sql回來的截止時間,優化顯示
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date = format.parse(row.optString("due_date"));
+            String dueDate = format.format(date);
+
+            Log.v("lipin",dueDate);
 
             //取出base64的圖片
             String base64Img = row.optString("foodimg");
             //轉成bitmap
             Bitmap bitmap = MainUtils.base64Tobitmap(base64Img);
 
+            //直接將資料顯示在首頁資訊
             hashMap.put("image",bitmap);
             hashMap.put("title", row.optString("name") );
-            hashMap.put("location", row.optString("city")+row.optString("dist"));
-            hashMap.put("deadline", "期限：" + row.optString("due_date"));
-            hashMap.put("quantity", "可否拆領："+stringSplit);
-            hashMap.put("leftQuantity", "預估剩餘："+ row.optString("qty")+ " 份");
+            hashMap.put("city",row.optString("city"));
+            hashMap.put("dist",row.optString("dist"));
+            hashMap.put("deadline",dueDate);
+            hashMap.put("quantity",stringSplit);
+            hashMap.put("leftQuantity",row.optString("qty"));
 
-            Log.v("lipin",hashMap.toString());
+            //下面東東目的,當客戶端點擊後進入詳細資料時可查看
+            hashMap.put("account",row.optString("account"));
+            hashMap.put("username",row.optString("username"));
+            hashMap.put("address",row.optString("address"));
+            hashMap.put("detail",row.optString("detail"));
+            hashMap.put("category",row.optString("category"));
+
             list.add(hashMap);
          }
 }

@@ -6,19 +6,35 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class FoodinfoTaker extends AppCompatActivity {
+    private Intent intent;
+    private HashMap<String, Object> hashmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_foodinfo_taker);
-
         setToolbar();
+
+        hashmap = (HashMap<String, Object>) getIntent().getSerializableExtra("foodcard");
+
+        Log.v("lipin",hashmap.toString());
+
+
+
     }
+
+
+
+
 
     /**
      * 設定 Toolbar
