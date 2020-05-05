@@ -289,7 +289,7 @@ public class HomeFragment extends Fragment {
                     Log.v("lipin",User.getCity()+"22222");
                     return params;
                 }else {
-                    return null;
+                    return params;
                 }
             }
         };
