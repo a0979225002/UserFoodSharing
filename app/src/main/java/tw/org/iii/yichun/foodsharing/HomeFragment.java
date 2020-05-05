@@ -92,14 +92,14 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * 點擊前往跳轉頁面
+     * 點擊前往跳食物詳細頁面
      */
     private void GotoFoodinfoTaker(int position,View view){
         intent = new Intent(view.getContext(),FoodinfoTaker.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("foodcard", (Serializable) list.get(position));
+        Bundle bundle = new Bundle();//拿出bundle
+        bundle.putSerializable("foodcard", (Serializable) list.get(position));//將hashmap強制轉型為序列化
 
-        intent.putExtras(bundle);
+        intent.putExtras(bundle);//將序列化的hashmap丟給下個頁面處理
 
         startActivity(intent);
 
@@ -367,6 +367,7 @@ public class HomeFragment extends Fragment {
             hashMap.put("address",row.optString("address"));
             hashMap.put("detail",row.optString("detail"));
             hashMap.put("category",row.optString("category"));
+            hashMap.put("tag",row.optString("tag"));
 
             list.add(hashMap);
          }
