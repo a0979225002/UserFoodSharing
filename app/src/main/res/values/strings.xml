@@ -32,13 +32,13 @@
 
     <!--  縣市選單  -->
     <string-array name="foodCity">
-        <item>台中</item>
-        <item>台北</item>
-        <item>高雄</item>
-        <item>彰化</item>
-        <item>雲林</item>
-        <item>台南</item>
-        <item>花蓮</item>
+        <item>台中市</item>
+        <item>台北市</item>
+        <item>高雄市</item>
+        <item>彰化市</item>
+        <item>雲林市</item>
+        <item>台南市</item>
+        <item>花蓮市</item>
     </string-array>
     <string-array name="foodCity_Taipei">
         <item>中正區</item>

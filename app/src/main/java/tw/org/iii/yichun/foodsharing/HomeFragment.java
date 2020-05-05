@@ -55,7 +55,11 @@ public class HomeFragment extends Fragment {
 
         listView = view.findViewById(R.id.home_lv);
 
-        getfoodcard();//資料庫獲得食物資訊,並將食物資訊放在list裡面,把參數給予適配器adpader
+        if (User.getLongitude() != null) {
+            getposition();//取得現在所在位置轉成文字地址
+        }else {
+            getfoodcard();//資料庫獲得食物資訊,並將食物資訊放在list裡面,把參數給予適配器adpader
+        }
 
 
         listViewClickListener();
@@ -174,9 +178,64 @@ public class HomeFragment extends Fragment {
     /**
      * 抓取現在客戶經緯度轉換為,拿取區域,與縣市
      */
+    private void getposition(){
+
+        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&language=zh-TW&key=AIzaSyDn1AwRWz2oQX_oOr5CobxB1PRe-Vg2eyA",
+                User.getLatitude(),User.getLongitude());
+
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        jsonposition(response);
+
+                        getfoodcard();//資料庫獲得食物資訊,並將食物資訊放在list裡面,把參數給予適配器adpader
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
+        );
+        MainUtils.queue.add(request);
+    }
+
+    /**
+     * 將傳回來了json地址拉出來存取地區,縣市
+     */
+    private void jsonposition(String response) {
+        try {
+            JSONObject  root = new JSONObject(response);
+            String statis = root.getString("status");
+            //檢查是否為ok,google如果有拿取到正確地址會在status欄位顯示ok
+
+            Log.v("lipin","status"+statis);
+
+            if (statis.equals("OK")){
+                JSONArray results = root.getJSONArray("results");
+                JSONObject result = results.getJSONObject(0);
+                JSONArray address_components = result.getJSONArray("address_components");
+                JSONObject city = address_components.getJSONObject(3);
+                JSONObject dist = address_components.getJSONObject(2);
+
+                //將轉出來的縣市地址傳入權域靜態類中
+                User.setCity(city.getString("short_name"));
+                User.setDist(dist.getString("short_name"));
+
+            }
+
+        }catch (Exception e){
+            Log.v("lipin",e.toString());
+        }
 
 
 
+    }
 
     /**
      * 抓取sql內的食物資訊
@@ -205,11 +264,16 @@ public class HomeFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> params = new HashMap<>();
-                if (User.getDist()!=null){
-                    //傳回地址,
 
+                //檢查有無取得地址,如果有的話,將地址傳給後端,讓顯示在首頁的不再是最新的20個資訊,而是你附近地址的資訊
+                if (User.getDist()!=null&&User.getCity()!=null){
+                    params.put("city",User.getCity());
+                    params.put("dist",User.getDist());
+                    Log.v("lipin",User.getCity()+"22222");
+                    return params;
+                }else {
+                    return null;
                 }
-                return null;
             }
         };
         MainUtils.queue.add(request);

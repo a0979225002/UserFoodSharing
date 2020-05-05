@@ -296,17 +296,17 @@ public class AddFoodActivity extends AppCompatActivity {
                 Log.v("lipin", selectedCity);
 
                 switch (selectedCity) {
-                    case "台北":
+                    case "台北市":
                         addFoodDist.setAdapter(new ArrayAdapter<String>(AddFoodActivity.this,
                                 R.layout.dropdown_menu_popup_item,
                                 getResources().getStringArray(R.array.foodCity_Taipei)));
                         break;
-                    case "台中":
+                    case "台中市":
                         addFoodDist.setAdapter(new ArrayAdapter<String>(AddFoodActivity.this,
                                 R.layout.dropdown_menu_popup_item,
                                 getResources().getStringArray(R.array.foodCity_Taichung)));
                         break;
-                    case "高雄":
+                    case "高雄市":
                         addFoodDist.setAdapter(new ArrayAdapter<String>(AddFoodActivity.this,
                                 R.layout.dropdown_menu_popup_item,
                                 getResources().getStringArray(R.array.foodCity_Kouhsiung)));
