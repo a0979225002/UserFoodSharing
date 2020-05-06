@@ -28,6 +28,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,12 +62,12 @@ public class LoadingActivity extends AppCompatActivity {
     Intent intent;
     boolean ispermission;
     boolean Location;//檢查是否取得到地址了
+    private  String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
-
         /**
          * 拿取權限
          * gps權限
@@ -118,7 +121,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     /**
-     * 有無權限都可做的事
+     * 有無權限都要做的事
      */
     private void important(){
         getaccount();//拿取存在手機內的帳號密碼
@@ -127,11 +130,13 @@ public class LoadingActivity extends AppCompatActivity {
 
         if (account != null) {
             Log.v("lipin", "有執行媽01");
+            //判斷token 是否一樣
+            VerifyToken();
+
             //如果是二次登入者,讓他存取該user的資訊,然後Auto_login()方法比對帳密是否正確要跳轉哪個頁面
             User();//將user資訓存到靜態類
         } else {
             Log.v("lipin", "有執行媽02");
-
             //如果是第一次登入者,無帳號,或有帳號密碼錯誤者
             Auto_login();//讓他判斷要跳轉哪個頁面
         }
@@ -250,6 +255,7 @@ public class LoadingActivity extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("account", account);
                 params.put("passwd", password);
+                params.put("token",token);
                 return params;
             }
         };
@@ -300,7 +306,6 @@ public class LoadingActivity extends AppCompatActivity {
                         MainUtils.setUser(response);
                         Log.v("lipin", "執行完了");
                         Auto_login();
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -387,6 +392,18 @@ public class LoadingActivity extends AppCompatActivity {
 
         }
     }
+    /**
+     * 拿取當下tonken比對是否一樣
+     */
+    private void VerifyToken(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                token = instanceIdResult.getToken();
+            }
+        });
+    }
+
 
 
 

@@ -17,6 +17,15 @@ public class User {
     private static String dist;
     private static Double Latitude;//user現在位置,經度
     private static Double Longitude;//user現在位置,緯度
+    private static String token;
+
+    public static String getToken() {
+        return token;
+    }
+
+    public static void setToken(String token) {
+        User.token = token;
+    }
 
     public static Double getLatitude() {
         return Latitude;

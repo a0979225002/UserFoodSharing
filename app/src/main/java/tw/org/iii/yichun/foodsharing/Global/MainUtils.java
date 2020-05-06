@@ -36,7 +36,6 @@ public class MainUtils extends Application {
     public void onCreate() {
         super.onCreate();
         queue = Volley.newRequestQueue(this);//獲得後端網路
-
     }
     //讀取框
     public static void showloading(Context context){
@@ -129,6 +128,7 @@ public class MainUtils extends Application {
                 User.setAddress(row.optString("address",null));
                 User.setCity(row.optString("city",null));
                 User.setDist(row.optString("dist",null));
+                User.setToken(row.optString("token",null));
 
             }
         }catch (Exception e){

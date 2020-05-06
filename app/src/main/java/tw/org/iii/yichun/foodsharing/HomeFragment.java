@@ -67,11 +67,11 @@ public class HomeFragment extends Fragment {
             getfoodcard();//資料庫獲得食物資訊,並將食物資訊放在list裡面,把參數給予適配器adpader
         }
 
-
         listViewClickListener();
 
-
         gotoFilter();//去進階搜尋頁面
+
+        Log.v("lipin",User.getToken());
 
         return view;
     }
@@ -87,6 +87,8 @@ public class HomeFragment extends Fragment {
                 Log.v("lipin",position+"查看");
 
                 GotoFoodinfoTaker(position,view);
+                //fragment的跳轉頁面寫法,須先getActivity
+                getActivity().overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
             }
         });
     }
@@ -102,6 +104,8 @@ public class HomeFragment extends Fragment {
         intent.putExtras(bundle);//將序列化的hashmap丟給下個頁面處理
 
         startActivity(intent);
+
+
 
     }
 
@@ -368,6 +372,7 @@ public class HomeFragment extends Fragment {
             hashMap.put("detail",row.optString("detail"));
             hashMap.put("category",row.optString("category"));
             hashMap.put("tag",row.optString("tag"));
+            hashMap.put("token",row.optString("token"));
 
             list.add(hashMap);
          }

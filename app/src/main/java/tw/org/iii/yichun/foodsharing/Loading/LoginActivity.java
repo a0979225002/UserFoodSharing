@@ -19,7 +19,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,13 +63,13 @@ public class LoginActivity extends AppCompatActivity {
     private String getpasswd;
     private int intcount;//1：是後端判斷帳密正確,0：是後端帳密判斷錯誤
     private SharedPreferences addUser;//保存帳密
-
+    private String token;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+        getToken();//拿取該手機tocken
         getSignup();//拿取註冊時的帳號密碼
     }
     /**
@@ -160,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                 HashMap<String,String> params = new HashMap<>();
                 params.put("account",getaccount);
                 params.put("passwd",getpasswd);
+                params.put("token",token);
 
                 return params;
             }
@@ -186,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
             addUser.edit()
                     .putString("account",getaccount)
                     .putString("password",getpasswd)
+                    .putString("token",token)
                     .commit();
             User();//將登入成功的user資料都存起來,方便之後在任何地方拿取
             intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -275,7 +280,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         MainUtils.setUser(response);
-                        Log.v("lipin","執行完了");
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -295,6 +300,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         MainUtils.queue.add(request);
+    }
+    /**
+     * 拿取tocken
+     */
+    private void getToken(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                token = instanceIdResult.getToken();
+            }
+        });
     }
 }
 
