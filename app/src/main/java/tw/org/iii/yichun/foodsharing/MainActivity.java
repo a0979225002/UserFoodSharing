@@ -1,5 +1,18 @@
 package tw.org.iii.yichun.foodsharing;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.RelativeLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,27 +21,22 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import tw.org.iii.yichun.foodsharing.profile.ProfileFragment;
 
 
 public class MainActivity extends AppCompatActivity {
+    @BindView(R.id.allview)
+    RelativeLayout allview;
+
     private BottomNavigationView bmView;
     private ViewPager viewPager;
     private Intent intent;
@@ -37,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        ALERT_WINDOW();//檢查用戶是否開啟懸浮視窗
+
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
@@ -65,13 +77,44 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * 檢查用戶是否有開啟懸浮視窗
+     */
+    private void ALERT_WINDOW() {
+        if (!Settings.canDrawOverlays(MainActivity.this)) {
+
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+                    .setTitle("您需要開啟懸浮視窗")
+                    .setMessage("如果需要在程式使用中時顯示對方通知,您需要開啟懸浮視窗")
+                    .setNegativeButton("前往開啟", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + getPackageName()));
+                            startActivityForResult(intent, 10);
+                        }
+                    })
+                    .setPositiveButton("不開啟", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Snackbar.make(allview,"程式在使用中時,系統將不會提示您有誰想拿取食物",Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+            dialog.show();
+
+        }
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         init();
     }
 
-    private void init(){
+    private void init() {
         bmView = findViewById(R.id.bottom_nav_view);
         viewPager = findViewById(R.id.view_pager);
 
@@ -82,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new ProfileFragment());
         fragments.add(new ShopFragment());
 
-        FragmentAdapter adapter = new FragmentAdapter(fragments,getSupportFragmentManager());
+        FragmentAdapter adapter = new FragmentAdapter(fragments, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         changeBottomNav();
@@ -91,21 +134,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 自訂 ToolBar
-    private void setToolBar(){
+    private void setToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.nav_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int i = item.getItemId();
-                if (i == R.id.nav_add){
+                if (i == R.id.nav_add) {
                     toaddfood();
 
-                }else if (i == R.id.nav_about){
+                } else if (i == R.id.nav_about) {
 
-                }else if (i == R.id.nav_feedback){
+                } else if (i == R.id.nav_feedback) {
 
-                }else if (i == R.id.nav_logout){
+                } else if (i == R.id.nav_logout) {
 
                 }
 
@@ -121,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *點擊toolbar上的＋,會進入新增卡片的頁面
+     * 點擊toolbar上的＋,會進入新增卡片的頁面
      */
     private void toaddfood() {
         Intent intent = new Intent(this, AddFoodActivity.class);
@@ -130,22 +173,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 點擊 Bottom Nav 事件
-    private void changeBottomNav(){
+    private void changeBottomNav() {
         bmView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int currentIndex = viewPager.getCurrentItem();
                 int menuId = menuItem.getItemId();
 
-                switch (menuId){
-                    case R.id.tabNotification:viewPager.setCurrentItem(0);break;
-                    case R.id.tabMessage:viewPager.setCurrentItem(1);break;
-                    case R.id.tabHome:viewPager.setCurrentItem(2);break;
-                    case R.id.tabProfile:viewPager.setCurrentItem(3);break;
-                    case R.id.tabShop:viewPager.setCurrentItem(4);break;
+                switch (menuId) {
+                    case R.id.tabNotification:
+                        viewPager.setCurrentItem(0);
+                        break;
+                    case R.id.tabMessage:
+                        viewPager.setCurrentItem(1);
+                        break;
+                    case R.id.tabHome:
+                        viewPager.setCurrentItem(2);
+                        break;
+                    case R.id.tabProfile:
+                        viewPager.setCurrentItem(3);
+                        break;
+                    case R.id.tabShop:
+                        viewPager.setCurrentItem(4);
+                        break;
                 }
 
-                switch (menuId){
+                switch (menuId) {
                     case 0:
                 }
                 return false;
@@ -160,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
-                if (i<5){
+                if (i < 5) {
                     bmView.getMenu().getItem(i).setChecked(true);
                 }
             }
@@ -191,6 +244,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * 暫停要做的事
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 }
 
 

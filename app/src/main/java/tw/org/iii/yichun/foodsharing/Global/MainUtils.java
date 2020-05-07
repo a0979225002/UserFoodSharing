@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Base64;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -135,5 +136,4 @@ public class MainUtils extends Application {
             Log.v("lipin",e.toString());
         }
     }
-
 }

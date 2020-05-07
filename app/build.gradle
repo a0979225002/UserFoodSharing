@@ -6,7 +6,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "tw.org.iii.yichun.foodsharing"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -58,6 +58,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation "org.java-websocket:Java-WebSocket:1.4.1"
     implementation 'com.google.android.material:material:<version>'
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
+    implementation 'com.github.yhaolpz:FloatWindow:1.0.9'
 
 
     implementation 'com.camerakit:camerakit:1.0.0-beta3.11'

@@ -244,7 +244,7 @@ public class newPreview extends AppCompatActivity {
                 parmas.put("dist", addFood.getAddFoodDist());
                 parmas.put("address", addFood.getAddress());
                 parmas.put("dueDate", datetime.getText().toString());
-                parmas.put("tag", foodTag.getText().toString());
+                parmas.put("tag", foodTag.getText().toString().trim());
                 parmas.put("qty", Integer.toString(foodAmount_Number));
                 parmas.put("split", addFood.isShareIt() == true ? "1" : "0");
                 parmas.put("createtime", createTime);

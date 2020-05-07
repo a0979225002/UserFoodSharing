@@ -9,6 +9,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -26,6 +30,7 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tw.org.iii.yichun.foodsharing.Item.AddFood;
@@ -159,11 +164,11 @@ public class AddFoodActivity extends AppCompatActivity {
 
         addFood.setAddress(address.getText().toString().trim());
         addFood.setAddFoodDatetime(addFoodDatetime.getText().toString());
-        addFood.setAddFoodTag(addFoodTag.getText().toString());
-        addFood.setAddFoodAmount(addFoodAmount.getText().toString());
+        addFood.setAddFoodTag(addFoodTag.getText().toString().trim());
+        addFood.setAddFoodAmount(addFoodAmount.getText().toString().trim());
         addFood.setShareIt(shareIt.isChecked());
         addFood.setAddFoodMemo(addFoodMemo.getText().toString());
-        addFood.setAddFoodName(addFoodName.getText().toString());
+        addFood.setAddFoodName(addFoodName.getText().toString().trim());
 
 
 

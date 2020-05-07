@@ -155,7 +155,9 @@ public class FoodinfoTaker extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> param = new HashMap<>();
                 param.put("GiverToken",hashmap.get("token").toString().trim());//拿取對方token
-                param.put("UserToken", User.getToken());//拿取我方token
+                param.put("UserToken",User.getToken());//拿取我方token
+                param.put("username", User.getAccount());
+                param.put("foodname",hashmap.get("title").toString().trim());
 
                 return param;
             }
@@ -194,21 +196,21 @@ public class FoodinfoTaker extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-        //由Builder生成需發送的物件
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_round)
-                .setContentTitle("剩食領取者通知")
-                .setContentText("很重要,一定要看")
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        //由Manager發送物件
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        // notificationId is a unique int for each notification that you must define
-        notificationManager.notify(123, builder.build());
+//        //由Builder生成需發送的物件
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                .setSmallIcon(R.drawable.ic_launcher_round)
+//                .setContentTitle("剩食領取者通知")
+//                .setContentText("很重要,一定要看")
+//                .setContentIntent(pendingIntent)
+//                .setAutoCancel(true)
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//        //由Manager發送物件
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//
+//        // notificationId is a unique int for each notification that you must define
+//        notificationManager.notify(123, builder.build());
 
         intqueue --;
         queue.setText(intqueue+"");
