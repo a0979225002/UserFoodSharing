@@ -1,9 +1,7 @@
 package tw.org.iii.yichun.foodsharing;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,9 +12,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.Image;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,37 +24,106 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.sl.utakephoto.compress.CompressConfig;
+import com.sl.utakephoto.crop.CropOptions;
+import com.sl.utakephoto.exception.TakeException;
+import com.sl.utakephoto.manager.ITakePhotoResult;
+import com.sl.utakephoto.manager.UTakePhoto;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import tw.org.iii.yichun.foodsharing.Item.AddFood;
 
 public class MyCameraActivity extends AppCompatActivity {
+//    @BindView(R.id.imgview)
+    ImageView imgview;
     private Camera camera;
     private CameraPreview cameraPreview;
     private FrameLayout container;
     private File sdroot;
     private SensorManager sensorManager;
     private Sensor sensor;
-    private MySensorListener mySensorListener;
+    //    private MySensorListener mySensorListener;
     private Bitmap bmp;
     private ImageView imageView;
     private String Imgname;
     private Intent intent;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_camera);
-
+        ButterKnife.bind(this);
+//        createImagePathUri(this);
         findID();
+
+//        comera();
+
 
         Intent intent = getIntent();
 
     }
 
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    private static File createImagePathUri(Context context) {
+//        File imageFilePath = null;
+//        String status = Environment.getExternalStorageState();
+//        SimpleDateFormat timeFormatter = new SimpleDateFormat(
+//                "yyyyMMdd_HHmmss", Locale.CHINA);
+//        long time = System.currentTimeMillis();
+//        String imageName = timeFormatter.format(new Date(time));
+//        // ContentValues是我们希望这条记录被创建时包含的数据信息
+//        ContentValues values = new ContentValues(3);
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME, imageName);
+//        values.put(MediaStore.Images.Media.DATE_TAKEN, time);
+//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+//        File sdcard = Environment.getExternalStorageDirectory();
+//        imageFilePath = new File(sdcard,"12345");
+//
+//        Log.v("lipin", "生成的照片输出路径：" + imageFilePath.toString());
+//        return imageFilePath;
+//    }
+//
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    private void comera() {
+//        Uri uri = Uri.fromFile(createImagePathUri(this));
+//        UTakePhoto.with(this)
+//                .openCamera()
+//                .setCrop(new CropOptions.Builder().create())
+//                .setCompressConfig(new CompressConfig.Builder().setTargetUri(uri).create())
+//                .build(new ITakePhotoResult() {
+//                    @Override
+//                    public void takeSuccess(List<Uri> uriList) {
+//                        Log.v("lipin", uriList.get(0)+"");
+//                        imageView.setImageURI(uriList.get(0));
+//
+//                    }
+//
+//                    @Override
+//                    public void takeFailure(TakeException ex) {
+//                        Log.v("lipin", ex.toString());
+//                    }
+//
+//                    @Override
+//                    public void takeCancel() {
+//                        Log.v("lipin", "取消");
+//                    }
+//
+//
+//                });
+//    }
 
 
     private void findID(){
@@ -66,6 +135,8 @@ public class MyCameraActivity extends AppCompatActivity {
         container.addView(cameraPreview, 0);
         camera.setDisplayOrientation(90);
         sdroot = Environment.getExternalStorageDirectory();
+
+        Log.v("lipin",sdroot.toString());
 
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
@@ -83,7 +154,7 @@ public class MyCameraActivity extends AppCompatActivity {
         }
     }
 
-
+    MySensorListener mySensorListener = new MySensorListener();
 
     private class MySensorListener implements SensorEventListener {
         @Override
@@ -151,6 +222,9 @@ public class MyCameraActivity extends AppCompatActivity {
             Date date = new Date();
             Imgname = "FoodSharing"+simpleDateFormat.format(date)+".jpg";
             FileOutputStream fout = new FileOutputStream(new File(sdroot, Imgname));
+
+                        Log.v("lipin",new File(sdroot, Imgname).toString());
+
             fout.write(data);
             fout.flush();
             fout.close();

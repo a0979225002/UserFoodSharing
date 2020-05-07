@@ -2,22 +2,33 @@ package tw.org.iii.yichun.foodsharing.MyService;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.yhao.floatwindow.FloatWindow;
 import com.yhao.floatwindow.Screen;
 import com.yhao.floatwindow.ViewStateListener;
+
+import es.dmoral.toasty.Toasty;
+import tw.org.iii.yichun.foodsharing.Item.User;
+import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 
 public class MessgingService extends FirebaseMessagingService {
 
     String title;
     String body;
+    int i = User.getI();
 
     @Override
     public void onCreate() {
@@ -52,8 +63,9 @@ public class MessgingService extends FirebaseMessagingService {
 
             title = remoteMessage.getNotification().getTitle();
             body = remoteMessage.getNotification().getBody();
-            uIhandler.sendEmptyMessage(1);
-            Log.v("lipin","有來媽");
+            uIhandler.sendEmptyMessage(i++);
+            User.setI(i);
+            Log.v("lipin",User.getI()+"");
         }
     }
 
@@ -63,15 +75,19 @@ public class MessgingService extends FirebaseMessagingService {
         @SuppressLint("ResourceType")
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
+
+            Toasty.info(getApplicationContext(),body,Toasty.LENGTH_LONG,true)
+                    .show();
+
+
+                if (msg.what == 0) {
                     FloatWindow
                             .with(getApplicationContext())
-                            .setView(LayoutInflater.from(MessgingService.this).inflate(R.layout.floatwindows,null))
+                            .setView(LayoutInflater.from(MessgingService.this).inflate(R.layout.floatwindows, null))
                             .setWidth(200)
-                            .setHeight(Screen.width,0.2f)
+                            .setHeight(Screen.width, 0.2f)
                             .setX(100)
-                            .setY(Screen.height,0.3f)
+                            .setY(Screen.height, 0.3f)
                             .setDesktopShow(true)
                             .setViewStateListener(new ViewStateListener() {
                                 @Override
@@ -86,7 +102,7 @@ public class MessgingService extends FirebaseMessagingService {
 
                                 @Override
                                 public void onHide() {
-                                    Log.v("lipin","onHide");
+                                    Log.v("lipin", "onHide");
                                 }
 
                                 @Override
@@ -96,27 +112,24 @@ public class MessgingService extends FirebaseMessagingService {
 
                                 @Override
                                 public void onMoveAnimStart() {
-                                    Log.v("lipin","onMoveAnimStart");
                                 }
 
                                 @Override
                                 public void onMoveAnimEnd() {
-                                    Log.v("lipin","onMoveAnimEnd");
+                                    Log.v("lipin", "onMoveAnimEnd");
                                 }
 
                                 @Override
                                 public void onBackToDesktop() {
-                                    Log.v("lipin","onBackToDesktop");
+                                    Log.v("lipin", "onBackToDesktop");
                                 }
                             }).build();
                     FloatWindow.get().show();
 
-                    break;
+                }
 
             }
         }
-
-    }
 
     /**
      * 拿取token才能知道是誰,發送的人是誰

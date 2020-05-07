@@ -9,8 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,9 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.camerakit.api.camera2.Camera2;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,9 +28,11 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.logging.Handler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tw.org.iii.yichun.foodsharing.Global.MyCamera.MyCamara2;
 import tw.org.iii.yichun.foodsharing.Item.AddFood;
 
 
@@ -233,7 +233,7 @@ public class AddFoodActivity extends AppCompatActivity {
         addFoodImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(AddFoodActivity.this, MyCameraActivity.class);
+                intent = new Intent(AddFoodActivity.this, MyCamara2.class);
 
                 SaveAddFood();//將所有客戶端輸入值的存成物件保存,（目的）跳轉後返回還是原來的值
 
@@ -241,6 +241,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
                 startActivityForResult(intent,321);
                 finish();
+                overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
             }
         });
     }

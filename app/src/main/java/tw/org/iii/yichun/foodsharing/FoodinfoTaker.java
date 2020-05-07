@@ -3,6 +3,7 @@ package tw.org.iii.yichun.foodsharing;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -26,6 +27,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -172,15 +174,27 @@ public class FoodinfoTaker extends AppCompatActivity {
      */
     public void queueBtn(View view) {
 
-        ManagerGiver();
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+                .setTitle("排隊")
+                .setMessage("點擊排隊後,需由對方通知您,您才有辦法與對方聯繫")
+                .setNegativeButton("不排隊", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("確定排隊", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ManagerGiver();
+                    }
+                });
+        dialog.show();
 
-
-        //點擊通知會進入的頁面
-        Intent intent = new Intent(this, LoadingActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-
+//        //點擊推播會進入的頁面
+//        Intent intent = new Intent(this, LoadingActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         final String CHANNEL_ID = "lipin";
 
         //android 7以前的不用做,此串為驗證
@@ -211,8 +225,5 @@ public class FoodinfoTaker extends AppCompatActivity {
 //
 //        // notificationId is a unique int for each notification that you must define
 //        notificationManager.notify(123, builder.build());
-
-        intqueue --;
-        queue.setText(intqueue+"");
     }
 }
