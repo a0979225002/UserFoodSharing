@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class ProfileFragment extends Fragment {
     private TabLayout tabLayout;
     private View view;
     private ArrayList views;
+    private ArrayList<String> title;
 
 
     @Override
@@ -52,14 +54,25 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         profileImg = view.findViewById(R.id.profile_img);
         tabLayout = view.findViewById(R.id.profile_tabLayout);
         viewPager = view.findViewById(R.id.profile_viewPager);
 
+        addlist();//將標題與fragment加入陣列
+
+        setFragment();//adapter三個fragment,實施監聽
+
+        return view;
+    }
+
+    /**
+     * 將fragment與標題加入陣列中
+     */
+    private void addlist(){
+
+        //新增頁面
         views = new ArrayList();
 
         fragment1 = new ShareHistoryFragment();
@@ -70,74 +83,42 @@ public class ProfileFragment extends Fragment {
         views.add(1,fragment2);
         views.add(2,fragment3);
 
-        setFragment();
-
-        return view;
+        //新增標題
+        title = new ArrayList();
+        title.add("分享紀錄");
+        title.add("索取紀錄");
+        title.add("評論");
     }
 
-
+    /**
+     * 將fragment加入適配器,進行監聽
+     */
     private void setFragment() {
 
-//        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
-
-        viewPager.setAdapter(new FragmentPagerAdapter(getFragmentManager(),tabLayout.getTabCount()) {
+        FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
-                Log.v("lipin", 123456+"::::"+position+"");
 
+                Log.v("lipin", position + "");
                 return (Fragment) views.get(position);
             }
-
 
             @Override
             public int getCount() {
                 return views.size();
             }
 
-            @NonNull
+            @Nullable
             @Override
-            public Object instantiateItem(@NonNull ViewGroup container, int position) {
-                tabLayout.getTabAt(0).setText("分享紀錄");
-                tabLayout.getTabAt(1).setText("索取紀錄");
-                tabLayout.getTabAt(2).setText("評論");
-
-                Log.v("lipin",position+"::::0000");
-                return super.instantiateItem(container, position);
+            public CharSequence getPageTitle(int position) {
+                return title.get(position);
             }
-        });
+        };
 
-        // 禁止 viewPager 左右滑動
-        viewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-
-        viewPager.setCurrentItem(0);
+        viewPager.setAdapter(pagerAdapter);
 
     }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.v("lipin", "onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.v("lipin", "onDestroy");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-    }
-
 }

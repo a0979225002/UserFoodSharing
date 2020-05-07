@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -98,14 +100,11 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/profile_viewPager"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@+id/profile_topArea">
-
+        >
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/profile_tabLayout"
             android:layout_width="match_parent"
@@ -132,7 +131,15 @@
 
         </com.google.android.material.tabs.TabLayout>
 
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/profile_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/profile_topArea">
 
-    </androidx.viewpager.widget.ViewPager>
+        </androidx.viewpager.widget.ViewPager>
+    </LinearLayout>
 
-</RelativeLayout>
+
+</LinearLayout>
