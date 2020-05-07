@@ -32,7 +32,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Global.MyCamera.MyCamara2"></activity>
+        <activity android:name=".Global.MyCamera.MyCamara2"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".MyService.MessgingService"
@@ -56,25 +57,38 @@
 
         <activity
             android:name=".GoogleMap.Map"
-            android:label="@string/title_activity_map" />
-        <activity android:name=".SearchFilterActivity" />
-        <activity android:name=".FoodinfoTaker" />
-        <activity android:name=".toolbarBtn.UserData" />
-        <activity android:name=".FoodinfoGiver" />
-        <activity android:name=".newPreview" />
-        <activity android:name=".ChatRoomActivity" />
+            android:label="@string/title_activity_map"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SearchFilterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FoodinfoTaker"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".toolbarBtn.UserData"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FoodinfoGiver"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".newPreview"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ChatRoomActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AddFoodActivity"
-            android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".MyCameraActivity" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MyCameraActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Loading.LoginActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Loading.SignupActivity"
-            android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".Loading.LoadingActivity">
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Loading.LoadingActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
