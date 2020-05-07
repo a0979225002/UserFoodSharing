@@ -76,12 +76,12 @@ public class MessgingService extends FirebaseMessagingService {
                             .setViewStateListener(new ViewStateListener() {
                                 @Override
                                 public void onPositionUpdate(int i, int i1) {
-                                    Log.v("lipin","onPositionUpdate");
+                                    //移動監聽
                                 }
 
                                 @Override
                                 public void onShow() {
-                                    Log.v("lipin","onShow");
+                                    //顯示呼叫
                                 }
 
                                 @Override
@@ -91,7 +91,7 @@ public class MessgingService extends FirebaseMessagingService {
 
                                 @Override
                                 public void onDismiss() {
-                                    Log.v("lipin","onDismiss");
+                                    //關閉時呼叫
                                 }
 
                                 @Override
@@ -132,6 +132,6 @@ public class MessgingService extends FirebaseMessagingService {
     public void onDestroy() {
         super.onDestroy();
         uIhandler.removeCallbacksAndMessages(null);
-        FloatWindow.destroy();
+//        FloatWindow.destroy();
     }
 }
