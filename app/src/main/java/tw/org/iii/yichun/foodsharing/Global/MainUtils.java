@@ -20,6 +20,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
@@ -32,12 +34,22 @@ import tw.org.iii.yichun.foodsharing.R;
 public class MainUtils extends Application {
     public static RequestQueue queue;
     private static ACProgressFlower dialog;
+    private static List<HashMap<String, Object>> list;
 
     @Override
     public void onCreate() {
         super.onCreate();
         queue = Volley.newRequestQueue(this);//獲得後端網路
     }
+
+    public static List<HashMap<String, Object>> getList() {
+        return list;
+    }
+
+    public static void setList(List<HashMap<String, Object>> list) {
+        MainUtils.list = list;
+    }
+
     //讀取框
     public static void showloading(Context context){
         dialog = new ACProgressFlower.Builder(context)

@@ -30,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +51,7 @@ public class HomeFragment extends Fragment {
     private ImageView selectmap,filter;
     private SearchView search;
     private ListView listView;
-    private String searchQuery;
+    private String searchQuery;//搜尋文字
 
     @Nullable
     @Override
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment {
         search = view.findViewById(R.id.search);
         listView = view.findViewById(R.id.home_lv);
 
+        MainUtils.showloading(getContext());
 
         gotomap(); //去地圖頁面
 
@@ -93,6 +95,7 @@ public class HomeFragment extends Fragment {
 
                 //虛擬鍵盤點擊搜尋才會觸發
                 if (query.length()>=1) {
+                    MainUtils.showloading(getContext());
                     searching(query);
                 }
 
@@ -123,7 +126,9 @@ public class HomeFragment extends Fragment {
 
                         JsonFoodcard(response);
 
-                        listView.setAdapter(new ListViewAdapter(getActivity(), list));
+                        listView.setAdapter(new ListViewAdapter(getActivity(), MainUtils.getList()));
+
+                        MainUtils.dimissloading();
 
                     }
                 },
@@ -170,7 +175,7 @@ public class HomeFragment extends Fragment {
                 Log.v("lipin", position + "查看");
 
                 GotoFoodinfoTaker(position, view);
-                //fragment的跳轉頁面寫法,須先getActivity
+                //fragment的跳轉頁面動畫寫法,須先getActivity
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
@@ -181,14 +186,10 @@ public class HomeFragment extends Fragment {
      */
     private void GotoFoodinfoTaker(int position, View view) {
         intent = new Intent(view.getContext(), FoodinfoTaker.class);
-        Bundle bundle = new Bundle();//拿出bundle
-        bundle.putSerializable("foodcard", (Serializable) list.get(position));//將hashmap強制轉型為序列化
 
-        intent.putExtras(bundle);//將序列化的hashmap丟給下個頁面處理
+        intent.putExtra("position",position);//將序列化的hashmap丟給下個頁面處理
 
         startActivity(intent);
-
-
     }
 
     /**
@@ -299,6 +300,7 @@ public class HomeFragment extends Fragment {
 
                         getfoodcard();//資料庫獲得食物資訊,並將食物資訊放在list裡面,把參數給予適配器adpader
 
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -359,7 +361,9 @@ public class HomeFragment extends Fragment {
                         //將抓下來的參數給予建構式中的ListViewAdapter class
 
 
-                            listView.setAdapter(new ListViewAdapter(getActivity(), list));
+                            listView.setAdapter(new ListViewAdapter(getActivity(), MainUtils.getList()));
+
+                            MainUtils.dimissloading();
 
 
                     }
@@ -431,19 +435,19 @@ public class HomeFragment extends Fragment {
      */
     JSONObject row;
     HashMap<String, Object> hashMap;
-    List<HashMap<String, Object>> list;
-
     private void JsonFoodcard(String response) {
-        list = new ArrayList<HashMap<String, Object>>();
+
+        List<HashMap<String, Object>>list = new ArrayList<HashMap<String, Object>>();
 
         try {
             JSONArray array = new JSONArray(response);
             for (int i = 0; i < array.length(); i++) {
                 row = array.getJSONObject(i);
 
-                getData();//將抓取的值一個一個放在listview裡面
+                getData(list);//將抓取的值一個一個放在listview裡面
 
             }
+            MainUtils.setList(list);
 
         } catch (Exception e) {
             Log.v("lipin", "JsonFoodcard:" + e.toString());
@@ -455,10 +459,9 @@ public class HomeFragment extends Fragment {
      * 食物 ListView getData
      */
     // TODO: 2020/4/27 撈資料庫資料
-    public void getData() throws ParseException {
+    public void getData( List<HashMap<String, Object>>list) throws ParseException {
         //因為list加入的方式的比對方式是地址,重複的地址物件會被蓋過,所以需要每次尋訪時是產生新的hashMap,故在此new出來
         hashMap = new HashMap<String, Object>();
-
         //拿取拆領的數字,0 or 1
         int split = Integer.valueOf(row.optString("split"));
 
@@ -482,6 +485,7 @@ public class HomeFragment extends Fragment {
         Bitmap bitmap = MainUtils.base64Tobitmap(base64Img);
 
         //直接將資料顯示在首頁資訊
+
         hashMap.put("image", bitmap);
         hashMap.put("title", row.optString("name"));
         hashMap.put("city", row.optString("city"));

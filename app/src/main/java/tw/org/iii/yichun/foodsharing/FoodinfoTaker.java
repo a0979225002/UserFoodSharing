@@ -6,8 +6,11 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,8 +70,7 @@ public class FoodinfoTaker extends AppCompatActivity {
     TextView Memo;
 
     private Intent intent;
-    private HashMap<String, Object> hashmap;
-    private int intqueue;
+    private int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,34 +78,46 @@ public class FoodinfoTaker extends AppCompatActivity {
         ButterKnife.bind(this);
         setToolbar();
 
-        hashmap = (HashMap<String, Object>) getIntent().getSerializableExtra("foodcard");
+        intent = getIntent();
+
+        position = intent.getIntExtra("position",-1);
+
 
         getfood();
-        intqueue = Integer.valueOf((String)hashmap.get("leftQuantity"));
 
+
+    }
+
+    private class UIhandler extends Handler{
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+        }
     }
 
     /**
      * 將foodcard的參數顯示在畫面中
      */
     private void getfood(){
-        foodImage.setImageBitmap((Bitmap) hashmap.get("image"));
-        username.setText(
-                (String)(!hashmap.get("username").toString().trim().isEmpty()?hashmap.get("username"):hashmap.get("account")));
-        queue.setText("剩餘份數:"+
-                (String)hashmap.get("leftQuantity")+"份");
-        foodname.setText((String)hashmap.get("title"));
-        address.setText(hashmap.get("city").toString()+
-                hashmap.get("dist").toString()+" "+
-                hashmap.get("address"));
-        category.setText((String)hashmap.get("category"));
-        foodTag.setText((String)hashmap.get("tag"));
-        datetime.setText((String)hashmap.get("deadline"));
-        amount.setText((String)hashmap.get("leftQuantity")+"份");
-        shareIt.setText((String)hashmap.get("quantity"));
-        Memo.setText((String)hashmap.get("detail"));
 
-        Log.v("lipin",hashmap.get("address")+"123");
+        foodImage.setImageBitmap((Bitmap) MainUtils.getList().get(position).get("image"));
+
+        username.setText(
+                (String)(!MainUtils.getList().get(position).get("username").toString().trim().isEmpty()
+                        ? MainUtils.getList().get(position).get("username"):MainUtils.getList().get(position).get("account")));
+        queue.setText("剩餘份數:"+
+                (String)MainUtils.getList().get(position).get("leftQuantity")+"份");
+        foodname.setText((String)MainUtils.getList().get(position).get("title"));
+        address.setText(MainUtils.getList().get(position).get("city").toString()+
+                MainUtils.getList().get(position).get("dist").toString()+" "+
+                MainUtils.getList().get(position).get("address"));
+        category.setText((String)MainUtils.getList().get(position).get("category"));
+        foodTag.setText((String)MainUtils.getList().get(position).get("tag"));
+        datetime.setText((String)MainUtils.getList().get(position).get("deadline"));
+        amount.setText((String)MainUtils.getList().get(position).get("leftQuantity")+"份");
+        shareIt.setText((String)MainUtils.getList().get(position).get("quantity"));
+        Memo.setText((String)MainUtils.getList().get(position).get("detail"));
+
     }
 
 
@@ -156,10 +170,10 @@ public class FoodinfoTaker extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> param = new HashMap<>();
-                param.put("GiverToken",hashmap.get("token").toString().trim());//拿取對方token
+                param.put("GiverToken",MainUtils.getList().get(position).get("token").toString().trim());//拿取對方token
                 param.put("UserToken",User.getToken());//拿取我方token
                 param.put("username", User.getAccount());
-                param.put("foodname",hashmap.get("title").toString().trim());
+                param.put("foodname",MainUtils.getList().get(position).get("title").toString().trim());
 
                 return param;
             }
