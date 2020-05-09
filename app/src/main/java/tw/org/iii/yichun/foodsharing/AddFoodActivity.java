@@ -358,6 +358,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 .setTitleStringId("請輸入截止時間")
                 .setThemeColor(getResources().getColor(R.color.colorSecondary))//樣式顏色
                 .setWheelItemTextSelectorColor(Color.BLACK)//字體顏色
+                .setSureStringId("確定")
                 .build();
 
         timePickerDialog.show(getSupportFragmentManager(), "all");

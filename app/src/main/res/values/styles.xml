@@ -40,12 +40,11 @@
         <item name="iconTint">@color/textWhite</item>
     </style>
 
-    <style name="IconOnlyButtonNoBG" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="IconOnlyButtonNoBG">
         <item name="iconPadding">0dp</item>
         <item name="iconGravity">textStart</item>
         <item name="backgroundTint">@color/float_transparent</item>
         <item name="iconTint">@color/colorPrimary</item>
-        <item name="android:shadowColor">@color/float_transparent</item>
     </style>
 
     <!--  Rating Bar  -->
