@@ -29,6 +29,8 @@
                     android:id="@+id/addFood_img"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/ic_add_a_photo_grey_24dp"
                     />
             </LinearLayout>
