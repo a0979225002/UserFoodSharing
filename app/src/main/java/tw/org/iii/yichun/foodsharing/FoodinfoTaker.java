@@ -127,6 +127,9 @@ public class FoodinfoTaker extends AppCompatActivity {
         shareIt.setText((String) MainUtils.getList().get(position).get("quantity"));
         Memo.setText((String) MainUtils.getList().get(position).get("detail"));
 
+        //設定 toolbar title
+        Toolbar toolbar = (Toolbar) findViewById(R.id.foodinfoTaker_toolbar);
+        toolbar.setTitle((String)MainUtils.getList().get(position).get("title"));
     }
 
 
@@ -135,13 +138,11 @@ public class FoodinfoTaker extends AppCompatActivity {
      */
     private void setToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.foodinfoTaker_toolbar);
-        String title = "愛心便當"; // 食物名稱
-        toolbar.setTitle(title);
+        toolbar.setTitle("Food Sharing");
         setSupportActionBar(toolbar);
         //回復前頁的設定
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     //toolbar切換設定
