@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
     private SearchView search;
     private ListView listView;
     private String searchQuery;//搜尋文字
+    private boolean mHasLoadedOnce;// 页面已经加载过
 
     @Nullable
     @Override
@@ -65,21 +66,43 @@ public class HomeFragment extends Fragment {
         search = view.findViewById(R.id.search);
         listView = view.findViewById(R.id.home_lv);
 
-        MainUtils.showloading(getContext());
+        Log.v("lipin","2");
 
-        gotomap(); //去地圖頁面
+            if (mHasLoadedOnce){
+                MainUtils.showloading(getContext());
+                Log.v("lipin","3");
+            }
 
-        gotoFilter();//去進階搜尋頁面
+           gotomap(); //去地圖頁面
 
-        search();//狀態欄監聽客戶搜尋功能
+           gotoFilter();//去進階搜尋頁面
 
-        Verifyposition();//判斷是否有取得經緯度,顯示出不同的foodcard資訊
+           search();//狀態欄監聽客戶搜尋功能
 
-        listViewClickListener();//監聽客戶點擊哪個食物卡片
+           Verifyposition();//判斷是否有取得經緯度,顯示出不同的foodcard資訊
 
-        Log.v("lipin", User.getToken());
+           listViewClickListener();//監聽客戶點擊哪個食物卡片
+
+
+//        Log.v("lipin", User.getToken());
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.v("lipin","321");
+        this.onDestroyView();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        mHasLoadedOnce = isVisibleToUser;
+        if (!isVisibleToUser){
+            this.onDestroyView();
+            Log.v("lipon","123");
+        }
     }
 
     /**
@@ -364,8 +387,6 @@ public class HomeFragment extends Fragment {
                             listView.setAdapter(new ListViewAdapter(getActivity(), MainUtils.getList()));
 
                             MainUtils.dimissloading();
-
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -501,6 +522,7 @@ public class HomeFragment extends Fragment {
         hashMap.put("detail", row.optString("detail"));
         hashMap.put("category", row.optString("category"));
         hashMap.put("tag", row.optString("tag"));
+        hashMap.put("foodid",row.optString("id"));
         hashMap.put("token", row.optString("token"));
 
         list.add(hashMap);

@@ -2,7 +2,9 @@ package tw.org.iii.yichun.foodsharing.MyService;
 
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +13,8 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -21,6 +25,7 @@ import com.yhao.floatwindow.ViewStateListener;
 
 import es.dmoral.toasty.Toasty;
 import tw.org.iii.yichun.foodsharing.Item.User;
+import tw.org.iii.yichun.foodsharing.Loading.LoadingActivity;
 import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 
@@ -59,14 +64,54 @@ public class MessgingService extends FirebaseMessagingService {
          * remoteMessage.getNotification().getTitle() 拿取通知標題
          * remoteMessage.getNotification().getBody() 拿取通知內容
          */
-        if (remoteMessage.getNotification() != null) {
 
-            title = remoteMessage.getNotification().getTitle();
-            body = remoteMessage.getNotification().getBody();
-            uIhandler.sendEmptyMessage(i++);
-            User.setI(i);
-            Log.v("lipin",User.getI()+"");
-        }
+
+
+
+
+        title = remoteMessage.getNotification().getTitle();
+        body = remoteMessage.getNotification().getBody();
+
+        setnotification();
+
+
+//        if (remoteMessage.getNotification()!= null) {
+//
+//
+//            uIhandler.sendEmptyMessage(i++);
+//            User.setI(i);
+//            Log.v("lipin",User.getI()+"");
+//        }
+    }
+
+
+    private void setnotification(){
+                //點擊推播會進入的頁面
+
+        final String CHANNEL_ID = "lipin";
+
+
+
+        Intent intent = new Intent(this, LoadingActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+
+                //由Builder生成需發送的物件
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_round)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        //由Manager發送物件
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(123, builder.build());
     }
 
 
@@ -78,7 +123,9 @@ public class MessgingService extends FirebaseMessagingService {
 
             Toasty.info(getApplicationContext(),body,Toasty.LENGTH_LONG,true)
                     .show();
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
 
+            startActivity(intent);
 
                 if (msg.what == 0) {
                     FloatWindow

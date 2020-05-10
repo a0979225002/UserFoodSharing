@@ -2,19 +2,19 @@ package tw.org.iii.yichun.foodsharing;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,8 +22,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,7 +29,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +42,6 @@ import butterknife.ButterKnife;
 import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Item.User;
-import tw.org.iii.yichun.foodsharing.Loading.LoadingActivity;
 
 public class FoodinfoTaker extends AppCompatActivity {
 
@@ -68,9 +69,14 @@ public class FoodinfoTaker extends AppCompatActivity {
     TextView shareIt;
     @BindView(R.id.Memo)
     TextView Memo;
+    @BindView(R.id.queueBtnID)
+    Button queueBtnID;
+    @BindView(R.id.allview)
+    ScrollView allview;
 
     private Intent intent;
     private int position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,43 +86,46 @@ public class FoodinfoTaker extends AppCompatActivity {
 
         intent = getIntent();
 
-        position = intent.getIntExtra("position",-1);
+        position = intent.getIntExtra("position", -1);
 
+        MainUtils.showloading(this);
+
+        queuestatus();
 
         getfood();
 
 
     }
 
-    private class UIhandler extends Handler{
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-        }
-    }
+//    private class UIhandler extends Handler{
+//        @Override
+//        public void handleMessage(@NonNull Message msg) {
+//            super.handleMessage(msg);
+//        }
+//    }
 
     /**
      * 將foodcard的參數顯示在畫面中
      */
-    private void getfood(){
+    private void getfood() {
 
         foodImage.setImageBitmap((Bitmap) MainUtils.getList().get(position).get("image"));
 
         username.setText(
-                (String)(!MainUtils.getList().get(position).get("username").toString().trim().isEmpty()
-                        ? MainUtils.getList().get(position).get("username"):MainUtils.getList().get(position).get("account")));
-        queue.setText("剩餘份數:"+
-                (String)MainUtils.getList().get(position).get("leftQuantity")+"份");
-        foodname.setText((String)MainUtils.getList().get(position).get("title"));
-        address.setText(MainUtils.getList().get(position).get("city").toString()+
-                MainUtils.getList().get(position).get("dist").toString()+" "+
+                (String) (!MainUtils.getList().get(position).get("username").toString().trim().isEmpty()
+                        ? MainUtils.getList().get(position).get("username") : MainUtils.getList().get(position).get("account")));
+        queue.setText("剩餘份數:" +
+                (String) MainUtils.getList().get(position).get("leftQuantity") + "份");
+        foodname.setText((String) MainUtils.getList().get(position).get("title"));
+        address.setText(MainUtils.getList().get(position).get("city").toString() +
+                MainUtils.getList().get(position).get("dist").toString() + " " +
                 MainUtils.getList().get(position).get("address"));
-        category.setText((String)MainUtils.getList().get(position).get("category"));
-        foodTag.setText((String)MainUtils.getList().get(position).get("tag"));
-        datetime.setText((String)MainUtils.getList().get(position).get("deadline"));
-        amount.setText((String)MainUtils.getList().get(position).get("leftQuantity")+"份");
-        shareIt.setText((String)MainUtils.getList().get(position).get("quantity"));
-        Memo.setText((String)MainUtils.getList().get(position).get("detail"));
+        category.setText((String) MainUtils.getList().get(position).get("category"));
+        foodTag.setText((String) MainUtils.getList().get(position).get("tag"));
+        datetime.setText((String) MainUtils.getList().get(position).get("deadline"));
+        amount.setText((String) MainUtils.getList().get(position).get("leftQuantity") + "份");
+        shareIt.setText((String) MainUtils.getList().get(position).get("quantity"));
+        Memo.setText((String) MainUtils.getList().get(position).get("detail"));
 
     }
 
@@ -140,17 +149,66 @@ public class FoodinfoTaker extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();//回復前頁
-            overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
         return super.onOptionsItemSelected(item);
     }
+    /**
+     * 判斷是否已經有排隊了
+     */
+    private void queuestatus(){
+        String url = "http://"+Utils.ip+"/FoodSharing_war/Sql_QueueStatus";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (getqueuestatus(response)){
+                            queueBtnID.setText("排隊中....");
+                            queueBtnID.setBackgroundColor(R.drawable.button_shape);//更改排隊按鈕顏色
+                        }
+                        MainUtils.dimissloading();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
 
+
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("giverid",User.getId());
+                params.put("foodcardID",(String) MainUtils.getList().get(position).get("foodid"));
+                return params;
+            }
+        };
+        MainUtils.queue.add(request);
+    }
+    int intqueue;//寫出去,下面單獨按鈕用得到 是0就是沒排隊, 1是有排隊
+    private boolean getqueuestatus(String response){
+        boolean queuebtn = false;
+        String isqueue = response.trim();
+        intqueue = Integer.valueOf(isqueue);
+
+        Log.v("lipin",intqueue+":::::::::::::::::::::");
+        if (intqueue == 1){
+            queuebtn = true;
+            return queuebtn;
+        }
+        return queuebtn;
+    }
 
     /**
      * 通知對方,傳送對方token
      */
-    private void ManagerGiver(){
-        String url = "http://"+ Utils.ip +"/FoodSharing_war/MessgingService";
+    private void ManagerGiver() {
+        String url = "http://" + Utils.ip + "/FoodSharing_war/MessgingService";
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
@@ -166,16 +224,111 @@ public class FoodinfoTaker extends AppCompatActivity {
 
                     }
                 }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> param = new HashMap<>();
+
+                Log.v("lipin", "123124" + MainUtils.getList().get(position).get("token").toString().trim());
+
+                param.put("GiverToken", MainUtils.getList().get(position).get("token").toString().trim());//拿取對方token
+                param.put("UserToken", User.getToken());//拿取我方token
+                param.put("username", User.getAccount());
+                param.put("foodname", MainUtils.getList().get(position).get("title").toString().trim());
+
+                return param;
+            }
+        };
+        MainUtils.queue.add(request);
+    }
+    /**
+     * 將想要排隊的客戶加入sql中
+     */
+    private void queueSQl(String queue){
+        String url = "http://"+Utils.ip+"/FoodSharing_war/SQl_queueTaker";
+
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("1")) {
+                            ManagerGiver();//發布出去
+
+                            queueBtnID.setText("排隊中....");
+                            queueBtnID.setBackgroundColor(R.drawable.button_shape);//更改排隊按鈕顏色
+
+                            queuestatus();//再讓他檢查一次 排隊狀態,這樣才能更換按鈕樣式
+                            MainUtils.dimissloading();
+                            onqueue = false;
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
         ){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> param = new HashMap<>();
-                param.put("GiverToken",MainUtils.getList().get(position).get("token").toString().trim());//拿取對方token
-                param.put("UserToken",User.getToken());//拿取我方token
-                param.put("username", User.getAccount());
-                param.put("foodname",MainUtils.getList().get(position).get("title").toString().trim());
 
-                return param;
+                Date date = new Date();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String nowdate = format.format(date);
+
+                HashMap<String,String> params = new HashMap<>();
+                //索取數量
+                params.put("queue",queue);
+                //此食物卡片的id
+                params.put("foodcardID",(String) MainUtils.getList().get(position).get("foodid"));
+                //想要排隊的userid
+                params.put("giverid",User.getId());
+
+                params.put("nowdate",nowdate);
+
+                return params;
+            }
+        };
+        MainUtils.queue.add(request);
+    }
+
+    /**
+     * 更新sql資料庫,讓客戶取消排隊
+     */
+    private void cancelQueue(){
+        String url = "http://"+Utils.ip+"/FoodSharing_war/Sql_cancelQueue";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("1")){
+                            queueBtnID.setText("排隊");
+                            queueBtnID.setBackgroundColor(Color.BLUE);//更改排隊按鈕顏色
+                            onqueue = true;//更改按鈕狀態
+                        }
+                        MainUtils.dimissloading();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
+
+
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("giverid",User.getId());
+                params.put("foodcardID",(String) MainUtils.getList().get(position).get("foodid"));
+                return params;
             }
         };
         MainUtils.queue.add(request);
@@ -184,31 +337,86 @@ public class FoodinfoTaker extends AppCompatActivity {
 
     /**
      * 客戶點擊排隊按鈕
+     *
      * @param view
      */
+    boolean onqueue = false;
     public void queueBtn(View view) {
+        //拿取自訂的dialog
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View newview = inflater.inflate(R.layout.mydialog,null);
+        //拿取自訂dialog的editext ID
+        EditText editText = newview.findViewById(R.id.addFood_qty);
+        Log.v("lipin",onqueue+"::");
 
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
-                .setTitle("排隊")
-                .setMessage("點擊排隊後,需由對方通知您,您才有辦法與對方聯繫")
-                .setNegativeButton("不排隊", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton("確定排隊", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ManagerGiver();
-                    }
-                });
-        dialog.show();
+        if (intqueue == 1 && onqueue == false){
 
-//        //點擊推播會進入的頁面
-//        Intent intent = new Intent(this, LoadingActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+                    .setTitle("確定不排隊了？")
+                    .setMessage("系統將會取消你的排隊狀態")
+                    .setNegativeButton("不排隊了", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainUtils.showloading(FoodinfoTaker.this);
+                            cancelQueue();//取消排隊狀態
+                        }
+                    })
+                    .setPositiveButton("繼續排隊", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            dialog.show();
+        }else if (intqueue == 0 || onqueue == true){
+            Log.v("lipin",onqueue+"::");
+            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+                    .setTitle("排隊")
+                    .setMessage("點擊排隊後,需由對方通知您,您才有辦法與對方聯繫")
+                    .setView(newview)
+                    .setNegativeButton("不排隊", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("確定排隊", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Log.v("lipin",editText.getText().toString());
+
+//                            此欄位不是空值才能進來
+                            if (!editText.getText().toString().trim().isEmpty()){
+                                //此欄位不是空值且值小於發布數量
+                                try {
+                                    if (Integer.valueOf(editText.getText().toString())<
+                                            Integer.valueOf((String) MainUtils.getList().get(position).get("leftQuantity"))){
+                                        MainUtils.showloading(FoodinfoTaker.this);
+
+                                        queueSQl(editText.getText().toString());//將排隊狀態加入sql
+
+
+                                    }else {
+                                        Snackbar.make(allview,"您輸入的數量不能大於剩餘數量",Snackbar.LENGTH_LONG).show();
+                                    }
+                                }catch (Exception e){
+                                    Log.v("lipin",e.toString());
+                                }
+
+                            }else {
+                                Snackbar.make(allview,"您需要數入欲索取的數量才能通知對方",Snackbar.LENGTH_LONG).show();
+                            }
+
+                        }
+                    });
+            dialog.show();
+        }
+
+
+
+
+
         final String CHANNEL_ID = "lipin";
 
         //android 7以前的不用做,此串為驗證

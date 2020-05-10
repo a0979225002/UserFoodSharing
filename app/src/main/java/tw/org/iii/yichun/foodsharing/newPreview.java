@@ -182,7 +182,7 @@ public class newPreview extends AppCompatActivity {
         MainUtils.showloading(this);//跳出讀取條
 
         //加入建立時間
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         createTime = simpleDateFormat.format(date);
 

@@ -376,7 +376,7 @@ public class SignupActivity extends AppCompatActivity {
         getpasswdVerify = passwdVerify.getText().toString();
         getcaptcha = captcha.getText().toString();//拿取客戶輸入的驗證碼
         getphone = phone.getText().toString();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         createTime = simpleDateFormat.format(date);
         Save_Signup();
