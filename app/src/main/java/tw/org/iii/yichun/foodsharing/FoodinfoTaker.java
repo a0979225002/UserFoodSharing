@@ -254,14 +254,14 @@ public class FoodinfoTaker extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.v("lipin",response.trim()+":::"+321);
                         if (response.trim().equals("1")) {
                             ManagerGiver();//發布出去
 
                             queueBtnID.setText("排隊中....");
                             queueBtnID.setBackgroundColor(R.drawable.button_shape);//更改排隊按鈕顏色
-
-                            queuestatus();//再讓他檢查一次 排隊狀態,這樣才能更換按鈕樣式
                             MainUtils.dimissloading();
+                            queuestatus();//再讓他檢查一次 排隊狀態,這樣才能更換按鈕樣式
                             onqueue = false;
                         }
                     }

@@ -34,12 +34,21 @@ import tw.org.iii.yichun.foodsharing.R;
 public class MainUtils extends Application {
     public static RequestQueue queue;
     private static ACProgressFlower dialog;
-    private static List<HashMap<String, Object>> list;
+    private static List<HashMap<String, Object>> list,mapList;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         queue = Volley.newRequestQueue(this);//獲得後端網路
+    }
+
+    public static List<HashMap<String, Object>> getMapList() {
+        return mapList;
+    }
+
+    public static void setMapList(List<HashMap<String, Object>> mapList) {
+        MainUtils.mapList = mapList;
     }
 
     public static List<HashMap<String, Object>> getList() {
@@ -81,7 +90,7 @@ public class MainUtils extends Application {
 
                 //目前圖片並無壓縮,未來如要壓縮,可在參數2更改,數越小壓縮比例越多,比如參數80 = 壓縮20%
                 //圖片實際大小並無改變,壓縮的是像素,所以圖檔抓出來後需將圖案大小縮小,不然圖案會變模糊
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG,80,outputStream);
 
                 outputStream.flush();
                 outputStream.close();
