@@ -34,8 +34,8 @@ import tw.org.iii.yichun.foodsharing.R;
 public class MainUtils extends Application {
     public static RequestQueue queue;
     private static ACProgressFlower dialog;
-    private static List<HashMap<String, Object>> list,mapList;
-
+    private static List<HashMap<String, Object>> list,giverlist;
+    private static String tornotbtn;//是否已領取按鈕
 
     @Override
     public void onCreate() {
@@ -43,12 +43,20 @@ public class MainUtils extends Application {
         queue = Volley.newRequestQueue(this);//獲得後端網路
     }
 
-    public static List<HashMap<String, Object>> getMapList() {
-        return mapList;
+    public static String getTornotbtn() {
+        return tornotbtn;
     }
 
-    public static void setMapList(List<HashMap<String, Object>> mapList) {
-        MainUtils.mapList = mapList;
+    public static void setTornotbtn(String tornotbtn) {
+        MainUtils.tornotbtn = tornotbtn;
+    }
+
+    public static List<HashMap<String, Object>> getGiverlist() {
+        return giverlist;
+    }
+
+    public static void setGiverlist(List<HashMap<String, Object>> giverlist) {
+        MainUtils.giverlist = giverlist;
     }
 
     public static List<HashMap<String, Object>> getList() {

@@ -102,9 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
     /**
      * 檢查用戶是否有開啟懸浮視窗
      */

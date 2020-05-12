@@ -1,6 +1,7 @@
 package tw.org.iii.yichun.foodsharing.profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -35,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.org.iii.yichun.foodsharing.FoodinfoGiver;
 import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Item.User;
@@ -43,6 +46,7 @@ import tw.org.iii.yichun.foodsharing.R;
 
 public class ShareHistoryFragment extends Fragment {
     private GridView listView;
+    private Intent intent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,9 +54,10 @@ public class ShareHistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_share_history, container, false);
         listView = view.findViewById(R.id.shareHistory_lv);
-//        MainUtils.showloading(getContext());
+        MainUtils.showloading(getContext());
 
         sharefoodcard();
+        listViewClickListener();//監聽user點擊哪個食物卡片
 
         return view;
     }
@@ -115,6 +120,29 @@ public class ShareHistoryFragment extends Fragment {
     }
 
     /**
+     * 監聽user點擊哪個食物卡片
+     */
+    private void listViewClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("lipin",position+"ssssssssss");
+
+                GotoFoodinfoGiver(position,view);
+
+            }
+        });
+    }
+    /**
+     * 跳轉頁面
+     */
+    private void GotoFoodinfoGiver(int position,View view){
+        intent = new Intent(view.getContext(), FoodinfoGiver.class);
+        intent.putExtra("position",position);
+        startActivity(intent);
+    }
+
+    /**
      * 撈已分享的食物
      */
     private void sharefoodcard(){
@@ -127,7 +155,7 @@ public class ShareHistoryFragment extends Fragment {
                     public void onResponse(String response) {
                         JsonFoodcard(response);
 
-                        listView.setAdapter(new ListViewAdapter(getActivity(), MainUtils.getList()));
+                        listView.setAdapter(new ListViewAdapter(getActivity(), MainUtils.getGiverlist()));
                     }
                 },
                 new Response.ErrorListener() {
@@ -168,7 +196,7 @@ public class ShareHistoryFragment extends Fragment {
                 getData(list);//將抓取的值一個一個放在listview裡面
 
             }
-            MainUtils.setList(list);
+            MainUtils.setGiverlist(list);
 
         } catch (Exception e) {
             Log.v("lipin", "JsonFoodcard:" + e.toString());
@@ -221,6 +249,7 @@ public class ShareHistoryFragment extends Fragment {
         hashMap.put("category", row.optString("category"));
         hashMap.put("tag", row.optString("tag"));
         hashMap.put("token", row.optString("token"));
+        hashMap.put("foodid",row.optString("id"));
 
         list.add(hashMap);
     }

@@ -130,7 +130,7 @@ public class ShopFragment extends Fragment {
             ListItem.discount = (TextView) convertView.findViewById(R.id.storeLv_discount);
             convertView.setTag(ListItem);
 
-            // 綁定資料
+//             綁定資料
             ListItem.storeImg.setImageResource((Integer) data.get(position).get("storeImg"));
             ListItem.storeName.setText((String)data.get(position).get("storeName"));
             ListItem.discountInfo.setText((String)data.get(position).get("discountInfo"));
