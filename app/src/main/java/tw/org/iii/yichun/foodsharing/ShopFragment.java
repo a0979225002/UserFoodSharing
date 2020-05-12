@@ -1,12 +1,18 @@
 package tw.org.iii.yichun.foodsharing;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -29,7 +35,7 @@ import tw.org.iii.yichun.foodsharing.profile.CommentFragment;
  */
 public class ShopFragment extends Fragment {
     private ListView listView;
-    private MaterialButton btn;
+    private Button btn;
 
     @Nullable
     @Override
@@ -41,19 +47,35 @@ public class ShopFragment extends Fragment {
         listView = view.findViewById(R.id.shop_lv);
         List<HashMap<String,Object>> list = getData();
         listView.setAdapter(new ListViewAdapter(getActivity(), list));
-
-        btn = view.findViewById(R.id.useDiscount);
-        //btn.setOnClickListener(new );
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                useDiscount();
+            }
+        });
 
         return view;
     }
 
-//    private View.OnClickListener myClickListener(){
-//
-//    }
 
     public void useDiscount(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(true);
 
+        LayoutInflater factory = LayoutInflater.from(getContext());
+        final View view = factory.inflate(R.layout.dialog_qrcode, null);
+        builder.setView(view);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        btn = view.findViewById(R.id.qrcode_btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     /**
@@ -99,7 +121,7 @@ public class ShopFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            // 取得 listView_comment.xml
+            // 取得 listView_store.xml
             ListItem ListItem = new ListViewAdapter.ListItem();
             convertView = layoutInflater.inflate(R.layout.listview_store, null);
             ListItem.storeImg = (ImageView) convertView.findViewById(R.id.storeLv_storeImg);
@@ -125,12 +147,37 @@ public class ShopFragment extends Fragment {
     // TODO: 2020/4/27 撈資料庫資料
     public List<HashMap<String, Object>> getData(){
         List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+
+        Object[] storeImg = new Object[10];
+        storeImg[0] = R.drawable.store_logo_1;
+        storeImg[1] = R.drawable.store_logo_2;
+        storeImg[2] = R.drawable.store_logo_3;
+        storeImg[3] = R.drawable.store_logo_4;
+        storeImg[4] = R.drawable.store_logo_5;
+        storeImg[5] = R.drawable.store_logo_6;
+        storeImg[6] = R.drawable.store_logo_7;
+        storeImg[7] = R.drawable.store_logo_8;
+        storeImg[8] = R.drawable.store_logo_9;
+        storeImg[9] = R.drawable.store_logo_10;
+
+        String[] storeName = new String[10];
+        storeName[0] = "統一超商";
+        storeName[1] = "全家便利商店";
+        storeName[2] = "麥當勞";
+        storeName[3] = "萊爾富超商";
+        storeName[4] = "屈臣氏";
+        storeName[5] = "Cama";
+        storeName[6] = "路易莎咖啡";
+        storeName[7] = "家樂福";
+        storeName[8] = "鬍鬚張";
+        storeName[9] = "輕井澤鍋物";
+
         for (int i = 0; i < 10; i++){
             HashMap<String, Object> hashMap = new HashMap<String, Object>();
-            hashMap.put("storeImg", R.drawable.ic_shop_24dp);
-            hashMap.put("storeName", "特力屋購物網" + i);
-            hashMap.put("discountInfo", "可於線上消費折抵");
-            hashMap.put("discount", "10-100點");
+            hashMap.put("storeImg", storeImg[i]);
+            hashMap.put("storeName", storeName[i]);
+            hashMap.put("discountInfo", "可於實體店面消費折抵");
+            hashMap.put("discount", (int)(Math.random()*10)*10 + " - " + (int)(Math.random()*100)*10 + " 點");
             list.add(hashMap);
         }
         return list;

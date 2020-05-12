@@ -12,7 +12,8 @@
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:src="@drawable/ic_shop_24dp"
-        android:padding="10dp"
+        android:padding="2dp"
+        android:layout_marginHorizontal="10dp"
         />
     <LinearLayout
         android:layout_width="0dp"
@@ -49,6 +50,7 @@
         android:text="10-100點"
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center_vertical"
+        android:textAlignment="textEnd"
         />
 
 
