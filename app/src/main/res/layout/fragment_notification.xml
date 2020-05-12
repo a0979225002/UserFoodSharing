@@ -2,23 +2,56 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp">
 
-    <!-- 測試用
-     <Button
-         android:id="@+id/notify"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:text="add notification"
-         />
-         -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/profile_tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/profile_tab1"
+                android:text="分享者通知"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/profile_tab2"
+                android:text="索取者通知"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/profile_tab3"
+                android:text="評論"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/profile_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/profile_topArea">
+
+        </androidx.viewpager.widget.ViewPager>
+    </LinearLayout>
 
      <ListView
          android:id="@+id/notification_lv"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          />
+
 
  </LinearLayout>

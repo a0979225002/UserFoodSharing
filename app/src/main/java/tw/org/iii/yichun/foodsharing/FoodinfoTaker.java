@@ -389,9 +389,9 @@ public class FoodinfoTaker extends AppCompatActivity {
 
 //                            此欄位不是空值才能進來
                             if (!editText.getText().toString().trim().isEmpty()){
-                                //此欄位不是空值且值小於發布數量
+                                //此欄位不是空值且值大於發布數量
                                 try {
-                                    if (Integer.valueOf(editText.getText().toString())<
+                                    if (Integer.valueOf(editText.getText().toString())<=
                                             Integer.valueOf((String) MainUtils.getList().get(position).get("leftQuantity"))){
                                         MainUtils.showloading(FoodinfoTaker.this);
 

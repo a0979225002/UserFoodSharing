@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import tw.org.iii.yichun.foodsharing.FragmentAdapter;
+import tw.org.iii.yichun.foodsharing.Item.User;
 import tw.org.iii.yichun.foodsharing.R;
 
 /**
@@ -34,20 +36,13 @@ import tw.org.iii.yichun.foodsharing.R;
  */
 public class ProfileFragment extends Fragment {
     private CircleImageView profileImg;
+    private TextView username;
     private ViewPager viewPager;
     private Fragment fragment1, fragment2, fragment3;
     private TabLayout tabLayout;
     private View view;
     private ArrayList views;
     private ArrayList<String> title;
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.v("yichun", "start");
-    }
-
 
     @Nullable
     @Override
@@ -59,6 +54,8 @@ public class ProfileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profile_img);
         tabLayout = view.findViewById(R.id.profile_tabLayout);
         viewPager = view.findViewById(R.id.profile_viewPager);
+        username = view.findViewById(R.id.profile_userName);
+        username.setText(User.getAccount());
 
         addlist();//將標題與fragment加入陣列
 
