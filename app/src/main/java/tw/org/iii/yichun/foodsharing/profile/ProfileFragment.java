@@ -115,6 +115,9 @@ public class ProfileFragment extends Fragment {
             }
         };
 
+        // 禁止 viewPager 左右滑動
+
+
         viewPager.setAdapter(pagerAdapter);
 
     }

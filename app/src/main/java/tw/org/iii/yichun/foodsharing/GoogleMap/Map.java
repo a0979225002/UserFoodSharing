@@ -94,7 +94,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         Marker m01 =  mMap.addMarker(new MarkerOptions().position(sydney).title("您現在所在的位置"));
         m01.setTag(100);
 
-        mMap.setMinZoomPreference(10);//顯示地圖的俯視高度
+        mMap.setMinZoomPreference(12);//顯示地圖的俯視高度
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));//顯示當下第一次無拖移時的位置
 
         //標記監聽

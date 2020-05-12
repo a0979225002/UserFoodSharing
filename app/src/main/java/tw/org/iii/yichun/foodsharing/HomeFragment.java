@@ -61,10 +61,14 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+
+
         selectmap = view.findViewById(R.id.selectmap);
         filter = view.findViewById(R.id.filter);
         search = view.findViewById(R.id.search);
         listView = view.findViewById(R.id.home_lv);
+
+
 
         Log.v("lipin","2");
 
@@ -123,6 +127,8 @@ public class HomeFragment extends Fragment {
                 }
 
                 Log.v("lipin", "搜尋1");
+
+                search.clearFocus();//清除鍵盤
 
                 return false;
             }
@@ -555,5 +561,11 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        search.setQuery("",false);//清空搜尋欄
+        super.onStop();
     }
 }
