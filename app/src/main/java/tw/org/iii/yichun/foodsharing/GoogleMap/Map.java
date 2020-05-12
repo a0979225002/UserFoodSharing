@@ -2,12 +2,18 @@ package tw.org.iii.yichun.foodsharing.GoogleMap;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -85,6 +92,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         }
 
         Marker m01 =  mMap.addMarker(new MarkerOptions().position(sydney).title("您現在所在的位置"));
+        m01.setTag(100);
 
         mMap.setMinZoomPreference(10);//顯示地圖的俯視高度
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));//顯示當下第一次無拖移時的位置
@@ -93,12 +101,49 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                int tag = Integer.valueOf((Integer) marker.getTag());
 
+
+                if (tag != 100) {
+                    //拿取自訂的dialog
+                    LayoutInflater inflater = LayoutInflater.from(Map.this);
+                    View newview = inflater.inflate(R.layout.mydialog2, null);
+                    //拿取自訂dialog的ID
+                    ImageView imag = newview.findViewById(R.id.foodList_img);
+                    TextView foodname = newview.findViewById(R.id.foodList_title);
+                    TextView address = newview.findViewById(R.id.foodList_location);
+                    TextView dueDate = newview.findViewById(R.id.foodList_deadline);
+                    TextView split = newview.findViewById(R.id.foodList_quantity);
+                    TextView qty = newview.findViewById(R.id.foodList_leftQuantity);
+
+                    imag.setImageBitmap((Bitmap) list.get(tag).get("image"));
+                    foodname.setText("名稱:" + (String) list.get(tag).get("title"));
+                    address.setText("地區:" + (String) list.get(tag).get("address"));
+                    dueDate.setText("期限:" + (String) list.get(tag).get("deadline"));
+                    split.setText("可否拆領:" + (String) list.get(tag).get("quantity"));
+                    qty.setText("預估剩餘份數:" + (String) list.get(tag).get("leftQuantity") + "份");
+
+
+                    MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(Map.this)
+                            .setTitle("食物資訊")
+                            .setView(newview)
+                            .setNegativeButton("前往拿取", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Map.this, FoodinfoTaker.class);
+                                    intent.putExtra("position", tag);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setPositiveButton("不拿取", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                    dialog.show();
+                }
                 Log.v("lipin",marker.getTag()+"123");
-
-                Intent intent = new Intent(Map.this, FoodinfoTaker.class);
-                intent.putExtra("position",Integer.valueOf((Integer) marker.getTag()));
-                startActivity(intent);
 
                 return false;
             }
