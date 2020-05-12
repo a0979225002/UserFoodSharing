@@ -43,7 +43,7 @@ public class CommentFragment extends Fragment {
     /**
      * 評論 ListView Adapter
      */
-    public class ListViewAdapter extends BaseAdapter {
+    private class ListViewAdapter extends BaseAdapter {
 
         private List<HashMap<String, Object>> data;
         private LayoutInflater layoutInflater;

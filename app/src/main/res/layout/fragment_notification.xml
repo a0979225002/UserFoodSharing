@@ -12,7 +12,7 @@
         android:orientation="vertical"
         >
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/profile_tabLayout"
+            android:id="@+id/notification_tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -38,7 +38,7 @@
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/profile_viewPager"
+            android:id="@+id/notification_viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -46,12 +46,4 @@
 
         </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
-
-     <ListView
-         android:id="@+id/notification_lv"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         />
-
-
  </LinearLayout>

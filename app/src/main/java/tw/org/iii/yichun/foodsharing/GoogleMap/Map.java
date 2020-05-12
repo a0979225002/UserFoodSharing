@@ -127,7 +127,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                     MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(Map.this)
                             .setTitle("食物資訊")
                             .setView(newview)
-                            .setNegativeButton("前往拿取", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("前往排隊", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent(Map.this, FoodinfoTaker.class);
@@ -135,7 +135,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                                     startActivity(intent);
                                 }
                             })
-                            .setPositiveButton("不拿取", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("不排隊", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();

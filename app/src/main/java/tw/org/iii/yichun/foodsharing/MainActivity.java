@@ -30,6 +30,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tw.org.iii.yichun.foodsharing.Global.MyCamera.MyCamara2;
+import tw.org.iii.yichun.foodsharing.Loading.LoginActivity;
 import tw.org.iii.yichun.foodsharing.profile.ProfileFragment;
 
 
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (i == R.id.nav_feedback) {
 
                 } else if (i == R.id.nav_logout) {
-
+                    Sign_out();
                 }
 
                 return false;
@@ -161,6 +163,17 @@ public class MainActivity extends AppCompatActivity {
 //      getSupportActionBar().setDisplayShowTitleEnabled(true); //隱藏 toolbar default title
 //      getSupportActionBar().setDisplayHomeAsUpEnabled(false); //是否顯示返回鍵
 //      getSupportActionBar().setHomeButtonEnabled(true); // 左上圖示是否可以點擊
+    }
+    /**
+     * 點擊toolbar上的登出按鈕
+     */
+    private void Sign_out(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        startActivity(intent);
+        this.finish();
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
 
     /**

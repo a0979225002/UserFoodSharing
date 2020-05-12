@@ -6,9 +6,13 @@
     tools:context=".Notification.TakerNoticeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/notification_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="comment"
+        tools:listitem="@layout/listview_notification"
+        android:padding="10dp"
+        />
 
 </FrameLayout>
