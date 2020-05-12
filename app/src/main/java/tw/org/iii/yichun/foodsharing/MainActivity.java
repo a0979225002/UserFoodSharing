@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        ALERT_WINDOW();//檢查用戶是否開啟懸浮視窗
+        //ALERT_WINDOW();//檢查用戶是否開啟懸浮視窗
 
         myReceiver receiver = new myReceiver();
         IntentFilter filter = new IntentFilter();
@@ -108,31 +108,31 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 檢查用戶是否有開啟懸浮視窗
      */
-    private void ALERT_WINDOW() {
-        if (!Settings.canDrawOverlays(MainActivity.this)) {
-
-            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
-                    .setTitle("您需要開啟懸浮視窗")
-                    .setMessage("如果需要在程式使用中時顯示對方通知,您需要開啟懸浮視窗")
-                    .setNegativeButton("前往開啟", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    Uri.parse("package:" + getPackageName()));
-                            startActivityForResult(intent, 10);
-                        }
-                    })
-                    .setPositiveButton("不開啟", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            Snackbar.make(allview,"程式在使用中時,系統將不會提示您有誰想拿取食物",Snackbar.LENGTH_LONG).show();
-                        }
-                    });
-            dialog.show();
-
-        }
-    }
+//    private void ALERT_WINDOW() {
+//        if (!Settings.canDrawOverlays(MainActivity.this)) {
+//
+//            MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+//                    .setTitle("您需要開啟懸浮視窗")
+//                    .setMessage("如果需要在程式使用中時顯示對方通知,您需要開啟懸浮視窗")
+//                    .setNegativeButton("前往開啟", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                                    Uri.parse("package:" + getPackageName()));
+//                            startActivityForResult(intent, 10);
+//                        }
+//                    })
+//                    .setPositiveButton("不開啟", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                            Snackbar.make(allview,"程式在使用中時,系統將不會提示您有誰想拿取食物",Snackbar.LENGTH_LONG).show();
+//                        }
+//                    });
+//            dialog.show();
+//
+//        }
+//    }
 
 
     @Override
