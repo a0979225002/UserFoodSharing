@@ -1,7 +1,9 @@
 package tw.org.iii.yichun.foodsharing;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,6 +69,7 @@ public class HomeFragment extends Fragment {
         filter = view.findViewById(R.id.filter);
         search = view.findViewById(R.id.search);
         listView = view.findViewById(R.id.home_lv);
+
 
 
 

@@ -94,6 +94,9 @@ public class MessgingService extends FirebaseMessagingService {
 
         Intent intent = new Intent(this, LoadingActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent2 = new Intent("lipin");
+        intent2.putExtra("Notice",body);
+        sendBroadcast(intent2);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
 

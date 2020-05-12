@@ -1,13 +1,17 @@
 package tw.org.iii.yichun.foodsharing;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
         ALERT_WINDOW();//檢查用戶是否開啟懸浮視窗
 
+        myReceiver receiver = new myReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("lipin");
+        registerReceiver(receiver,filter);
+
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
@@ -78,6 +87,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    /**
+     * 實作廣播器
+     */
+    private class myReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.v("lipin","我是廣播器2");
+            if (intent.getAction().equals("lipin")){
+                String Notice = intent.getStringExtra("Notice");
+                Log.v("lipin","我是廣播器");
+               Snackbar snackbar =  Snackbar.make(allview,Notice,Snackbar.LENGTH_INDEFINITE);
+            }
+        }
+    }
+
 
 
     /**
