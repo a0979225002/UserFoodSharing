@@ -54,7 +54,6 @@ public class ShareHistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_share_history, container, false);
         listView = view.findViewById(R.id.shareHistory_lv);
-        MainUtils.showloading(getContext());
 
         sharefoodcard();
         listViewClickListener();//監聽user點擊哪個食物卡片

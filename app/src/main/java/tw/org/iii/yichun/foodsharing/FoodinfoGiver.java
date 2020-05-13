@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,8 +59,6 @@ public class FoodinfoGiver extends AppCompatActivity {
     Button shareBtn;
     @BindView(R.id.queue)
     TextView queue;
-    @BindView(R.id.remaining)
-    TextView remaining;
     @BindView(R.id.foodname)
     TextView foodname;
     @BindView(R.id.address)
@@ -76,9 +77,14 @@ public class FoodinfoGiver extends AppCompatActivity {
     TextView Memo;
     @BindView(R.id.takerlist)
     ListView takerlist;
+    @BindView(R.id.itemview)
+    LinearLayout itemview;
+    @BindView(R.id.displayBtn)
+    TextView displayBtn;
     private ListView listView;
     private Intent intent;
     private int position;
+    private ListViewAdapter ListViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +105,75 @@ public class FoodinfoGiver extends AppCompatActivity {
 
     }
 
+    //listview點擊監聽
+    private void takerlistTouch() {
+        displayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Log.v("lipin", ListViewAdapter.getCount() + "");
+                    if (ListViewAdapter.getCount() >= 2) {
+                        ListViewAdapter.additemNum(1);
+                        ListViewAdapter.notifyDataSetChanged();
+                        itemview.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.updown_show));
+
+                    } else {
+                        ListViewAdapter.additemNum(list.size());
+                        ListViewAdapter.notifyDataSetChanged();
+                        itemview.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.updown_show));
+                    }
+                }
+
+        });
+    }
+
+    /**
+     * 結束分享
+     */
+    private void userFoodEnd(){
+        String url = "";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ){
+
+        };
+        MainUtils.queue.add(request);
+    }
+
+
+    //拿取剩餘份數
+    private void Remainingqueue(){
+        int restqueue =  Integer.valueOf(MainUtils.getGiverlist().get(position).get("leftQuantity").toString());
+        for (int i=0 ; i< list.size() ;i++){
+
+           int userqty =  Integer.valueOf(list.get(i).get("qty").toString());
+
+           restqueue =  restqueue - userqty;
+        }
+        queue.setText("剩餘份數:"+restqueue+"份");
+    }
+
+
+    /**
+     * 將食物資料顯示在螢幕中
+     */
     private void getfood() {
 
         foodImage.setImageBitmap((Bitmap) MainUtils.getGiverlist().get(position).get("image"));
 
         username.setText(User.getName() != null ? User.getName() : User.getAccount());
-        queue.setText("剩餘份數:" +
-                (String) MainUtils.getGiverlist().get(position).get("leftQuantity") + "份");
         foodname.setText((String) MainUtils.getGiverlist().get(position).get("title"));
         address.setText(MainUtils.getGiverlist().get(position).get("city").toString() +
                 MainUtils.getGiverlist().get(position).get("dist").toString() + " " +
@@ -124,11 +192,16 @@ public class FoodinfoGiver extends AppCompatActivity {
         private List<HashMap<String, Object>> data;
         private LayoutInflater layoutInflater;
         private Context context;
+        private int itemCount = 1;
 
         public ListViewAdapter(Context context, List<HashMap<String, Object>> data) {
             this.context = context;
             this.data = data;
             this.layoutInflater = LayoutInflater.from(context);
+        }
+
+        private void additemNum(int number) {
+            itemCount = number;
         }
 
         /**
@@ -142,8 +215,12 @@ public class FoodinfoGiver extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            Log.v("lipin", data.size() + "::::::zxc");
-            return data.size();
+            if (data.size() >= 2) {
+                Log.v("lipin", "有來媽");
+                return itemCount;
+            } else {
+                return data.size();
+            }
         }
 
         @Override
@@ -255,13 +332,13 @@ public class FoodinfoGiver extends AppCompatActivity {
                                                 public void onResponse(String response) {
                                                     Intent intent = new Intent(context, ChatRoomActivity.class);
                                                     startActivityForResult(intent, 0);
-                                                    overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                                                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                                                 }
                                             },
                                             new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-                                                    Log.v("lipin",error.toString());
+                                                    Log.v("lipin", error.toString());
                                                 }
                                             }
                                     ) {
@@ -287,7 +364,7 @@ public class FoodinfoGiver extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent(context, ChatRoomActivity.class);
                                     startActivityForResult(intent, 0);
-                                    overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                                 }
                             });
                     dialog.show();
@@ -298,7 +375,6 @@ public class FoodinfoGiver extends AppCompatActivity {
 
         }
     }
-
 
 
     /**
@@ -316,7 +392,11 @@ public class FoodinfoGiver extends AppCompatActivity {
                     public void onResponse(String response) {
                         JsonTakers(response);
                         Log.v("lipin", response);
-                        listView.setAdapter(new ListViewAdapter(FoodinfoGiver.this, list));
+
+                        ListViewAdapter = new ListViewAdapter(FoodinfoGiver.this, list);
+                        listView.setAdapter(ListViewAdapter);
+                        takerlistTouch();//listview點擊監聽
+                        Remainingqueue();
                     }
                 },
                 new Response.ErrorListener() {
@@ -394,9 +474,9 @@ public class FoodinfoGiver extends AppCompatActivity {
         hashMap.put("qty", row.optString("qty"));
         hashMap.put("takeornot", row.optString("takeornot"));
         hashMap.put("userid", row.optString("user_id"));
-        hashMap.put("token",row.optString("token"));
+        hashMap.put("token", row.optString("token"));
 
-        Log.v("lipin",row.optString("token"));
+        Log.v("lipin", row.optString("token"));
 
 
         list.add(hashMap);

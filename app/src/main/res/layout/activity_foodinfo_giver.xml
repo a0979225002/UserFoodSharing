@@ -28,6 +28,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginHorizontal="20dp"
+
         >
         <ImageView
             android:id="@+id/foodImage"
@@ -83,14 +84,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="？人排隊"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    />
-                <TextView
-                    android:id="@+id/remaining"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="預約/總份數: 4/10"
                     android:textStyle="bold"
                     android:gravity="center"
                     />
@@ -293,9 +286,9 @@
     </LinearLayout>
     </ScrollView>
     <LinearLayout
+        android:id="@+id/itemview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:orientation="vertical"
         >
@@ -304,12 +297,22 @@
             android:layout_height="2dp"
             android:background="#000"
             android:layout_marginBottom="5dp"/>
+        <TextView
+            android:id="@+id/displayBtn"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="點擊展開"
+            />
 
         <ListView
             android:id="@+id/takerlist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/listview_foodinfogiver_takerlist"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             />
     </LinearLayout>
 
