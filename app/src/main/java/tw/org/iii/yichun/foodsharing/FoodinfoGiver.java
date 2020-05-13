@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -36,7 +35,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +56,6 @@ public class FoodinfoGiver extends AppCompatActivity {
     ImageView userImage;
     @BindView(R.id.username)
     TextView username;
-    @BindView(R.id.shareBtn)
-    Button shareBtn;
     @BindView(R.id.queue)
     TextView queue;
     @BindView(R.id.foodname)
@@ -81,6 +80,8 @@ public class FoodinfoGiver extends AppCompatActivity {
     LinearLayout itemview;
     @BindView(R.id.displayBtn)
     TextView displayBtn;
+    @BindView(R.id.shareBtnID)
+    Button shareBtnID;
     private ListView listView;
     private Intent intent;
     private int position;
@@ -110,34 +111,88 @@ public class FoodinfoGiver extends AppCompatActivity {
         displayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Log.v("lipin", ListViewAdapter.getCount() + "");
-                    if (ListViewAdapter.getCount() >= 2) {
-                        ListViewAdapter.additemNum(1);
-                        ListViewAdapter.notifyDataSetChanged();
-                        itemview.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.updown_show));
+                Log.v("lipin", ListViewAdapter.getCount() + "");
+                if (ListViewAdapter.getCount() >= 2) {
+                    ListViewAdapter.additemNum(1);
+                    ListViewAdapter.notifyDataSetChanged();
+                    itemview.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.updown_show));
 
-                    } else {
-                        ListViewAdapter.additemNum(list.size());
-                        ListViewAdapter.notifyDataSetChanged();
-                        itemview.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.updown_show));
-                    }
+                } else {
+                    ListViewAdapter.additemNum(list.size());
+                    ListViewAdapter.notifyDataSetChanged();
+                    itemview.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.updown_show));
                 }
+            }
 
         });
     }
 
     /**
+     * 結束分享按鈕
+     *
+     * @param view
+     */
+    public void shareBtn(View view) throws ParseException {
+//        如果是結束狀態
+        if (MainUtils.getGiverlist().get(position).get("status").toString().equals("0")){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date duedate = new Date();
+            Date nowdate = new Date();
+            duedate = format.parse((String) MainUtils.getGiverlist().get(position).get("deadline"));
+            Log.v("lipin",duedate+"");
+
+            //現在時間在截止日期之後
+            if (nowdate.before(duedate)){
+
+                userFoodEnd();
+
+                //現在時間在截止日期之前
+            }else if (nowdate.after(duedate)){
+                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+                        .setTitle("截止日期已過期")
+                        .setMessage("您需要先更改此分布的截止時間")
+                        .setNegativeButton("前往更改", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(FoodinfoGiver.this, AddFoodActivity.class);
+                                intent.putExtra("FoodinfoGiver","editFoodcard");//通知intent的b介面能更改
+                                startActivity(intent);
+                            }
+                        })
+                        .setPositiveButton("離開", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                dialog.show();
+                Log.v("lipin","時間已加入");
+            }
+//            如果是分享中狀態
+        }else if (MainUtils.getGiverlist().get(position).get("status").toString().equals("1")){
+            userFoodEnd();
+        }
+
+        }
+
+
+    /**
      * 結束分享
      */
-    private void userFoodEnd(){
-        String url = "";
+    private void userFoodEnd() {
+        String url = "http://" + Utils.ip + "/FoodSharing_war/Sql_foodEnd";
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        if (response.trim().equals("結束分享")){
+                            shareBtnID.setText("結束分享");
+                            MainUtils.getGiverlist().get(position).put("status",0);
+                        }else if (response.trim().equals("分享中")){
+                            shareBtnID.setText("分享中...");
+                            MainUtils.getGiverlist().get(position).put("status",1);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -146,23 +201,31 @@ public class FoodinfoGiver extends AppCompatActivity {
 
                     }
                 }
-        ){
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("userid", User.getId());
+                params.put("foodid", (String) MainUtils.getGiverlist().get(position).get("foodid"));
 
+
+                return params;
+            }
         };
         MainUtils.queue.add(request);
     }
 
 
     //拿取剩餘份數
-    private void Remainingqueue(){
-        int restqueue =  Integer.valueOf(MainUtils.getGiverlist().get(position).get("leftQuantity").toString());
-        for (int i=0 ; i< list.size() ;i++){
+    private void Remainingqueue() {
+        int restqueue = Integer.valueOf(MainUtils.getGiverlist().get(position).get("leftQuantity").toString());
+        for (int i = 0; i < list.size(); i++) {
 
-           int userqty =  Integer.valueOf(list.get(i).get("qty").toString());
+            int userqty = Integer.valueOf(list.get(i).get("qty").toString());
 
-           restqueue =  restqueue - userqty;
+            restqueue = restqueue - userqty;
         }
-        queue.setText("剩餘份數:"+restqueue+"份");
+        queue.setText("剩餘份數:" + restqueue + "份");
     }
 
 
@@ -185,6 +248,11 @@ public class FoodinfoGiver extends AppCompatActivity {
         shareIt.setText((String) MainUtils.getGiverlist().get(position).get("quantity"));
         Memo.setText((String) MainUtils.getGiverlist().get(position).get("detail"));
 
+        if (MainUtils.getGiverlist().get(position).get("status").toString().equals("0")){
+            shareBtnID.setText("已結束分享");
+        }else if (MainUtils.getGiverlist().get(position).get("status").toString().equals("1")){
+            shareBtnID.setText("分享中...");
+        }
 
     }
 
@@ -247,7 +315,7 @@ public class FoodinfoGiver extends AppCompatActivity {
             ListItem.send = (ImageView) convertView.findViewById(R.id.takerlist_send);
             convertView.setTag(ListItem);
 
-            // 綁定資料 (todo: 資料data.get(position).get("key")無法成功，先寫死，刻出版面)
+            // 綁定資料
             ListItem.orderNo.setText((int) data.get(position).get("orderNo") + "");
             ListItem.userImage.setImageResource((Integer) data.get(position).get("userImage"));
             ListItem.takername.setText((String) data.get(position).get("username"));
@@ -514,8 +582,10 @@ public class FoodinfoGiver extends AppCompatActivity {
                 finish();
                 return true; //回復前頁
             case R.id.menu_edit: //去編輯頁面
-                Intent intent = new Intent(this, AddFoodActivity.class);
-                startActivityForResult(intent, 0);
+
+                Intent intent = new Intent(FoodinfoGiver.this, AddFoodActivity.class);
+                intent.putExtra("FoodinfoGiver","editFoodcard");//通知intent的b介面能更改
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

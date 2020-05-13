@@ -249,6 +249,7 @@ public class ShareHistoryFragment extends Fragment {
         hashMap.put("tag", row.optString("tag"));
         hashMap.put("token", row.optString("token"));
         hashMap.put("foodid",row.optString("id"));
+        hashMap.put("status",row.optString("status"));
 
         list.add(hashMap);
     }

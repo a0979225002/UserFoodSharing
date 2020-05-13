@@ -87,6 +87,9 @@ public class AddFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_food);
         ButterKnife.bind(this);
 
+
+
+
         menuHeight();//更改下拉選單顯示的長度
 
         getAddFood();//拿取客戶端寫的欄位資料
@@ -106,6 +109,12 @@ public class AddFoodActivity extends AppCompatActivity {
 //        addFoodImg.setImageResource(R.drawable.ic_add_a_photo_grey_24dp); //預設相機圖示
 
         dismissBar();
+
+
+        intent = getintent;
+        String editFoodcard = intent.getStringExtra("FoodinfoGiver");
+
+        Log.v("lipin",editFoodcard+"1234567");
 
     }
 
