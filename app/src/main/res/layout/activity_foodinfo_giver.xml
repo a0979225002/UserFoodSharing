@@ -54,7 +54,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_height="50sp"
-                android:src="@drawable/profile_img_2"
+                android:src="@drawable/profile_img"
                 android:layout_gravity="center"
                 />
             <TextView
@@ -83,7 +83,7 @@
                     android:id="@+id/queue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="？人排隊"
+                    android:text="0人排隊"
                     android:textStyle="bold"
                     android:gravity="center"
                     />

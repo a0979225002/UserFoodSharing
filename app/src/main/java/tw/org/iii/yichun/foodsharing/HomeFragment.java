@@ -303,7 +303,7 @@ public class HomeFragment extends Fragment {
             // 綁定資料
 
             ListItem.image.setImageBitmap((Bitmap) data.get(position).get("image"));
-            ListItem.title.setText("名稱:" + (String) data.get(position).get("title"));
+            ListItem.title.setText((String) data.get(position).get("title"));
             ListItem.location.setText("地區:" + (String) data.get(position).get("city") +
                     (String) data.get(position).get("dist"));
             ListItem.deadline.setText("期限:" + (String) data.get(position).get("deadline"));
