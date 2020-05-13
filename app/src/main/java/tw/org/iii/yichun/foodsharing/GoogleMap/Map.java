@@ -161,7 +161,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                            list.get(i).get("dist").toString()+
                                 list.get(i).get("address").toString();
 
-
+           Log.v("yichun",address);
 
             Geocoder geocoder = new Geocoder(this, Locale.TAIWAN);
             try {
@@ -172,7 +172,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                 LatLng sydney = new LatLng(maplist.get(0).getLatitude(), maplist.get(0).getLongitude());
                 Marker marker =  mMap.addMarker(new MarkerOptions()
                         .position(sydney)
-                        .title((String) list.get(i).get("title")));
+                        .title((String) list.get(i).get("title"))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.foodicon)));
                 marker.setTag(i);
             } catch (IOException e) {
                 e.printStackTrace();
