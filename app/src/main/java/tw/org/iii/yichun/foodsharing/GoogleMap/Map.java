@@ -161,9 +161,14 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
                            list.get(i).get("dist").toString()+
                                 list.get(i).get("address").toString();
 
+
+
             Geocoder geocoder = new Geocoder(this, Locale.TAIWAN);
             try {
                 maplist = geocoder.getFromLocationName(address,5);
+
+                Log.v("lipin",maplist.toString());
+
                 LatLng sydney = new LatLng(maplist.get(0).getLatitude(), maplist.get(0).getLongitude());
                 Marker marker =  mMap.addMarker(new MarkerOptions()
                         .position(sydney)

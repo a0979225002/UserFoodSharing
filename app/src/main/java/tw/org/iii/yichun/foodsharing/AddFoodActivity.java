@@ -87,10 +87,9 @@ public class AddFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_food);
         ButterKnife.bind(this);
 
-
-
-
         menuHeight();//更改下拉選單顯示的長度
+
+        getFoodinfoGiver();//如果是從FoodinfoGiver過來編修的 拿取FoodinfoGiver的編修資料
 
         getAddFood();//拿取客戶端寫的欄位資料
 
@@ -108,25 +107,60 @@ public class AddFoodActivity extends AppCompatActivity {
 
 //        addFoodImg.setImageResource(R.drawable.ic_add_a_photo_grey_24dp); //預設相機圖示
 
-        dismissBar();
+        dismissBar();//讓整頁擁有關掉snackbar的功能
 
 
-        intent = getintent;
-        String editFoodcard = intent.getStringExtra("FoodinfoGiver");
 
-        Log.v("lipin",editFoodcard+"1234567");
 
     }
 
     /**
-     * 讓整頁擁有關掉snackbar的功能
+     * 如果是從FoodinfoGiver過來編修的 拿取FoodinfoGiver的編修資料
      */
+    private void getFoodinfoGiver(){
+        intent  = getIntent();
+        String editFoodcard = intent.getStringExtra("FoodinfoGiver");
+        int position = intent.getIntExtra("position",-1);
+
+        Log.v("lipin",position+":::"+editFoodcard);
+
+//        if (editFoodcard != null){
+//
+//            Imgname = addFood.getAddFoodImg();
+//
+//            addFoodCategory.setText(addFood.getAddFoodCategory());
+//            selectedCategory = addFood.getAddFoodCategory();
+//
+//            addFoodCity.setText(addFood.getAddFoodCity());
+//            selectedCity = addFood.getAddFoodCity();
+//
+//            addFoodDist.setText(addFood.getAddFoodDist());
+//            selectedDist = addFood.getAddFoodDist();
+//
+//            address.setText(addFood.getAddress());
+//
+//            addFoodDatetime.setText(addFood.getAddFoodDatetime());
+//
+//            addFoodTag.setText(addFood.getAddFoodTag());
+//
+//            addFoodAmount.setText(addFood.getAddFoodAmount());
+//
+//            shareIt.setChecked(addFood.isShareIt());
+//
+//            addFoodMemo.setText(addFood.getAddFoodMemo());
+//
+//            addFoodName.setText(addFood.getAddFoodName());
+//        }
+
+
+    }
 
 
     /**
      * 從其他頁面回來可以拿回原本已寫好的值
      */
     private void getAddFood(){
+
         getintent = getIntent();
         addFood = (AddFood) getIntent().getSerializableExtra("savefood");
         if (addFood != null) {

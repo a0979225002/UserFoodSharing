@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bmView;
     private ViewPager viewPager;
     private Intent intent;
+    myReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ALERT_WINDOW();//檢查用戶是否開啟懸浮視窗
 
-        myReceiver receiver = new myReceiver();
+        receiver = new myReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("lipin");
         registerReceiver(receiver,filter);
@@ -286,6 +287,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
     }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(receiver);
+        super.onDestroy();
+    }
 }
+
 
 

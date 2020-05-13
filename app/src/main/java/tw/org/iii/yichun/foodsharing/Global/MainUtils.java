@@ -98,7 +98,7 @@ public class MainUtils extends Application {
 
                 //目前圖片並無壓縮,未來如要壓縮,可在參數2更改,數越小壓縮比例越多,比如參數80 = 壓縮20%
                 //圖片實際大小並無改變,壓縮的是像素,所以圖檔抓出來後需將圖案大小縮小,不然圖案會變模糊
-                bitmap.compress(Bitmap.CompressFormat.JPEG,80,outputStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG,90,outputStream);
 
                 outputStream.flush();
                 outputStream.close();
@@ -125,13 +125,48 @@ public class MainUtils extends Application {
 
     /**
      * 將base64字串轉成bitmap
+     * 官方源碼：https://www.jianshu.com/p/c545f2a6cafc
      * @param base64
      * @return
      */
     public static Bitmap base64Tobitmap(String base64){
         byte[] bytes = Base64.decode(base64,Base64.DEFAULT);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(bytes,0,bytes.length,options);
 
-        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        int imageHeight = options.outHeight;
+        int imageWidth = options.outWidth;
+        String imageType = options.outMimeType;
+
+        options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);
+
+
+        options.inJustDecodeBounds = false;
+
+
+        return BitmapFactory.decodeByteArray(bytes,0,bytes.length,options);
+    }
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
 

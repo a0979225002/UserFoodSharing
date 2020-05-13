@@ -585,6 +585,7 @@ public class FoodinfoGiver extends AppCompatActivity {
 
                 Intent intent = new Intent(FoodinfoGiver.this, AddFoodActivity.class);
                 intent.putExtra("FoodinfoGiver","editFoodcard");//通知intent的b介面能更改
+                intent.putExtra("position",position);
                 startActivity(intent);
                 return true;
             default:
