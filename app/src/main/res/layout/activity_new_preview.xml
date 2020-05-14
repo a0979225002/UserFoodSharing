@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".newPreview">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/addfoodcard_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.ToolBarStyle"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:id="@+id/allview"

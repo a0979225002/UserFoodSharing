@@ -1,5 +1,7 @@
 package tw.org.iii.yichun.foodsharing.Item;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -19,6 +21,18 @@ public class  AddFood implements Serializable {
     private String addFoodMemo;
     private String addFoodName;
     private String merge_arrdress;
+
+    public Bitmap getFoodimg() {
+        return foodimg;
+    }
+
+    public void setFoodimg(Bitmap foodimg) {
+        this.foodimg = foodimg;
+    }
+
+    private Bitmap foodimg;
+
+
 
     public String getMerge_arrdress() {
         return merge_arrdress;

@@ -157,6 +157,7 @@ public class FoodinfoGiver extends AppCompatActivity {
                                 Intent intent = new Intent(FoodinfoGiver.this, AddFoodActivity.class);
                                 intent.putExtra("FoodinfoGiver","editFoodcard");//通知intent的b介面能更改
                                 startActivity(intent);
+                                finish();
                             }
                         })
                         .setPositiveButton("離開", new DialogInterface.OnClickListener() {
@@ -587,6 +588,8 @@ public class FoodinfoGiver extends AppCompatActivity {
                 intent.putExtra("FoodinfoGiver","editFoodcard");//通知intent的b介面能更改
                 intent.putExtra("position",position);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

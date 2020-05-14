@@ -7,18 +7,22 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.camerakit.api.camera2.Camera2;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,12 +30,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.logging.Handler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.Global.MyCamera.MyCamara2;
 import tw.org.iii.yichun.foodsharing.Item.AddFood;
 
@@ -66,6 +71,8 @@ public class AddFoodActivity extends AppCompatActivity {
     TextInputEditText addFoodName;       //食物名
     @BindView(R.id.allview)
     LinearLayout allview;                //整個頁面
+    @BindView(R.id.addfoodcard_toolbar)
+    Toolbar addfoodcardToolbar;
 
 
     private File sdroot;//獲得加入照片的位置
@@ -76,10 +83,13 @@ public class AddFoodActivity extends AppCompatActivity {
     private boolean getshareIt;//取得客戶端是否有有打勾
     private Bitmap bitmap;
     private Snackbar snackbar;
-    private Intent intent,getintent;
+    private Intent intent, getintent;
     private AddFood addFood;
     private String Imgname;
     private String merge_arrdress;
+    private String editFoodcard;
+    private String editFoodcard2;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,48 +119,115 @@ public class AddFoodActivity extends AppCompatActivity {
 
         dismissBar();//讓整頁擁有關掉snackbar的功能
 
+        setToolbar();
 
 
+    }
+
+    /**
+     * 設定 Toolbar
+     */
+    private void setToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.addfoodcard_toolbar);
+        String title = null;
+
+        if (editFoodcard !=null){
+            title = "編輯剩食";
+        }else {
+            title = "發布剩食";
+        }
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        //回復前頁的設定
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    //toolbar切換設定
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+                        .setTitle("確定要離開？")
+                        .setMessage("系統將不會保留您輸入的資訊")
+                        .setNegativeButton("不離開", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setPositiveButton("離開", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (editFoodcard != null|| editFoodcard2 !=null) {
+                                    intent = new Intent(AddFoodActivity.this, FoodinfoGiver.class);
+                                    intent.putExtra("position", position);
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                    AddFoodActivity.this.finish();
+                                } else {
+                                    intent = new Intent(AddFoodActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    dialog.cancel();
+                                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                    AddFoodActivity.this.finish();
+                                }
+                            }
+                        });
+                dialog.show();
+
+                return true; //回復前頁
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
     }
 
     /**
      * 如果是從FoodinfoGiver過來編修的 拿取FoodinfoGiver的編修資料
      */
-    private void getFoodinfoGiver(){
-        intent  = getIntent();
-        String editFoodcard = intent.getStringExtra("FoodinfoGiver");
-        int position = intent.getIntExtra("position",-1);
+    private void getFoodinfoGiver() {
+        intent = getIntent();
+        editFoodcard = intent.getStringExtra("FoodinfoGiver");
+        editFoodcard2 = intent.getStringExtra("FoodinfoGiver_preview");
 
-        Log.v("lipin",position+":::"+editFoodcard);
+        position = intent.getIntExtra("position", -1);
 
-//        if (editFoodcard != null){
-//
-//            Imgname = addFood.getAddFoodImg();
-//
-//            addFoodCategory.setText(addFood.getAddFoodCategory());
-//            selectedCategory = addFood.getAddFoodCategory();
-//
-//            addFoodCity.setText(addFood.getAddFoodCity());
-//            selectedCity = addFood.getAddFoodCity();
-//
-//            addFoodDist.setText(addFood.getAddFoodDist());
-//            selectedDist = addFood.getAddFoodDist();
-//
-//            address.setText(addFood.getAddress());
-//
-//            addFoodDatetime.setText(addFood.getAddFoodDatetime());
-//
-//            addFoodTag.setText(addFood.getAddFoodTag());
-//
-//            addFoodAmount.setText(addFood.getAddFoodAmount());
-//
-//            shareIt.setChecked(addFood.isShareIt());
-//
-//            addFoodMemo.setText(addFood.getAddFoodMemo());
-//
-//            addFoodName.setText(addFood.getAddFoodName());
-//        }
+        Log.v("lipin", position + ":::" + editFoodcard+"::"+editFoodcard2);
+
+        if (editFoodcard != null) {
+
+            bitmap = (Bitmap) MainUtils.getGiverlist().get(position).get("image");
+            addFoodImg.setImageBitmap(bitmap);
+
+            addFoodCategory.setText((String) MainUtils.getGiverlist().get(position).get("category"));
+            selectedCategory = (String) MainUtils.getGiverlist().get(position).get("category");
+
+            addFoodCity.setText(MainUtils.getGiverlist().get(position).get("city").toString());
+            selectedCity = MainUtils.getGiverlist().get(position).get("city").toString();
+
+            addFoodDist.setText(MainUtils.getGiverlist().get(position).get("dist").toString());
+            selectedDist = MainUtils.getGiverlist().get(position).get("dist").toString();
+
+            address.setText((String) MainUtils.getGiverlist().get(position).get("address"));
+
+            addFoodDatetime.setText((String) MainUtils.getGiverlist().get(position).get("deadline"));
+
+            addFoodTag.setText((String) MainUtils.getGiverlist().get(position).get("tag"));
+
+            addFoodAmount.setText((String) MainUtils.getGiverlist().get(position).get("leftQuantity"));
+
+            shareIt.setChecked(
+                    MainUtils.getGiverlist().get(position).get("quantity").toString().equals("可拆領") ?
+                            true : false);
+
+            addFoodMemo.setText((String) MainUtils.getGiverlist().get(position).get("detail"));
+
+            addFoodName.setText((String) MainUtils.getGiverlist().get(position).get("title"));
+        }
 
 
     }
@@ -159,13 +236,15 @@ public class AddFoodActivity extends AppCompatActivity {
     /**
      * 從其他頁面回來可以拿回原本已寫好的值
      */
-    private void getAddFood(){
+    private void getAddFood() {
 
         getintent = getIntent();
         addFood = (AddFood) getIntent().getSerializableExtra("savefood");
         if (addFood != null) {
-
             Imgname = addFood.getAddFoodImg();
+            if (Imgname == null){
+                bitmap = (Bitmap) MainUtils.getGiverlist().get(position).get("image");
+            }
 
             addFoodCategory.setText(addFood.getAddFoodCategory());
             selectedCategory = addFood.getAddFoodCategory();
@@ -190,14 +269,14 @@ public class AddFoodActivity extends AppCompatActivity {
 
             addFoodName.setText(addFood.getAddFoodName());
 
-            Log.v("lipin",addFood.isShareIt()+"123");
+            Log.v("lipin", addFood.isShareIt() + "123");
         }
     }
 
     /**
      * 將所有客戶端輸入值的存成物件保存,（目的）跳轉後返回還是原來的值
      */
-    private void SaveAddFood(){
+    private void SaveAddFood() {
 
         addFood.setAddFoodImg(Imgname);
         addFood.setAddFoodCategory(selectedCategory);
@@ -215,20 +294,20 @@ public class AddFoodActivity extends AppCompatActivity {
 
 
 
-        Log.v("lipin","123"+getshareIt);
-        Log.v("lipin","123"+addFoodName.getText().toString());
+        Log.v("lipin", "123" + getshareIt);
+        Log.v("lipin", "123" + addFoodName.getText().toString());
     }
 
 
     /**
      * 讓整頁擁有關掉snackbar的功能
      */
-    private void dismissBar(){
+    private void dismissBar() {
         allview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (snackbar != null)
-                snackbar.dismiss();
+                    snackbar.dismiss();
             }
         });
     }
@@ -262,14 +341,15 @@ public class AddFoodActivity extends AppCompatActivity {
     private void camera() {
         sdroot = Environment.getExternalStorageDirectory();//拿取sd卡路徑
 
-        Log.v("lipin",Imgname+"地址");
+        Log.v("lipin", Imgname + "地址");
 
         if (Imgname != null) {
 
             bitmap = BitmapFactory.decodeFile(sdroot.getAbsolutePath() + "/" + Imgname);//拿出sd卡位置的圖片
-            addFoodImg.setImageBitmap(bitmap);//拿取存放的照片
-
             Log.v("lipin", "bitmap" + bitmap);
+        }
+        if (Imgname !=null|| bitmap !=null) {
+            addFoodImg.setImageBitmap(bitmap);//拿取存放的照片
         }
 
         //點擊照片回到照相頁面
@@ -280,11 +360,14 @@ public class AddFoodActivity extends AppCompatActivity {
 
                 SaveAddFood();//將所有客戶端輸入值的存成物件保存,（目的）跳轉後返回還是原來的值
 
-                intent.putExtra("savefood",addFood);
-
-                startActivityForResult(intent,321);
+                intent.putExtra("savefood", addFood);
+                if (editFoodcard!=null) {
+                    intent.putExtra("FoodinfoGiver", "editFoodcard");//通知intent的b介面能更改
+                    intent.putExtra("position", position);
+                }
+                startActivityForResult(intent, 321);
                 finish();
-                overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
     }
@@ -411,6 +494,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
     /**
      * 預覽按鈕
+     *
      * @param view
      */
     public void toAddFoodPreview(View view) {
@@ -422,7 +506,7 @@ public class AddFoodActivity extends AppCompatActivity {
      * 判斷是否有欄位空值
      */
     private void verify() {
-        Log.v("lipin",bitmap+":圖片");
+        Log.v("lipin", bitmap + ":圖片");
         if (bitmap != null
                 && !addFoodAmount.getText().toString().trim().isEmpty()
                 && !addFoodCity.getText().toString().isEmpty()
@@ -432,12 +516,17 @@ public class AddFoodActivity extends AppCompatActivity {
                 && !addFoodDatetime.getText().toString().isEmpty()
                 && !addFoodName.getText().toString().trim().isEmpty()) {
 
-            merge_arrdress = selectedCity+" "+ selectedDist+" "+ address.getText().toString();//將縣市區域地址整合成一條字串
+            merge_arrdress = selectedCity + " " + selectedDist + " " + address.getText().toString();//將縣市區域地址整合成一條字串
 
             intent = new Intent(this, newPreview.class);
             SaveAddFood();
-            intent.putExtra("savefood",addFood);
-            startActivityForResult(intent,321);
+            intent.putExtra("savefood", addFood);
+            if (editFoodcard != null|| editFoodcard2!=null) {
+                intent.putExtra("FoodinfoGiver", "editFoodcard");//通知intent的b介面能更改
+                intent.putExtra("position", position);
+            }
+            startActivityForResult(intent, 321);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
 
         } else if (bitmap == null
@@ -450,7 +539,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 || addFoodName.getText().toString().trim().isEmpty()) {
 
             if (bitmap == null) {
-                Log.v("lipin","123");
+                Log.v("lipin", "123");
                 snackbar = Snackbar.make(allview, "發布時須給予照片", Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
             }
@@ -472,7 +561,7 @@ public class AddFoodActivity extends AppCompatActivity {
             if (addFoodName.getText().toString().trim().isEmpty())
                 addFoodName.setError("食物名稱不能為空");
 
-            Log.v("lipin","截止日期" +addFoodDatetime.getText().toString());
+            Log.v("lipin", "截止日期" + addFoodDatetime.getText().toString());
         }
     }
 
@@ -488,7 +577,7 @@ public class AddFoodActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle("確定要離開？")
                 .setMessage("系統將不會保留您輸入的資訊")
                 .setNegativeButton("不離開", new DialogInterface.OnClickListener() {
@@ -500,14 +589,22 @@ public class AddFoodActivity extends AppCompatActivity {
                 .setPositiveButton("離開", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        intent = new Intent(AddFoodActivity.this,MainActivity.class);
-                        startActivity(intent);
-                        dialog.cancel();
-                        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                        AddFoodActivity.this.finish();
+                        if (editFoodcard != null || editFoodcard2 !=null) {
+                            intent = new Intent(AddFoodActivity.this, FoodinfoGiver.class);
+                            intent.putExtra("position", position);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            AddFoodActivity.this.finish();
+                        } else {
+                            intent = new Intent(AddFoodActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            dialog.cancel();
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            AddFoodActivity.this.finish();
+                        }
                     }
                 });
-               dialog.show();
+        dialog.show();
 
 
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);

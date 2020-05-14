@@ -39,9 +39,11 @@ public class MyCamara2 extends AppCompatActivity {
     @BindView(R.id.imgview)
     ImageView imgview;
 
-    String Imgname;
-    AddFood addFood;
-    Intent intent;
+    private String Imgname;
+    private AddFood addFood;
+    private Intent intent;
+    private String editFoodcard;
+    private int position;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class MyCamara2 extends AppCompatActivity {
 
         addFood = (AddFood) getIntent().getSerializableExtra("savefood");
         intent = getIntent();
+        position  = intent.getIntExtra("position",-1);
+
+        editFoodcard = intent.getStringExtra("FoodinfoGiver");
         comera();
     }
 
@@ -83,6 +88,7 @@ public class MyCamara2 extends AppCompatActivity {
                     public void takeSuccess(List<Uri> uriList) {
                         Log.v("lipin", uriList.get(0) + "");
 
+
                         intent = new Intent(MyCamara2.this, AddFoodActivity.class);
 
                         Log.v("lipin", Imgname);
@@ -90,6 +96,10 @@ public class MyCamara2 extends AppCompatActivity {
                         if (Imgname != null) addFood.setAddFoodImg(Imgname);
 
                         intent.putExtra("savefood",addFood);
+                        if (editFoodcard!=null){
+                            intent.putExtra("FoodinfoGiver_preview", "editFoodcard2");//通知intent的b介面能更改
+                            intent.putExtra("position", position);
+                        }
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                         startActivityForResult(intent,321);
                         MyCamara2.this.finish();
@@ -105,6 +115,10 @@ public class MyCamara2 extends AppCompatActivity {
                     public void takeCancel() {
                         Log.v("lipin", "取消");
                         intent = new Intent(MyCamara2.this,AddFoodActivity.class);
+                        if (editFoodcard!=null){
+                            intent.putExtra("FoodinfoGiver_preview", "editFoodcard2");//通知intent的b介面能更改
+                            intent.putExtra("position", position);
+                        }
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                         startActivityForResult(intent,321);
                         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
