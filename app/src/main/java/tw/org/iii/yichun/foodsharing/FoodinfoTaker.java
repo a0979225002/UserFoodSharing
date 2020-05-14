@@ -90,7 +90,7 @@ public class FoodinfoTaker extends AppCompatActivity {
 
         MainUtils.showloading(this);
 
-        queuestatus();
+        gettakeornot();
 
         getfood();
 
@@ -153,6 +153,46 @@ public class FoodinfoTaker extends AppCompatActivity {
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
         return super.onOptionsItemSelected(item);
+    }
+    /**
+     * 檢查是否已經拿取
+     */
+    private void gettakeornot(){
+        String url = "http://"+Utils.ip+"/FoodSharing_war/gettakeornot";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("1")){
+                            queueBtnID.setText("已領取");
+                            queueBtnID.setEnabled(false);
+                            queueBtnID.setBackgroundColor(R.drawable.button_shape);//更改排隊按鈕顏色
+                        }else {
+                            queuestatus();
+                        }
+                        MainUtils.dimissloading();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
+
+
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("giverid",User.getId());
+                params.put("foodcardID",(String) MainUtils.getList().get(position).get("foodid"));
+                return params;
+            }
+        };
+        MainUtils.queue.add(request);
     }
     /**
      * 判斷是否已經有排隊了
