@@ -108,7 +108,7 @@ public class GiverNoticeFragment extends Fragment {
 
             // 綁定資料
             ListItem.notification_msg.setText("關於您想索取的"+data.get(position).get("title")+
-                    (String) data.get(position).get("account")+"發布者已讓您進入排隊");
+                    "發布者"+(String) data.get(position).get("account")+"已讓您進入排隊");
             ListItem.notification_time.setText((String)data.get(position).get("createtime"));
 
             return convertView;
