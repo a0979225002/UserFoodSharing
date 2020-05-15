@@ -1,0 +1,102 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        >
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            />
+        <ImageView
+            android:id="@+id/foodList_img"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="114dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:layout_marginRight="15dp"
+            />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/foodList_title"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.8"
+                android:textSize="16sp"
+                android:text="食物名稱"
+                android:textColor="@color/colorPrimary"
+                android:paddingTop="5dp"
+                />
+            <TextView
+                android:id="@+id/foodList_deadline"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:textSize="12sp"
+                android:text="期限：2020/05/27 20:00"
+                />
+            <TextView
+                android:id="@+id/foodList_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:textSize="12sp"
+                android:text="份數：10 份，可拆領"
+                />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_comment"
+            android:theme="@style/AppInput">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addfoodcomment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

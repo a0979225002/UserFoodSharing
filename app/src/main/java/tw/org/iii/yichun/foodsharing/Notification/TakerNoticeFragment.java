@@ -115,10 +115,9 @@ public class TakerNoticeFragment extends Fragment {
             convertView.setTag(ListItem);
 
             // 綁定資料
-            ListItem.notification_msg.setText("關於您的"+data.get(position).get("title")+
+            ListItem.notification_msg.setText("關於您的"+data.get(position).get("title")+",用戶"+
                     (String) data.get(position).get("account")+"想向您索取食物");
-            ListItem.notification_time.setText((String)data.get(position).get("createtime"));
-
+            ListItem.notification_time.setText((String)data.get(position).get("modified"));
 
             return convertView;
         }
@@ -363,6 +362,7 @@ public class TakerNoticeFragment extends Fragment {
         hashMap.put("createtime",row.optString("createtime"));
         hashMap.put("userid",row.optString("user_id"));
         hashMap.put("qty",row.optString("takerqty"));
+        hashMap.put("modified",row.optString("modified"));
         list.add(hashMap);
     }
 }

@@ -100,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
                 String Notice = intent.getStringExtra("Notice");
                 Log.v("lipin","我是廣播器");
                Snackbar snackbar =  Snackbar.make(allview,Notice,Snackbar.LENGTH_INDEFINITE);
+               snackbar.setAction("ok", new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+
+                   }
+               });
+               snackbar.show();
             }
         }
     }
@@ -288,11 +295,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(receiver);
-        super.onDestroy();
-    }
 }
 
 

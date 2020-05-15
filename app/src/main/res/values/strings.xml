@@ -13,6 +13,7 @@
     <string name="input_foodName">"食物名稱"</string>
     <string name="input_foodCategory">"食物分類"</string>
     <string name="input_foodqut">索取數量</string>
+    <string name="input_comment">給予評論</string>
     <string-array name="foodCategory">
         <item>熟食</item>
         <item>生鮮</item>

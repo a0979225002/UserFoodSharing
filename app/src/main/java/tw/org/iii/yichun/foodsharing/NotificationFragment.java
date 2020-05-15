@@ -108,7 +108,7 @@ public class NotificationFragment extends Fragment {
 
             @Override
             public int getCount() {
-                return 2;
+                return views.size();
             }
 
             @Nullable

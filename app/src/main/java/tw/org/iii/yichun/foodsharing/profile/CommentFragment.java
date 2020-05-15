@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,21 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import tw.org.iii.yichun.foodsharing.Global.MainUtils;
+import tw.org.iii.yichun.foodsharing.Global.Utils;
+import tw.org.iii.yichun.foodsharing.Item.User;
 import tw.org.iii.yichun.foodsharing.R;
 
 /**
@@ -99,6 +110,36 @@ public class CommentFragment extends Fragment {
 
             return convertView;
         }
+    }
+    private void getComment(){
+        String url = "http://"+ Utils.ip+"/FoodSharing_war/SharerNotice";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("userid", User.getId());
+
+
+
+                return params;
+            }
+        };
+        MainUtils.queue.add(request);
     }
 
 
