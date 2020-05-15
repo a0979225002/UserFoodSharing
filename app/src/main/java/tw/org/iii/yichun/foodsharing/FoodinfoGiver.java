@@ -224,9 +224,9 @@ public class FoodinfoGiver extends AppCompatActivity {
 
             int userqty = Integer.valueOf(list.get(i).get("qty").toString());
 
-            restqueue = restqueue - userqty;
+            restqueue = restqueue + userqty;
         }
-        queue.setText("剩餘份數:" + restqueue + "份");
+        amount.setText(restqueue + "份");
     }
 
 
@@ -245,10 +245,9 @@ public class FoodinfoGiver extends AppCompatActivity {
         category.setText((String) MainUtils.getGiverlist().get(position).get("category"));
         foodTag.setText((String) MainUtils.getGiverlist().get(position).get("tag"));
         datetime.setText((String) MainUtils.getGiverlist().get(position).get("deadline"));
-        amount.setText((String) MainUtils.getGiverlist().get(position).get("leftQuantity") + "份");
         shareIt.setText((String) MainUtils.getGiverlist().get(position).get("quantity"));
         Memo.setText((String) MainUtils.getGiverlist().get(position).get("detail"));
-
+        queue.setText("剩餘份數:" + (String) MainUtils.getGiverlist().get(position).get("leftQuantity") + "份");
         if (MainUtils.getGiverlist().get(position).get("status").toString().equals("0")){
             shareBtnID.setText("已結束分享");
         }else if (MainUtils.getGiverlist().get(position).get("status").toString().equals("1")){

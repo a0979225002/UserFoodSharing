@@ -238,6 +238,7 @@ public class TakerNoticeFragment extends Fragment {
                 HashMap<String,String> params = new HashMap<>();
                 params.put("foodid", (String) list.get(position).get("foodid"));
                 params.put("userid", (String) list.get(position).get("userid"));
+                params.put("qty",(String) list.get(position).get("qty"));
 
                 return params;
             }
