@@ -444,8 +444,6 @@ public class FoodinfoGiver extends AppCompatActivity {
 
         }
     }
-
-
     /**
      * 拿取user自己的卡片資訊想排隊之人的資訊
      *

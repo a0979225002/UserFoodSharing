@@ -10,9 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -49,7 +51,10 @@ public class TakeHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_take_history, container, false);
 
         listView = view.findViewById(R.id.takeHistory_lv);
+
         sharefoodcard();
+
+        listViewClickListener();
 
         return view;
     }
@@ -106,8 +111,21 @@ public class TakeHistoryFragment extends Fragment {
             ListItem.image.setImageBitmap((Bitmap) data.get(position).get("image"));
             ListItem.title.setText((String)data.get(position).get("title"));
 
+
+
             return convertView;
         }
+    }
+    /**
+     * 監聽點擊事件
+     */
+    private void listViewClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("lipin","u.3x96a8 "+position);
+            }
+        });
     }
     /**
      * 撈已索取完畢的食物

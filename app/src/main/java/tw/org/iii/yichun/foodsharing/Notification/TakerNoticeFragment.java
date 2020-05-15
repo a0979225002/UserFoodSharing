@@ -1,6 +1,8 @@
 package tw.org.iii.yichun.foodsharing.Notification;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,10 +11,13 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,15 +39,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.org.iii.yichun.foodsharing.AddFoodActivity;
+import tw.org.iii.yichun.foodsharing.FoodinfoGiver;
 import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.Global.Utils;
 import tw.org.iii.yichun.foodsharing.Item.User;
+import tw.org.iii.yichun.foodsharing.MainActivity;
 import tw.org.iii.yichun.foodsharing.R;
 import tw.org.iii.yichun.foodsharing.profile.TakeHistoryFragment;
 
 
 public class TakerNoticeFragment extends Fragment {
     private ListView listView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,6 +61,7 @@ public class TakerNoticeFragment extends Fragment {
 
         MainUtils.showloading(getContext());
         getTakerqueue();
+
 
         return view;
     }
@@ -65,7 +76,9 @@ public class TakerNoticeFragment extends Fragment {
             this.data = data;
             this.layoutInflater = LayoutInflater.from(context);
         }
-
+        public void removeItem(int index){
+            data.remove(index);
+        }
 
         /**
          * List Item 集合，對應 listView_profile_history.xml
@@ -73,6 +86,7 @@ public class TakerNoticeFragment extends Fragment {
         public final class ListItem{
             public TextView notification_msg; // 食物照片
             public TextView notification_time; // 食物名稱
+            public LinearLayout allitem;
         }
 
         @Override
@@ -97,6 +111,7 @@ public class TakerNoticeFragment extends Fragment {
             convertView = layoutInflater.inflate(R.layout.listview_notification, null);
             ListItem.notification_msg = (TextView) convertView.findViewById(R.id.notification_msg);
             ListItem.notification_time = (TextView) convertView.findViewById(R.id.notification_time);
+            ListItem.allitem = convertView.findViewById(R.id.allitem);
             convertView.setTag(ListItem);
 
             // 綁定資料
@@ -105,14 +120,101 @@ public class TakerNoticeFragment extends Fragment {
             ListItem.notification_time.setText((String)data.get(position).get("createtime"));
 
 
-
-
             return convertView;
         }
+    }
+    //監聽使用者點擊第幾個item
+    private void ListviewListener(){
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("lipin","監聽"+position);
+
+                Log.v("lipin",(String)
+                        list.get(position).get("foodid")+"::"+(String) list.get(position).get("userid"));
+
+
+                //拿取自訂的dialog
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
+                View newview = inflater.inflate(R.layout.mydialog2, null);
+                //拿取自訂dialog的ID
+                ImageView imag = newview.findViewById(R.id.foodList_img);
+                TextView foodname = newview.findViewById(R.id.foodList_title);
+                TextView address = newview.findViewById(R.id.foodList_location);
+                TextView dueDate = newview.findViewById(R.id.foodList_deadline);
+                TextView split = newview.findViewById(R.id.foodList_quantity);
+                TextView qty = newview.findViewById(R.id.foodList_leftQuantity);
+
+                imag.setImageBitmap((Bitmap) list.get(position).get("image"));
+                foodname.setText("名稱:" + (String) list.get(position).get("title"));
+                address.setText("地區:" + (String) list.get(position).get("address"));
+                dueDate.setText("期限:" + (String) list.get(position).get("deadline"));
+                split.setText("可否拆領:" + (String) list.get(position).get("quantity"));
+                qty.setText("預估剩餘份數:" + (String) list.get(position).get("leftQuantity") + "份");
+
+                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(getActivity())
+                        .setTitle((String) list.get(position).get("account")+"想索取食物")
+                        .setView(newview)
+                        .setNegativeButton("讓他進入排隊", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                updateQueue(position);
+                            }
+                        })
+                        .setPositiveButton("不讓他排隊", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                listViewAdapter.removeItem(position);
+                                listViewAdapter.notifyDataSetChanged();
+                            }
+                        });
+                dialog.show();
+
+
+            }
+        });
+    }
+    /**
+     * 更新排隊狀態
+     */
+    private void updateQueue(int position){
+        String url = "http://"+ Utils.ip+"/FoodSharing_war/updatequequ";
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                            MainUtils.dimissloading();
+                            listViewAdapter.removeItem(position);
+                            listViewAdapter.notifyDataSetChanged();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("lipin",error.toString());
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("foodid", (String) list.get(position).get("foodid"));
+                params.put("userid", (String) list.get(position).get("userid"));
+
+                return params;
+            }
+        };
+        MainUtils.queue.add(request);
     }
     /**
      * 拿取想排隊的人的通知
      */
+    ListViewAdapter listViewAdapter;
     private void getTakerqueue(){
         String url = "http://"+ Utils.ip+"/FoodSharing_war/SharerNotice";
         StringRequest request = new StringRequest(
@@ -122,9 +224,13 @@ public class TakerNoticeFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         JsonFoodcard(response);
-                        listView.setAdapter(new ListViewAdapter(getActivity(),list));
+                       listViewAdapter = new ListViewAdapter(getActivity(),list);
+
+                        listView.setAdapter(listViewAdapter);
                         MainUtils.dimissloading();
                         Log.v("lipin",list.toString());
+                        ListviewListener();
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -221,6 +327,7 @@ public class TakerNoticeFragment extends Fragment {
         hashMap.put("foodid",row.optString("id"));
         hashMap.put("status",row.optString("status"));
         hashMap.put("createtime",row.optString("createtime"));
+        hashMap.put("userid",row.optString("user_id"));
         list.add(hashMap);
     }
 }
