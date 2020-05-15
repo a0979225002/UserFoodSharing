@@ -538,7 +538,7 @@ public class FoodinfoGiver extends AppCompatActivity {
         hashMap.put("username", row.optString("name", null) != null ?
                 row.optString("name", null) : row.optString("account"));
 
-        hashMap.put("qty", row.optString("qty"));
+        hashMap.put("qty", row.optString("takerqty"));
         hashMap.put("takeornot", row.optString("takeornot"));
         hashMap.put("userid", row.optString("user_id"));
         hashMap.put("token", row.optString("token"));

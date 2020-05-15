@@ -251,8 +251,6 @@ public class newPreview extends AppCompatActivity {
         Date date = new Date();
         createTime = simpleDateFormat.format(date);
 
-        Log.v("lipin",editFoodcard);
-
         if (editFoodcard!= null){
             SaveEditFoodCard();
         }else {

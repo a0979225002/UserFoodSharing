@@ -137,20 +137,18 @@ public class TakerNoticeFragment extends Fragment {
 
                 //拿取自訂的dialog
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
-                View newview = inflater.inflate(R.layout.mydialog2, null);
+                View newview = inflater.inflate(R.layout.mydialog3, null);
                 //拿取自訂dialog的ID
                 ImageView imag = newview.findViewById(R.id.foodList_img);
                 TextView foodname = newview.findViewById(R.id.foodList_title);
-                TextView address = newview.findViewById(R.id.foodList_location);
                 TextView dueDate = newview.findViewById(R.id.foodList_deadline);
                 TextView split = newview.findViewById(R.id.foodList_quantity);
                 TextView qty = newview.findViewById(R.id.foodList_leftQuantity);
 
                 imag.setImageBitmap((Bitmap) list.get(position).get("image"));
-                foodname.setText("名稱:" + (String) list.get(position).get("title"));
-                address.setText("地區:" + (String) list.get(position).get("address"));
-                dueDate.setText("期限:" + (String) list.get(position).get("deadline"));
-                split.setText("可否拆領:" + (String) list.get(position).get("quantity"));
+                foodname.setText((String) list.get(position).get("title"));
+                dueDate.setText("索取時間:" + (String)list.get(position).get("createtime"));
+                split.setText("索取數量:" + (String) list.get(position).get("qty"));
                 qty.setText("預估剩餘份數:" + (String) list.get(position).get("leftQuantity") + "份");
 
                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(getActivity())
@@ -160,7 +158,42 @@ public class TakerNoticeFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 updateQueue(position);
+                                /**
+                                 * 通知對方,傳送對方token
+                                 */
+                                String url = "http://" + Utils.ip + "/FoodSharing_war/GiverMessgingService";
+                                StringRequest request = new StringRequest(
+                                        Request.Method.POST,
+                                        url,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Log.v("lipin", error.toString());
+                                            }
+                                        }
+                                ) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        HashMap<String, String> param = new HashMap<>();
+
+//                                            Log.v("lipin", "123124" + data.get(position).get("token").toString().trim());
+
+                                        param.put("TakerToken", list.get(position).get("token").toString().trim());//拿取對方token
+                                        param.put("UserToken", User.getToken());//拿取我方token
+                                        param.put("username", User.getAccount());
+                                        param.put("foodname", list.get(position).get("title").toString());
+
+                                        return param;
+                                    }
+                                };
+                                MainUtils.queue.add(request);
                             }
+
                         })
                         .setPositiveButton("不讓他排隊", new DialogInterface.OnClickListener() {
                             @Override
@@ -229,7 +262,7 @@ public class TakerNoticeFragment extends Fragment {
                         listView.setAdapter(listViewAdapter);
                         MainUtils.dimissloading();
                         Log.v("lipin",list.toString());
-                        ListviewListener();
+                        ListviewListener();//監聽使用者點擊第幾個item
 
                     }
                 },
@@ -328,6 +361,7 @@ public class TakerNoticeFragment extends Fragment {
         hashMap.put("status",row.optString("status"));
         hashMap.put("createtime",row.optString("createtime"));
         hashMap.put("userid",row.optString("user_id"));
+        hashMap.put("qty",row.optString("takerqty"));
         list.add(hashMap);
     }
 }
