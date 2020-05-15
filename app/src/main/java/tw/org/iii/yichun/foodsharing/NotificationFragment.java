@@ -63,6 +63,8 @@ public class NotificationFragment extends Fragment {
 
         addlist();
 
+        setFragment();
+
         return view;
 
     }
@@ -83,7 +85,7 @@ public class NotificationFragment extends Fragment {
 
         //新增標題
         title = new ArrayList();
-        title.add("分享者通知");
+        title.add("發布通知");
         title.add("索取者通知");
         title.add("評論");
 
@@ -106,7 +108,7 @@ public class NotificationFragment extends Fragment {
 
             @Override
             public int getCount() {
-                return views.size();
+                return 1;
             }
 
             @Nullable

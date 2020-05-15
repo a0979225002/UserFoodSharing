@@ -181,8 +181,6 @@ public class FoodinfoTaker extends AppCompatActivity {
                         Log.v("lipin",error.toString());
                     }
                 }
-
-
         ){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

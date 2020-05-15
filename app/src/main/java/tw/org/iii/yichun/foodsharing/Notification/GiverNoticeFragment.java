@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import tw.org.iii.yichun.foodsharing.Global.MainUtils;
+import tw.org.iii.yichun.foodsharing.Global.Utils;
+import tw.org.iii.yichun.foodsharing.Item.User;
 import tw.org.iii.yichun.foodsharing.R;
 
 public class GiverNoticeFragment extends Fragment {
@@ -113,7 +115,7 @@ public class GiverNoticeFragment extends Fragment {
      * 拿取能讓你來排隊的通知
      */
     private void getGiverqueue(){
-        String url = "";
+        String url = "http://"+ Utils.ip+"/FoodSharing_war/gettakeornot";
         StringRequest request = new StringRequest(
                 Request.Method.POST,
                 url,
@@ -132,7 +134,11 @@ public class GiverNoticeFragment extends Fragment {
         ){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
+                HashMap<String,String> params = new HashMap<>();
+                params.put("userid", User.getId());
+
+
+                return params;
             }
         };
         MainUtils.queue.add(request);

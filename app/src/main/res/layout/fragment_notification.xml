@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_below="@+id/profile_topArea">
+            android:layout_below="@+id/notification_tabLayout">
 
         </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
