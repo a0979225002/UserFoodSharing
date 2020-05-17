@@ -19,6 +19,15 @@ public class User {
     private static Double Longitude;//user現在位置,緯度
     private static String token;
     private static int i;
+    private static double fraction;
+
+    public static double getFraction() {
+        return fraction;
+    }
+
+    public static void setFraction(Double fraction) {
+        User.fraction = fraction;
+    }
 
     public static int getI() {
         return i;

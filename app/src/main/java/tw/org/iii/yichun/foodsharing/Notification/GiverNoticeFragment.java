@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -44,16 +45,17 @@ public class GiverNoticeFragment extends Fragment {
     private ListView listView;
     private String [] from = {"notification","time"};
     private int [] to = {R.id.notification_msg, R.id.notification_time};
-
+    private View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.fragment_giver_notice, container, false);
+
+           view = inflater.inflate(R.layout.fragment_giver_notice, container, false);
 
 
-        listView = view.findViewById(R.id.notification_comment);
+           listView = view.findViewById(R.id.notification_comment);
 
-        getGiverqueue();
+           getGiverqueue();
 
         return view;
     }

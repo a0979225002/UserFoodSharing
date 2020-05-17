@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -48,16 +49,18 @@ import tw.org.iii.yichun.foodsharing.profile.ShareHistoryFragment;
  */
 public class CommentNoticeFragment extends Fragment {
     private ListView listView;
+    private View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_comment_notice,container,false);
 
-        listView = view.findViewById(R.id.notification_comment);
-        MainUtils.showloading(getActivity());
-        geNotCommenNotice();
+            view = inflater.inflate(R.layout.fragment_comment_notice, container, false);
 
-        // Inflate the layout for this fragment
+            listView = view.findViewById(R.id.notification_comment);
+            geNotCommenNotice();
+
+            // Inflate the layout for this fragment
+
         return view;
     }
 
@@ -140,10 +143,23 @@ public class CommentNoticeFragment extends Fragment {
                 TextView dueDate = newview.findViewById(R.id.foodList_deadline);
                 TextView split = newview.findViewById(R.id.foodList_quantity);
                 EditText addfoodcomment = newview.findViewById(R.id.addfoodcomment);
+                RatingBar ratingBar = newview.findViewById(R.id.comment_ratingBar);
+
+                ratingBar.setNumStars(5);
+                ratingBar.setMax(5);
+                ratingBar.setRating(0);
+                ratingBar.setStepSize(0.5f);
+                ratingBar.setIsIndicator(false);
+                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        Log.v("lipin",ratingBar+"::"+rating+"::"+fromUser);
+                    }
+                });
 
                 imag.setImageBitmap((Bitmap) list.get(position).get("image"));
                 foodname.setText((String) list.get(position).get("title"));
-                dueDate.setText("索取時間:" + (String)list.get(position).get("createtime"));
+                dueDate.setText("索取時間:" +"\n"+ (String)list.get(position).get("createtime"));
                 split.setText("已索取數量:" + (String) list.get(position).get("qty"));
 
                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(getActivity())
@@ -161,7 +177,7 @@ public class CommentNoticeFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (!addfoodcomment.getText().toString().trim().isEmpty()){
                                     Log.v("lipin",addfoodcomment.getText().toString());
-                                    updateComment(position,addfoodcomment.getText().toString());
+                                    updateComment(position,addfoodcomment.getText().toString(),ratingBar.getRating());
                                 }
                             }
 
@@ -181,7 +197,7 @@ public class CommentNoticeFragment extends Fragment {
      * 如果有填寫評論發布,將會更新後端sql
      * @param position
      */
-    private void updateComment(int position,String Comment ){
+    private void updateComment(int position,String Comment ,float Rating ){
         String url = "http://"+ Utils.ip+"/FoodSharing_war/UpdateComment";
         StringRequest request = new StringRequest(
                 Request.Method.POST,
@@ -207,8 +223,10 @@ public class CommentNoticeFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> params = new HashMap<>();
                 params.put("userid", User.getId());
+                params.put("giverid", (String) list.get(position).get("userid"));
                 params.put("foodid", (String) list.get(position).get("foodid"));
                 params.put("comment",Comment);
+                params.put("Rating",String.valueOf(Rating));
 
 
 
@@ -235,9 +253,9 @@ public class CommentNoticeFragment extends Fragment {
 
                         listView.setAdapter(listViewAdapter);
                         MainUtils.dimissloading();
-                        Log.v("lipin",list.toString());
+                        Log.v("lipin","有來媽"+list.toString());
                         ListviewListener();//監聽使用者點擊第幾個item
-                        MainUtils.dimissloading();
+
 
                     }
                 },
@@ -269,7 +287,6 @@ public class CommentNoticeFragment extends Fragment {
     HashMap<String, Object> hashMap;
     List<HashMap<String, Object>>list;
     private void JsonFoodcard(String response) {
-
         list = new ArrayList<HashMap<String, Object>>();
 
         try {
@@ -332,10 +349,10 @@ public class CommentNoticeFragment extends Fragment {
         hashMap.put("category", row.optString("category"));
         hashMap.put("tag", row.optString("tag"));
         hashMap.put("token", row.optString("token"));
-        hashMap.put("foodid",row.optString("id"));
+        hashMap.put("foodid",row.optString("foodcard_id"));
         hashMap.put("status",row.optString("status"));
         hashMap.put("createtime",row.optString("createtime"));
-        hashMap.put("userid",row.optString("user_id"));
+        hashMap.put("userid",row.optString("id"));
         hashMap.put("qty",row.optString("takerqty"));
         list.add(hashMap);
     }

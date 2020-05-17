@@ -61,6 +61,7 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.4.2'
     implementation 'com.github.yhaolpz:FloatWindow:1.0.9'
     implementation 'com.sl.utakephoto:uTakePhoto:1.1.0'
+    implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
 
 
     implementation 'com.camerakit:camerakit:1.0.0-beta3.11'

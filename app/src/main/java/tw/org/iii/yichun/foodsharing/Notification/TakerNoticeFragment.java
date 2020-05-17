@@ -51,16 +51,18 @@ import tw.org.iii.yichun.foodsharing.profile.TakeHistoryFragment;
 
 public class TakerNoticeFragment extends Fragment {
     private ListView listView;
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_taker_notice, container, false);
 
-        listView = view.findViewById(R.id.notification_comment);
+            view = inflater.inflate(R.layout.fragment_taker_notice, container, false);
 
-        MainUtils.showloading(getContext());
-        getTakerqueue();
+            listView = view.findViewById(R.id.notification_comment);
+
+            MainUtils.showloading(getActivity());
+            getTakerqueue();
 
 
         return view;

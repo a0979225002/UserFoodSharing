@@ -35,20 +35,11 @@ public class MainUtils extends Application {
     public static RequestQueue queue;
     private static ACProgressFlower dialog;
     private static List<HashMap<String, Object>> list,giverlist;
-    private static String tornotbtn;//是否已領取按鈕
 
     @Override
     public void onCreate() {
         super.onCreate();
         queue = Volley.newRequestQueue(this);//獲得後端網路
-    }
-
-    public static String getTornotbtn() {
-        return tornotbtn;
-    }
-
-    public static void setTornotbtn(String tornotbtn) {
-        MainUtils.tornotbtn = tornotbtn;
     }
 
     public static List<HashMap<String, Object>> getGiverlist() {
@@ -194,6 +185,7 @@ public class MainUtils extends Application {
                 User.setCity(row.optString("city",null));
                 User.setDist(row.optString("dist",null));
                 User.setToken(row.optString("token",null));
+                User.setFraction(Double.valueOf(row.optString("fraction",null)));
 
             }
         }catch (Exception e){
