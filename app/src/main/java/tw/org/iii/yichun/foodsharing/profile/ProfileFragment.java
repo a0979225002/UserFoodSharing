@@ -163,7 +163,6 @@ public class ProfileFragment extends Fragment {
      * @param respone
      */
     private void JsonUserFraction(String respone) {
-        Log.v("lipin",respone);
         try {
             JSONArray array = new JSONArray(respone);
             JSONObject jsonObject = array.getJSONObject(0);

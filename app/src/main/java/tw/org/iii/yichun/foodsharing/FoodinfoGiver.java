@@ -150,13 +150,15 @@ public class FoodinfoGiver extends AppCompatActivity {
             }else if (nowdate.after(duedate)){
                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this)
                         .setTitle("截止日期已過期")
-                        .setMessage("您需要先更改此分布的截止時間")
+                        .setMessage("如您想重新發佈,您需要前往右上角的編輯中更改截止時間")
                         .setNegativeButton("前往更改", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(FoodinfoGiver.this, AddFoodActivity.class);
                                 intent.putExtra("FoodinfoGiver","editFoodcard");//通知intent的b介面能更改
+                                intent.putExtra("position",position);
                                 startActivity(intent);
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                                 finish();
                             }
                         })

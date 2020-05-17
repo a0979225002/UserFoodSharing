@@ -35,11 +35,20 @@ public class MainUtils extends Application {
     public static RequestQueue queue;
     private static ACProgressFlower dialog;
     private static List<HashMap<String, Object>> list,giverlist;
+    private static boolean gotoProfile;
 
     @Override
     public void onCreate() {
         super.onCreate();
         queue = Volley.newRequestQueue(this);//獲得後端網路
+    }
+
+    public static boolean isGotoProfile() {
+        return gotoProfile;
+    }
+
+    public static void setGotoProfile(boolean gotoProfile) {
+        MainUtils.gotoProfile = gotoProfile;
     }
 
     public static List<HashMap<String, Object>> getGiverlist() {

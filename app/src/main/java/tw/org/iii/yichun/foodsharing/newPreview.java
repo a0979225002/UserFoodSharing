@@ -103,6 +103,8 @@ public class newPreview extends AppCompatActivity {
         editFoodcard = intent.getStringExtra("FoodinfoGiver");
         position = intent.getIntExtra("position",-1);
 
+        Log.v("lipin",editFoodcard+123);
+
         dismissSnckbar();//關掉snackbar
 
         FoodAmount();//取出數量的值,用正則把數字與字串分開
@@ -271,11 +273,15 @@ public class newPreview extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         if (response.trim().equals("1")) {
+                            Log.v("lipin","廣播發送");
+
                             intent = new Intent(newPreview.this, MainActivity.class);
+                            Intent intent2 = new Intent("EditFoodCard");//加入廣播中
+                            intent2.putExtra("lipin","有來媽");
+                            sendBroadcast(intent2);
                             startActivity(intent);
                             overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                             finish();
-
                             MainUtils.dimissloading();//關掉讀取框
 
                         } else {
@@ -297,8 +303,7 @@ public class newPreview extends AppCompatActivity {
 
                 String base64img = MainUtils.bitmaptoBase64(bitmap);//拿取已經將圖片轉成base64的字串
 
-                Log.v("lipin",base64img+":圖片64");
-                Log.v("lipin",category.getText().toString());
+
 
                 HashMap<String, String> parmas = new HashMap<>();
 
@@ -365,8 +370,6 @@ public class newPreview extends AppCompatActivity {
 
                 String base64img = MainUtils.bitmaptoBase64(bitmap);//拿取已經將圖片轉成base64的字串
 
-                Log.v("lipin",base64img+":圖片64");
-                Log.v("lipin",category.getText().toString());
 
                 HashMap<String, String> parmas = new HashMap<>();
 

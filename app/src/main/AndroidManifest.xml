@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="tw.org.iii.yichun.foodsharing">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -16,14 +17,13 @@
     <application
         android:name=".Global.MainUtils"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
-        android:hardwareAccelerated="false"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.mydomain.fileprovider"
@@ -34,8 +34,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Global.MyCamera.MyCamara2"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Global.MyCamera.MyCamara2"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".MyService.MessgingService"
@@ -60,37 +61,46 @@
         <activity
             android:name=".GoogleMap.Map"
             android:label="@string/title_activity_map"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".SearchFilterActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FoodinfoTaker"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".toolbarBtn.UserData"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FoodinfoGiver"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".newPreview"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ChatRoomActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SearchFilterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FoodinfoTaker"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".toolbarBtn.UserData"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FoodinfoGiver"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".newPreview"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChatRoomActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AddFoodActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MyCameraActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".MyCameraActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Loading.LoginActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Loading.SignupActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Loading.LoadingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Loading.LoadingActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

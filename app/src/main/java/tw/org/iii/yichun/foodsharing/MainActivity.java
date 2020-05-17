@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTabHost;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,6 +38,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tw.org.iii.yichun.foodsharing.Global.MainUtils;
 import tw.org.iii.yichun.foodsharing.Global.MyCamera.MyCamara2;
 import tw.org.iii.yichun.foodsharing.Loading.LoginActivity;
 import tw.org.iii.yichun.foodsharing.profile.ProfileFragment;
@@ -46,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bmView;
     private ViewPager viewPager;
     private Intent intent;
-    myReceiver receiver;
+    private myReceiver receiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,36 +62,24 @@ public class MainActivity extends AppCompatActivity {
 
         //ALERT_WINDOW();//檢查用戶是否開啟懸浮視窗
 
+
+            init();
+
+            // 將首頁設為 default fragment
+            if (savedInstanceState == null && MainUtils.isGotoProfile()==false) {
+                bmView.setSelectedItemId(R.id.tabHome);
+            }else if (MainUtils.isGotoProfile()==true){
+                bmView.setSelectedItemId(R.id.tabProfile);
+                MainUtils.setGotoProfile(false);
+            }
+
+
+
         receiver = new myReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("lipin");
+        filter.addAction("EditFoodCard");
         registerReceiver(receiver,filter);
-
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE},
-                    123);
-
-        } else {
-            init();
-        }
-
-
-        // 將首頁設為 default fragment
-        if (savedInstanceState == null) {
-            bmView.setSelectedItemId(R.id.tabHome);
-        }
 
     }
     /**
@@ -108,8 +102,13 @@ public class MainActivity extends AppCompatActivity {
                });
                snackbar.show();
             }
+            if (intent.getAction().equals("EditFoodCard")){
+                MainUtils.setGotoProfile(true);
+            }
         }
     }
+
+
     /**
      * 檢查用戶是否有開啟懸浮視窗
      */
@@ -138,13 +137,6 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        init();
-    }
 
     private void init() {
         bmView = findViewById(R.id.bottom_nav_view);
@@ -291,10 +283,10 @@ public class MainActivity extends AppCompatActivity {
      * 暫停要做的事
      */
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        unregisterReceiver(receiver);
+        super.onDestroy();
     }
-
 }
 
 
