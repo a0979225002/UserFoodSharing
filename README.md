@@ -1,5 +1,13 @@
 # UserFoodSharing
 剩食終結者專案
+共同開發人員3員:
+GitHub帳號:a0979225002,YichunChen49,floragoodjob
+
+任務分配:
+floragoodjob:資料庫設計
+YichunChen49:UIUX,介面設計,專案介面美化,前端撰寫
+a0979225002:後端撰寫,前端app功能實現
+共通完成項目:專案頁面xml實現
 
 ![image](imag/all.gif)
 
