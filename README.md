@@ -1,7 +1,10 @@
-# UserFoodSharing
-剩食終結者專案
-共同開發人員3員:
-GitHub帳號:a0979225002,YichunChen49,floragoodjob
+## 剩食終結者專案<br>  
+
+共同開發人員3員: 
+<br>  
+
+[GitHub帳號:]a0979225002,YichunChen49,floragoodjob
+<br>  
 
 任務分配:
 floragoodjob:資料庫設計
