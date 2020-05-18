@@ -39,6 +39,9 @@
                 android:id="@+id/chatRoom_show_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="聊天功能開發中,近請期待"
+                android:textSize="30dp"
+                android:gravity="center"
                 />
         </ScrollView>
 

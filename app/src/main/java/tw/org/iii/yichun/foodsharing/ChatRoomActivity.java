@@ -44,53 +44,53 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 
         setToolbar();
 
-        showMessage = findViewById(R.id.chatRoom_show_msg);
-        editText = findViewById(R.id.chatRoom_text);
-        findViewById(R.id.chatRoom_send).setOnClickListener(this);
-        URI serverURI = URI.create("ws://192.168.0.116:8810");
-
-        webSocketClient = new WebSocketClient(serverURI) {
-            @Override
-            public void onOpen(ServerHandshake handshakedata) {
-                sb.append("onOpen at time: ");
-//                sb.append(new Data());
-                sb.append("服務器狀態：");
-                sb.append(handshakedata.getHttpStatusMessage());
-                sb.append("\n");
-                showMessage.setText(sb.toString());
-            }
-
-            @Override
-            public void onMessage(String message) {
-                Message handlerMessage = Message.obtain();
-                handlerMessage.obj = message;
-                handler.sendMessage(handlerMessage);
-            }
-
-            @Override
-            public void onClose(int code, String reason, boolean remote) {
-                sb.append("onClose at time：");
-//                sb.append(new Date());
-                sb.append("\n");
-                sb.append("onClose info:");
-                sb.append(code);
-                sb.append(reason);
-                sb.append(remote);
-                sb.append("\n");
-                showMessage.setText(sb.toString());
-            }
-
-            @Override
-            public void onError(Exception ex) {
-                sb.append("onError at time：");
-//                sb.append(new Date());
-                sb.append("\n");
-                sb.append(ex);
-                sb.append("\n");
+//        showMessage = findViewById(R.id.chatRoom_show_msg);
+//        editText = findViewById(R.id.chatRoom_text);
+//        findViewById(R.id.chatRoom_send).setOnClickListener(this);
+//        URI serverURI = URI.create("ws://192.168.0.116:8810");
+//
+//        webSocketClient = new WebSocketClient(serverURI) {
+//            @Override
+//            public void onOpen(ServerHandshake handshakedata) {
+//                sb.append("onOpen at time: ");
+////                sb.append(new Data());
+//                sb.append("服務器狀態：");
+//                sb.append(handshakedata.getHttpStatusMessage());
+//                sb.append("\n");
 //                showMessage.setText(sb.toString());
-            }
-        };
-        webSocketClient.connect();
+//            }
+//
+//            @Override
+//            public void onMessage(String message) {
+//                Message handlerMessage = Message.obtain();
+//                handlerMessage.obj = message;
+//                handler.sendMessage(handlerMessage);
+//            }
+//
+//            @Override
+//            public void onClose(int code, String reason, boolean remote) {
+//                sb.append("onClose at time：");
+////                sb.append(new Date());
+//                sb.append("\n");
+//                sb.append("onClose info:");
+//                sb.append(code);
+//                sb.append(reason);
+//                sb.append(remote);
+//                sb.append("\n");
+//                showMessage.setText(sb.toString());
+//            }
+//
+//            @Override
+//            public void onError(Exception ex) {
+//                sb.append("onError at time：");
+////                sb.append(new Date());
+//                sb.append("\n");
+//                sb.append(ex);
+//                sb.append("\n");
+////                showMessage.setText(sb.toString());
+//            }
+//        };
+//        webSocketClient.connect();
     }
 
     @Override

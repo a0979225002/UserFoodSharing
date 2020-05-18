@@ -28,8 +28,8 @@ public class MessageFragment extends Fragment {
         goChatRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ChatRoomActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getContext(), ChatRoomActivity.class);
+//                startActivity(intent);
             }
         });
 
