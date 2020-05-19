@@ -17,7 +17,7 @@ a0979225002:後端撰寫,前端app功能實現
 <br>  
 共通完成項目:專案頁面xml實現
 <br>  
-
+影片製作:YichunChen49
 ![image](imag/all.gif)
 
 開發環境android 23
