@@ -35,7 +35,7 @@ a0979225002:後端撰寫,前端app功能實現
 
  <img src="imag/device-2020-05-18-215633.png" width = "500"  alt="demo1" align=center />
  <br>
- <img src="imag/device-2020-05-18-215610.png)" width = "500"  alt="demo2" align=center />
+ <img src="imag/device-2020-05-18-215610.png" width = "500"  alt="demo2" align=center />
  <br>
 如有程式上問題,或想參觀交流,可聯繫我
 我的信箱:a0979225002@gmail.com
