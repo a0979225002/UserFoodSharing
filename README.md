@@ -1,23 +1,5 @@
 ## 剩食終結者專案<br>  
 
-共同開發人員3員: 
-<br>  
-[GitHub帳號:]
-<br>  
-a0979225002,YichunChen49,floragoodjob
-<br>  
-
-任務分配:
-<br>  
-floragoodjob:資料庫設計
-<br>  
-YichunChen49:UIUX,介面設計,專案介面美化,前端撰寫
-<br>  
-a0979225002:後端撰寫,前端app功能實現
-<br>  
-共通完成項目:專案頁面xml實現
-<br>  
-影片製作:YichunChen49
 ![image](imag/all.gif)
 
 開發環境android 23
